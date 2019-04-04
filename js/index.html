@@ -5,7 +5,7 @@
       <div id = 'chart'></div>
     </head>
     <style>
-    body {
+body {
   background: linear-gradient(rgb(30,30,30), rgb(25,25,25));
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -46,7 +46,7 @@ div.tooltip {
 //canvas
 var margin={top:75, right:15, bottom:125, left:85},
     width=1200-margin.left,
-    height=1200-margin.top-margin.bottom;
+    height=1800-margin.top-margin.bottom;
 var svg=d3.select("#chart").append("svg")
     .attr("width",width+margin.left+margin.right)
     .attr("height",height+margin.top+margin.bottom)
@@ -56,36 +56,12 @@ var svg=d3.select("#chart").append("svg")
 var div=d3.select("body").append("div")
         .attr("class","tooltip")
         .style("opacity",0);
+
 //load data
-d3.json('every5minute_entry0401_list.json').then (function(data){
-      //  data.forEach(function(d,i){
-      //    d.forEach(function(d){
-      //       d.time=i;
-      //       d.station=d[0];
-      //       d.pop=d[1];
-      //    })
-      //  })  
-    data=d3.keys(data)
-      .map(function(d){
-        return {"time":d,"stations":data[d]}
-      });
-      // console.log(data);
-      data.forEach(function(d,i){
-        stations=d.stations
-        stations=d3.keys(d.stations)
-             .map(function(d){
-              return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
-             })
-        //  console.log(stations)
-        //  console.log(i)
-         DrawHeatmapRow(stations,i)
-      })
-      // console.log(data);
-      // DrawHeatmap(data);
-});
 d3.json('stations_by_name_with_alias.json').then (function(data){
     var data=d3.keys(data)
         .map(function(d){
+
           return {"STATION":d,"LINE_NO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
           "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
           "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
@@ -102,6 +78,29 @@ d3.json('stations_by_name_with_alias.json').then (function(data){
     // console.log(data)
     console.log(stationline)
     Drawstationline(stationline)
+   
+    d3.json('every5minute_entry0401_list.json').then (function(data){ 
+    data=d3.keys(data)
+      .map(function(d){
+        return {"time":d,"stations":data[d]}
+      });
+      console.log(data);
+      data.forEach(function(d,i){
+        stations=d.stations
+        stations=d3.keys(d.stations)
+             .map(function(d){
+              return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
+             })
+      // var CombineData={};
+      // if(d.station=stationline.STATION){
+      //  CombineData=stationline.map((d,i)=>({...d,...stations[i]}));}
+      // console.log(CombineData)
+         console.log(stations)
+         console.log(i)
+         DrawHeatmapRow(stations,i)
+      })
+ 
+});
 });
 
 //scale
@@ -145,6 +144,7 @@ var colorScale=function(pop){
   else if(pop>=1600 && pop<1800){return red;}
   else if(pop>=1800 && pop<2000){return hot;}
 }
+
 //render the data in an svg
 function DrawHeatmapRow(stations,i){
   svg.selectAll("svg")
@@ -152,10 +152,10 @@ function DrawHeatmapRow(stations,i){
      .enter().append("rect")
      .attr("class","tile")
      .attr("x",x=i*3)
-     .attr("y", function(d,j){ return y=d.index*3;
-     })
+     .attr("y", function(d,j){ return y=d.index*4.5;})
+    //  .attr("y", function(d){ return stationNO(d.station);})
      .attr("width",2.8)
-     .attr("height",2.8)
+     .attr("height",4.3)
      .attr("transform", "translate(0,-20)")
      .style("fill",function(d){return colorScale(d.pop);})
        .on("mouseover",function(d){
@@ -189,35 +189,46 @@ var linecolor=function(LINENO){
    else if(LINENO==16){return mediumaquamarine;}
   }
 function Drawstationline(stationline){
-  var cicle= svg.selectAll("body")
+  const circle= svg.selectAll("body")
      .data(stationline)
      .enter().append("circle")
     //  .attr("class","tile")
      .attr("cx",margin.left)
-     .attr("cy", function(d){ return d.INDEX*3;})
-     .attr("r",1.4)
+     .attr("cy", function(d){ return d.INDEX*4.5;})
+     .attr("r",2.2)
      .attr("transform", "translate(0,-20)")
      .style("fill",function(d){return linecolor(d.LINENO);})
        .on("mouseover",function(d){
-         d3.select(this).attr("r",2);
+         d3.select(this).attr("r",3);
          d3.select(this).attr("opacity,1");
 
         div.transition()
             .duration(200)
             .style("opacity",0.9);
-        div.html(d.ST_NAME_EN+""+d.STATION+""+"Line_NO"+d.LINENO)
+        div.html("Line"+d.LINENO+". "+d.ST_NAME_EN)
             .style("left",(d3.event.pageX+7)+"px")
             .style("top",(d3.event.pageY-28)+"px");
        })
        .on("mouseout",function(d){
-         d3.select(this).attr("r",1.4);
+         d3.select(this).attr("r",2.2);
          d3.select(this).attr("opacity",0.8);
 
          div.transition()
             .duration(500)
             .style("opacity",0);
        });
-       console.log(stationline)
+      //  console.log(stationline)
+    svg.selectAll("body")
+       .data(stationline)
+         .enter().append("text")
+        .text(function(d,i){return (d.LINENO+d.STATION)})
+        .attr("x",82)
+        .attr("y",function(d){ return d.INDEX*4.5;})
+        .attr("transform", "translate(0,-20)")
+        .attr("text-anchor", "end")
+        .style("font-family", "Avenir")
+        .style("font-size",4.6)
+        .style("fill","white");
 }
       </script>
      
