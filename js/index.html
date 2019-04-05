@@ -1,252 +1,275 @@
 <DOCTYPE html>
-    <meta charset="utf-8">
-    <title>SH Metro</title>
-    <head>
-      <div id = 'chart'></div>
-    </head>
-    <style>
+  <meta charset="utf-8">
+  <title>SH Metro</title>
+  <head>
+    <div id = 'chart'></div>
+  </head>
+  <style>
 body {
-  background: linear-gradient(rgb(30,30,30), rgb(25,25,25));
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+background: linear-gradient(rgb(30,30,30), rgb(25,25,25));
+background-attachment: fixed;
+background-repeat: no-repeat;
 }
-
 #chart {
-  width: 1200px;
-  margin: 55px auto;
+width: 1200px;
+margin: 55px auto;
 }
-
 svg {
-  background: none;
+background: none;
 }
-
 .axis path {
-    fill: none;
+  fill: none;
 }
-
 .axis line {
-  stroke: #FCFCFC;
+stroke: #FCFCFC;
 }
-
 div.tooltip {	
-    position: absolute;
-    text-align: left;
-    padding: 12px;
-    font-size: 16px;
-  	font-family: 'Cormorant Garamond', serif;
-    background: rgba(250, 250, 250, 0.75);
-    border-radius: 3px;
-    pointer-events: none;
+  position: absolute;
+  text-align: left;
+  padding: 12px;
+  font-size: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  background: rgba(250, 250, 250, 0.75);
+  border-radius: 3px;
+  pointer-events: none;
 }
-    </style>
-    <body>
-      
-      <script src="https://d3js.org/d3.v5.min.js"></script>
-      <script>
+  </style>
+  <body>
+    
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
 //canvas
 var margin={top:75, right:15, bottom:125, left:85},
-    width=1200-margin.left,
-    height=1800-margin.top-margin.bottom;
+  width=1200-margin.left,
+  height=1800-margin.top-margin.bottom;
 var svg=d3.select("#chart").append("svg")
-    .attr("width",width+margin.left+margin.right)
-    .attr("height",height+margin.top+margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("width",width+margin.left+margin.right)
+  .attr("height",height+margin.top+margin.bottom)
+.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 //append div for tooltip on hover:
 var div=d3.select("body").append("div")
-        .attr("class","tooltip")
-        .style("opacity",0);
-
+      .attr("class","tooltip")
+      .style("opacity",0);
+//intersection line
+var linesvg=svg.append("g");
+var focus=svg.append("g")
+       .style("display","none");
+    
 //load data
 d3.json('stations_by_name_with_alias.json').then (function(data){
-    var data=d3.keys(data)
-        .map(function(d){
-          return {"STATION":d,"LINE_NO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
-          "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
-          "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
-        })
-    data.sort(function(x,y){
-      return d3.ascending(x.LINE_NO,y.LINE_NO);
-    });
-    stationline=d3.keys(data)
-        .map(function(d){
-          return {"INDEX":d,"STATION":data[d].STATION,"LINENO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
-          "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
-          "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
-        })
-    // console.log(data)
-    console.log(stationline)
-    Drawstationline(stationline)
-
-    d3.json('every5minute_entry0401_list.json').then (function(data){ 
-    data=d3.keys(data)
+  var data=d3.keys(data)
       .map(function(d){
-        return {"time":d,"stations":data[d]}
-      });
-      // console.log(data);
-      data.forEach(function(d,i){
-        stations=d.stations
-        stations=d3.keys(d.stations)
-             .map(function(d){
-              return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
-             })
- 
-        stations.forEach(function(d,i){
-          stationline.forEach(function(x,j){
-          if(d.station==x.STATION){
-            d.index=x.INDEX
-          }
-        })
+        return {"STATION":d,"LINE_NO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
+        "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
+        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
       })
-         console.log(stations)
-        //  console.log(i)
-         DrawHeatmapRow(stations,i)
+  data.sort(function(x,y){
+    return d3.ascending(x.LINE_NO,y.LINE_NO);
+  });
+  stationline=d3.keys(data)
+      .map(function(d){
+        return {"INDEX":d,"STATION":data[d].STATION,"LINENO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
+        "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
+        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
       })
- 
-});
-});
+  // console.log(data)
+  console.log(stationline)
+  Drawstationline(stationline)
+  d3.json('every5minute_entry0401_list.json').then (function(data){ 
+  data=d3.keys(data)
+    .map(function(d){
+      return {"time":d,"stations":data[d]}
+    });
+    // console.log(data);
+    data.forEach(function(d,i){
+      stations=d.stations
+      stations=d3.keys(d.stations)
+           .map(function(d){
+            return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
+           })
 
+      stations.forEach(function(d,i){
+        stationline.forEach(function(x,j){
+        if(d.station==x.STATION){
+          d.index=x.INDEX
+        }
+      })
+    })
+       console.log(stations)
+       console.log(i)
+       DrawHeatmapRow(stations,i)
+       IntersectionLine(stations,i)
+    })
+});
+});
 //scale
 // var x=d3.scale.linear().range([0,width]),
 //     y=d3.scale.linear().range([0,height]);
-
 // Variables for colors and legend:
 var mint = "#05B89A",
-    teal = "#0B90B6",
-    corn = "#FFCE65",
-    yellow = "#FFC039",
-    gold = "#FFC707",
-    orange = "#FF9339",
-    sun = "#FF6307",
-    heart = "#FF4739",
-    red = "#FF1907",
-    hot = "960018",
-    lawngreen="#7CFC00",
-    rebeccapurple="#663399",
-    mediumslateblue="#7b68ee",
-    orchid="#da70d6",
-    blue="#4169E1",
-    lightskyblue="#87cefa",
-    mediumpurple="#9370db",
-    saddlebrown="#8b4513",
-    green="#00FF00",
-    lightpink="#FFC0CB",
-    mediumaquamarine="#66DDAA",
-    colors = [ "#05B89A", "#0B90B6", "#FFCE65", "#FFC039", "#FFC707", "#FF9339", "#FF6307", "#FF4739", "#FF1907", "960018" ],
-    legendScale = ["0 - 3", "3 - 5.5", "5.5 - 6", "6 - 6.5", "6.5 - 7", "7 - 8.5", "8.5 - 9", "9 - 9.5", "9.5 - 10", "10+"];
+  teal = "#0B90B6",
+  corn = "#FFCE65",
+  yellow = "#FFC039",
+  gold = "#FFC707",
+  orange = "#FF9339",
+  sun = "#FF6307",
+  heart = "#FF4739",
+  red = "#FF1907",
+  hot = "960018",
+  lawngreen="#7CFC00",
+  rebeccapurple="#663399",
+  mediumslateblue="#7b68ee",
+  orchid="#da70d6",
+  blue="#4169E1",
+  lightskyblue="#87cefa",
+  mediumpurple="#9370db",
+  saddlebrown="#8b4513",
+  green="#00FF00",
+  lightpink="#FFC0CB",
+  mediumaquamarine="#66DDAA",
+  colors = [ "#05B89A", "#0B90B6", "#FFCE65", "#FFC039", "#FFC707", "#FF9339", "#FF6307", "#FF4739", "#FF1907", "960018" ],
+  legendScale = ["0 - 3", "3 - 5.5", "5.5 - 6", "6 - 6.5", "6.5 - 7", "7 - 8.5", "8.5 - 9", "9 - 9.5", "9.5 - 10", "10+"];
 //scale population to color
 var colorScale=function(pop){
-  if(pop>=0 && pop<100){return mint;}
-  else if(pop>=100 && pop<300){return teal;}
-  else if(pop>=300 && pop<500){return corn;}
-  else if(pop>=500 && pop<750){return yellow;}
-  else if(pop>=750 && pop<1000){return gold;}
-  else if(pop>=1000 && pop<1200){return orange;}
-  else if(pop>=1200 && pop<1400){return sun;}
-  else if(pop>=1400 && pop<1600){return heart;}
-  else if(pop>=1600 && pop<1800){return red;}
-  else if(pop>=1800 && pop<2000){return hot;}
+if(pop>=0 && pop<100){return mint;}
+else if(pop>=100 && pop<300){return teal;}
+else if(pop>=300 && pop<500){return corn;}
+else if(pop>=500 && pop<750){return yellow;}
+else if(pop>=750 && pop<1000){return gold;}
+else if(pop>=1000 && pop<1200){return orange;}
+else if(pop>=1200 && pop<1400){return sun;}
+else if(pop>=1400 && pop<1600){return heart;}
+else if(pop>=1600 && pop<1800){return red;}
+else if(pop>=1800 && pop<2000){return hot;}
 }
-
 //render the data in an svg
 function DrawHeatmapRow(stations,i){
-  svg.selectAll("svg")
+svg.selectAll("svg")
+   .data(stations)
+   .enter().append("rect")
+   .attr("class","tile")
+   .attr("x",x=i*4)
+   .attr("y", function(d,j){ return y=d.index*5.6;})
+  //  .attr("y", function(d){ return stationNO(d.station);})
+   .attr("width",3.8)
+   .attr("height",5.4)
+   .attr("transform", "translate(0,-20)")
+   .style("fill",function(d){return colorScale(d.pop);})
+     .on("mouseover",function(d){
+       div.transition()
+          .duration(200)
+          .style("opacity",0.9);
+      div.html(d.station+""+d.pop)
+          .style("left",(d3.event.pageX+7)+"px")
+          .style("top",(d3.event.pageY-28)+"px");
+     })
+     .on("mouseout",function(d){
+       div.transition()
+          .duration(500)
+          .style("opacity",0);
+     });
+svg.selectAll("body")
      .data(stations)
-     .enter().append("rect")
-     .attr("class","tile")
-     .attr("x",x=i*4)
-     .attr("y", function(d,j){ return y=d.index*5.6;})
-    //  .attr("y", function(d){ return stationNO(d.station);})
-     .attr("width",3.8)
-     .attr("height",5.4)
-     .attr("transform", "translate(0,-20)")
-     .style("fill",function(d){return colorScale(d.pop);})
-       .on("mouseover",function(d){
-         div.transition()
-            .duration(200)
-            .style("opacity",0.9);
-        div.html(d.station+""+d.pop)
-            .style("left",(d3.event.pageX+7)+"px")
-            .style("top",(d3.event.pageY-28)+"px");
-       })
-       .on("mouseout",function(d){
-         div.transition()
-            .duration(500)
-            .style("opacity",0);
-       });
-  svg.selectAll("body")
-       .data(stations)
-         .enter().append("text")
-        .text(i)
-        .attr("x",x=i*4)
-        .attr("y",-2)
-        .attr("transform", "translate(0,-20)")
-        // .attr("transform",function(d){return "rotate(90)"})
-        .attr("text-anchor", "middle")
-        .style("font-family", "Avenir")
-        .style("font-size",3.5)
-        .style("fill","white");
+       .enter().append("text")
+      .text(i)
+      .attr("x",x=i*4)
+      .attr("y",-2)
+      .attr("transform", "translate(0,-20)")
+      // .attr("transform",function(d){return "rotate(90)"})
+      .attr("text-anchor", "middle")
+      .style("font-family", "Avenir")
+      .style("font-size",3.5)
+      .style("fill","white");
 }
 var linecolor=function(LINENO){
-   if(LINENO==1){return red;}
-   else if(LINENO==2){return lawngreen;}
-   else if(LINENO==3){return yellow;}
-   else if(LINENO==4){return rebeccapurple;}
-   else if(LINENO==5){return mediumslateblue;}
-   else if(LINENO==6){return orchid;}
-   else if(LINENO==7){return orange;}
-   else if(LINENO==8){return blue;}
-   else if(LINENO==9){return lightskyblue;}
-   else if(LINENO==10){return mediumpurple;}
-   else if(LINENO==11){return saddlebrown;}
-   else if(LINENO==12){return green;}
-   else if(LINENO==13){return lightpink;}
-   else if(LINENO==16){return mediumaquamarine;}
-  }
+ if(LINENO==1){return red;}
+ else if(LINENO==2){return lawngreen;}
+ else if(LINENO==3){return yellow;}
+ else if(LINENO==4){return rebeccapurple;}
+ else if(LINENO==5){return mediumslateblue;}
+ else if(LINENO==6){return orchid;}
+ else if(LINENO==7){return orange;}
+ else if(LINENO==8){return blue;}
+ else if(LINENO==9){return lightskyblue;}
+ else if(LINENO==10){return mediumpurple;}
+ else if(LINENO==11){return saddlebrown;}
+ else if(LINENO==12){return green;}
+ else if(LINENO==13){return lightpink;}
+ else if(LINENO==16){return mediumaquamarine;}
+}
 function Drawstationline(stationline){
-  const circle= svg.selectAll("body")
+const circle= svg.selectAll("body")
+   .data(stationline)
+   .enter().append("circle")
+  //  .attr("class","tile")
+   .attr("cx",margin.left+100)
+   .attr("cy", function(d){ return d.INDEX*5.6;})
+   .attr("r",2.7)
+   .attr("transform", "translate(0,-20)")
+   .style("fill",function(d){return linecolor(d.LINENO);})
+     .on("mouseover",function(d){
+       d3.select(this).attr("r",4);
+       d3.select(this).attr("opacity,1");
+      div.transition()
+          .duration(200)
+          .style("opacity",0.9);
+      div.html("Line"+d.LINENO+". "+d.ST_NAME_EN)
+          .style("left",(d3.event.pageX+7)+"px")
+          .style("top",(d3.event.pageY-28)+"px");
+     })
+     .on("mouseout",function(d){
+       d3.select(this).attr("r",2.7);
+       d3.select(this).attr("opacity",0.8);
+       div.transition()
+          .duration(500)
+          .style("opacity",0);
+     });
+    //  console.log(stationline)
+  svg.selectAll("body")
      .data(stationline)
-     .enter().append("circle")
-    //  .attr("class","tile")
-     .attr("cx",margin.left+100)
-     .attr("cy", function(d){ return d.INDEX*5.6;})
-     .attr("r",2.7)
-     .attr("transform", "translate(0,-20)")
-     .style("fill",function(d){return linecolor(d.LINENO);})
-       .on("mouseover",function(d){
-         d3.select(this).attr("r",4);
-         d3.select(this).attr("opacity,1");
-
-        div.transition()
-            .duration(200)
-            .style("opacity",0.9);
-        div.html("Line"+d.LINENO+". "+d.ST_NAME_EN)
-            .style("left",(d3.event.pageX+7)+"px")
-            .style("top",(d3.event.pageY-28)+"px");
-       })
-       .on("mouseout",function(d){
-         d3.select(this).attr("r",2.7);
-         d3.select(this).attr("opacity",0.8);
-
-         div.transition()
-            .duration(500)
-            .style("opacity",0);
-       });
-      //  console.log(stationline)
-    svg.selectAll("body")
-       .data(stationline)
-         .enter().append("text")
-        .text(function(d,i){return (d.LINENO+d.STATION)})
-        .attr("x",182)
-        .attr("y",function(d){ return d.INDEX*5.6;})
-        .attr("transform", "translate(0,-20)")
-        .attr("text-anchor", "end")
-        .style("font-family", "Avenir")
-        .style("font-size",5)
-        .style("fill","white");
+       .enter().append("text")
+      .text(function(d,i){return (d.LINENO+d.STATION)})
+      .attr("x",182)
+      .attr("y",function(d){ return d.INDEX*5.6;})
+      .attr("transform", "translate(0,-20)")
+      .attr("text-anchor", "end")
+      .style("font-family", "Avenir")
+      .style("font-size",5)
+      .style("fill","white");
+}
+function IntersectionLine(stations,i){
+  var valueline=d3.line()
+       .x(x=i*4)
+       .y(function(d){ return d.index*5.6;})
+  linesvg.append("path")
+       .attr("class","line")
+       .attr("d",valueline(stations));
+  focus.append("circle")
+       .attr("class","y")
+       .style("fill","white")
+      //  .style("stroke","white")
+      .attr("r",10)
+  svg.append("rect")
+       .attr("width",width)
+       .attr("height",height)
+       .style("fill","none")
+       .style("pointer-events","all")
+       .on("mouseover",function(){focus.style("display",null);})
+       .on("mouseout",function(){focus.style("display","none");})
+       .on("mousemove",mousemove);
+  function mousemove(){
+  var x0=d3.mouse(this)[0],
+      // i=bisectDate(stations,x0,1),
+      d0=stations[i-1],
+      d1=stations[i],
+      d=x0-((i-1)*4)>i*4-x0? d1:d0;
+  focus.select("circle.y")
+       .attr("transform","translate("+(i*4)+","+(d.index*5.6)+")");
+}
 }
 
-      </script>
-     
-    </body>
-  </DOCTYPE>
+    </script>
+   
+  </body>
+</DOCTYPE>
