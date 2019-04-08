@@ -2,7 +2,8 @@
   <meta charset="utf-8">
   <title>SH Metro</title>
   <head>
-    <div id = 'chart'></div>
+        <div id = 'chart'></div>  
+        <div id = 'geo'></div> 
   </head>
   <style>
 body {
@@ -13,6 +14,13 @@ background-repeat: no-repeat;
 #chart {
 width: 1200px;
 margin: 55px auto;
+z-index: 10;
+}
+#geo {
+width: 1200px;
+height:600px;
+margin: 5px auto;
+z-index: 10;
 }
 svg {
 background: none;
@@ -33,6 +41,32 @@ div.tooltip {
   border-radius: 3px;
   pointer-events: none;
 }
+rect {
+  fill: none;
+  pointer-events: all;
+  z-index: -10;
+}
+circle {
+  fill: none;
+  stroke-width: 2.5px;
+}
+line.x{
+  stroke:white;
+  stroke-width: 3.8px;
+  z-index: 30;
+  opacity:0.6;
+}
+line.y{
+  stroke:white;
+  stroke-width: 7.8px;
+  z-index: 30;
+  opacity:0.6;
+}
+.connection{
+  stroke:white;
+  stroke-width: 0.9px;
+  opacity:0.3;
+}
   </style>
   <body>
     
@@ -41,20 +75,34 @@ div.tooltip {
 //canvas
 var margin={top:75, right:15, bottom:125, left:85},
   width=1200-margin.left,
-  height=1800-margin.top-margin.bottom;
-var svg=d3.select("#chart").append("svg")
+  height=2500-margin.top-margin.bottom;
+var svg1=d3.select("#chart").append("svg")
   .attr("width",width+margin.left+margin.right)
   .attr("height",height+margin.top+margin.bottom)
 .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//geocanvas setting
+var geo = d3.select("#geo");
+geo.width=600;
+geo.height=600;
+geo.attr("width",geo.width).attr("height",geo.height);
+geo.margin = ({top: 5, right: 5, bottom: 5, left: 5});
+var geocanvas=geo.append("svg")
+   .attr("width",geo.width).attr("height",geo.height);
+geocanvas.width=geo.width;
+geocanvas.height=geo.height;
+// geocanvas.attr("width", geocanvas.width)
+//          .attr("height", geocanvas.height)
+//          .attr("transform","translate("+geo.margin.left+","+geo.margin.top+")");
+ 
+
 //append div for tooltip on hover:
 var div=d3.select("body").append("div")
       .attr("class","tooltip")
       .style("opacity",0);
-//intersection line
-var linesvg=svg.append("g");
-var focus=svg.append("g")
-       .style("display","none");
+var hightlight;
+
     
 //load data
 d3.json('stations_by_name_with_alias.json').then (function(data){
@@ -88,7 +136,6 @@ d3.json('stations_by_name_with_alias.json').then (function(data){
            .map(function(d){
             return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
            })
-
       stations.forEach(function(d,i){
         stationline.forEach(function(x,j){
         if(d.station==x.STATION){
@@ -96,16 +143,86 @@ d3.json('stations_by_name_with_alias.json').then (function(data){
         }
       })
     })
-       console.log(stations)
-       console.log(i)
-       DrawHeatmapRow(stations,i)
-       IntersectionLine(stations,i)
-    })
+      //  console.log(stations)
+      //  console.log(i)
+       DrawHeatmapRow(stations,i);
+    hightlight=svg1.append('g')
+              .attr("class","hightlightline")
+              .style("display",'none');
+    hightlight.append("line")
+              .classed('x',true);
+    hightlight.append("line")
+              .classed('y',true);
+    });
+
 });
 });
-//scale
-// var x=d3.scale.linear().range([0,width]),
-//     y=d3.scale.linear().range([0,height]);
+//geo map data
+var cscale=d3.scaleOrdinal()
+             .domain([0,16])
+             .range(d3.schemeCategory10);
+d3.json('connections_by_station_name.json').then(function(d) {
+    connections=d;
+    d3.json('stations_by_name.json').then(function(d){
+     stations=d3.values(d);
+           stationsraw=d;
+           console.log(stations);
+     geox=geoxscale(stations);
+           geoy=geoyscale(stations);
+           geocanvas.selectAll(".GeoStationDot")
+                    .data(stations)
+                    .enter().append("circle")
+                    .attr("class","GeoStationDot")
+                    .attr("id", function(d){ return d.ST_NAME_EN; })
+                    .attr("r",1.2)
+                    .attr("cx",function(d){return geox(+d.LNG)})
+                    .attr("cy",function(d){return geoy(+d.LAT)})
+                    .style("fill","white")
+                    .style("fill-opacity","0.3")
+                    .style("stroke","white")
+                    .style("stroke-opacity","0.3")
+                    .on("mouseover",function(d){
+                         d3.select(this).attr("r",2);
+                         d3.select(this).attr("opacity",1);
+      div.transition()
+          .duration(200)
+          .style("opacity",0.9);
+      div.html(d.ST_NAME+"<div>"+d.ST_NAME_EN+"<div>"+"Line:"+d.LINE_NO)
+          .style("left",(d3.event.pageX+7)+"px")
+          .style("top",(d3.event.pageY+18)+"px");      
+     })
+     .on("mouseout",function(d){
+      d3.select(this).attr("r",1.2);
+      d3.select(this).attr("opacity",0.3);
+       div.transition()
+          .duration(1000)
+          .style("opacity",0)});
+   
+           geocanvas.selectAll(".connection")
+                .data(connections)
+                .enter().append("line")
+                .attr("class","connection")
+                .attr("id",function(d){return d[0]+'-'+d[1]+"line"+d[2];})
+                .attr("stroke",function(d){return linecolor(+d[2])})
+                .attr("stroke-linecap", "round")
+                .attr("x1", function(d) { return geox(+(stationsraw[d[0]].LNG)); })
+                .attr("y1", function(d) { return geoy(+(stationsraw[d[0]].LAT)); })
+                .attr("x2", function(d) { return geox(+(stationsraw[d[1]].LNG)); })
+                .attr("y2", function(d) { return geoy(+(stationsraw[d[1]].LAT)); });
+    });
+});
+function geoxscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LNG}),d3.max(d,function(d){return +d.LNG})])
+             .range([0,geocanvas.width]);
+   };
+   function geoyscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LAT}),d3.max(d,function(d){return +d.LAT})])
+             .range([geocanvas.height,0]);
+   };
+
+
 // Variables for colors and legend:
 var mint = "#05B89A",
   teal = "#0B90B6",
@@ -142,34 +259,50 @@ else if(pop>=1200 && pop<1400){return sun;}
 else if(pop>=1400 && pop<1600){return heart;}
 else if(pop>=1600 && pop<1800){return red;}
 else if(pop>=1800 && pop<2000){return hot;}
-}
+};
 //render the data in an svg
 function DrawHeatmapRow(stations,i){
-svg.selectAll("svg")
+svg1.selectAll("svg1")
    .data(stations)
    .enter().append("rect")
    .attr("class","tile")
    .attr("x",x=i*4)
-   .attr("y", function(d,j){ return y=d.index*5.6;})
-  //  .attr("y", function(d){ return stationNO(d.station);})
+   .attr("y", function(d,j){ return y=d.index*8;})
    .attr("width",3.8)
-   .attr("height",5.4)
+   .attr("height",7.8)
    .attr("transform", "translate(0,-20)")
    .style("fill",function(d){return colorScale(d.pop);})
+   .style("opacity",1)
+   .attr("class","rect")
      .on("mouseover",function(d){
+      //  console.log(this);
+      hightlight.style("display",null)
+            .attr("transform", "translate(0,-20)");
+      hightlight.select("line.x")
+            .attr("x1",(d3.select(this).attr('x')*2+3.8)/2)
+            .attr("y1",0)
+            .attr("x2",(d3.select(this).attr('x')*2+3.8)/2)
+            .attr("y2",(d3.select(this).attr('y')*2+7.8)/2);
+      hightlight.select("line.y")
+            .attr("x1",0)
+            .attr("y1",(d3.select(this).attr('y')*2+7.8)/2)
+            .attr("x2",(d3.select(this).attr('x')*2+3.8)/2)
+            .attr("y2",(d3.select(this).attr('y')*2+7.8)/2);
        div.transition()
           .duration(200)
           .style("opacity",0.9);
       div.html(d.station+""+d.pop)
           .style("left",(d3.event.pageX+7)+"px")
-          .style("top",(d3.event.pageY-28)+"px");
+          .style("top",(d3.event.pageY+18)+"px");      
      })
      .on("mouseout",function(d){
+      // hightlight.style("display","none");
        div.transition()
-          .duration(500)
+          .duration(2000)
           .style("opacity",0);
+
      });
-svg.selectAll("body")
+svg1.selectAll("body")
      .data(stations)
        .enter().append("text")
       .text(i)
@@ -181,7 +314,7 @@ svg.selectAll("body")
       .style("font-family", "Avenir")
       .style("font-size",3.5)
       .style("fill","white");
-}
+};
 var linecolor=function(LINENO){
  if(LINENO==1){return red;}
  else if(LINENO==2){return lawngreen;}
@@ -197,20 +330,20 @@ var linecolor=function(LINENO){
  else if(LINENO==12){return green;}
  else if(LINENO==13){return lightpink;}
  else if(LINENO==16){return mediumaquamarine;}
-}
+};
 function Drawstationline(stationline){
-const circle= svg.selectAll("body")
+const circle= svg1.selectAll("body")
    .data(stationline)
    .enter().append("circle")
-  //  .attr("class","tile")
    .attr("cx",margin.left+100)
-   .attr("cy", function(d){ return d.INDEX*5.6;})
-   .attr("r",2.7)
+   .attr("cy", function(d){ return d.INDEX*8+4;})
+   .attr("r",3.7)
    .attr("transform", "translate(0,-20)")
    .style("fill",function(d){return linecolor(d.LINENO);})
      .on("mouseover",function(d){
-       d3.select(this).attr("r",4);
-       d3.select(this).attr("opacity,1");
+       console.log(d);
+       d3.select(this).attr("r",5);
+       d3.select(this).attr("opacity",1);
       div.transition()
           .duration(200)
           .style("opacity",0.9);
@@ -219,55 +352,26 @@ const circle= svg.selectAll("body")
           .style("top",(d3.event.pageY-28)+"px");
      })
      .on("mouseout",function(d){
-       d3.select(this).attr("r",2.7);
+       d3.select(this).attr("r",3.7);
        d3.select(this).attr("opacity",0.8);
        div.transition()
           .duration(500)
           .style("opacity",0);
      });
     //  console.log(stationline)
-  svg.selectAll("body")
+  svg1.selectAll("body")
      .data(stationline)
        .enter().append("text")
       .text(function(d,i){return (d.LINENO+d.STATION)})
-      .attr("x",182)
-      .attr("y",function(d){ return d.INDEX*5.6;})
+      .attr("x",180)
+      .attr("y",function(d){ return (d.INDEX*8+7);})
       .attr("transform", "translate(0,-20)")
       .attr("text-anchor", "end")
       .style("font-family", "Avenir")
-      .style("font-size",5)
+      .style("font-size",7)
       .style("fill","white");
 }
-function IntersectionLine(stations,i){
-  var valueline=d3.line()
-       .x(x=i*4)
-       .y(function(d){ return d.index*5.6;})
-  linesvg.append("path")
-       .attr("class","line")
-       .attr("d",valueline(stations));
-  focus.append("circle")
-       .attr("class","y")
-       .style("fill","white")
-      //  .style("stroke","white")
-      .attr("r",10)
-  svg.append("rect")
-       .attr("width",width)
-       .attr("height",height)
-       .style("fill","none")
-       .style("pointer-events","all")
-       .on("mouseover",function(){focus.style("display",null);})
-       .on("mouseout",function(){focus.style("display","none");})
-       .on("mousemove",mousemove);
-  function mousemove(){
-  var x0=d3.mouse(this)[0],
-      // i=bisectDate(stations,x0,1),
-      d0=stations[i-1],
-      d1=stations[i],
-      d=x0-((i-1)*4)>i*4-x0? d1:d0;
-  focus.select("circle.y")
-       .attr("transform","translate("+(i*4)+","+(d.index*5.6)+")");
-}
-}
+ 
 
     </script>
    
