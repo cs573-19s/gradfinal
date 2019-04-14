@@ -4,6 +4,7 @@
   <head>
         <div id = 'chart'></div>  
         <div id = 'geo'></div> 
+        <div id= 'img'></div>
   </head>
   <style>
 body {
@@ -54,18 +55,18 @@ line.x{
   stroke:white;
   stroke-width: 3.8px;
   z-index: 30;
-  opacity:0.6;
+  opacity:0.8;
 }
 line.y{
   stroke:white;
   stroke-width: 7.8px;
   z-index: 30;
-  opacity:0.6;
+  opacity:0.8;
 }
 .connection{
-  stroke:white;
-  stroke-width: 0.9px;
-  opacity:0.3;
+  /* stroke:white; */
+  /* stroke-width: 0.9px; */
+  opacity:0.8;
 }
   </style>
   <body>
@@ -95,22 +96,32 @@ geocanvas.height=geo.height;
 // geocanvas.attr("width", geocanvas.width)
 //          .attr("height", geocanvas.height)
 //          .attr("transform","translate("+geo.margin.left+","+geo.margin.top+")");
- 
+
+//station image canvas
+var imgsvg=d3.select("#img").append("svg")
+       .attr("width",1500)
+       .attr("height",1500)
 
 //append div for tooltip on hover:
 var div=d3.select("body").append("div")
       .attr("class","tooltip")
       .style("opacity",0);
 var hightlight;
-
+var geopoint=null;
     
 //load data
-d3.json('stations_by_name_with_alias.json').then (function(data){
+d3.json('connections_by_station_name.json').then(function(d) {
+    connections=d;
+    console.log(connections);
+
+d3.json('stations_by_name.json').then (function(data){
+  stationsraw=data;
+  console.log(stationsraw);
   var data=d3.keys(data)
       .map(function(d){
         return {"STATION":d,"LINE_NO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
         "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
-        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
+        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y,"img":data[d].img}
       })
   data.sort(function(x,y){
     return d3.ascending(x.LINE_NO,y.LINE_NO);
@@ -119,33 +130,36 @@ d3.json('stations_by_name_with_alias.json').then (function(data){
       .map(function(d){
         return {"INDEX":d,"STATION":data[d].STATION,"LINENO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
         "ST_HORIZONTAL":data[d].ST_HORIZONTAL,"ST_NAME":data[d].ST_NAME,"ST_NAME_EN":data[d].ST_NAME_EN,"ST_NO":data[d].ST_NO,
-        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y}
+        "TRANSFER_TAG":data[d].TRANSFER_TAG,"X":data[d].X,"Y":data[d].Y,"img":data[d].img}
       })
   // console.log(data)
   console.log(stationline)
   Drawstationline(stationline)
+  Drawgeocanvas(stationline)
+  Drawstationimg(stationline)
+      
+  //entry data
   d3.json('every5minute_entry0401_list.json').then (function(data){ 
-  data=d3.keys(data)
-    .map(function(d){
-      return {"time":d,"stations":data[d]}
-    });
-    // console.log(data);
-    data.forEach(function(d,i){
-      stations=d.stations
-      stations=d3.keys(d.stations)
+       data=d3.keys(data)
+          .map(function(d){
+              return {"time":d,"stations":data[d]}
+                          });
+        // console.log(data);
+       data.forEach(function(d,i){
+            stations=d.stations
+            stations=d3.keys(d.stations)
            .map(function(d){
-            return {"index":d,"station":stations[d][0],"pop":stations[d][1]}
-           })
-      stations.forEach(function(d,i){
-        stationline.forEach(function(x,j){
-        if(d.station==x.STATION){
-          d.index=x.INDEX
-        }
-      })
-    })
+            return {"index":d,"station":stations[d][0],"pop":stations[d][1],"id":stations[d][0]}
+                           })
+            stations.forEach(function(d,i){
+           stationline.forEach(function(x,j){
+               if(d.station==x.STATION){
+                    d.index=x.INDEX    }
+                                            })
+                                          })
       //  console.log(stations)
       //  console.log(i)
-       DrawHeatmapRow(stations,i);
+     DrawHeatmapRow(stations,i);
     hightlight=svg1.append('g')
               .attr("class","hightlightline")
               .style("display",'none');
@@ -153,70 +167,18 @@ d3.json('stations_by_name_with_alias.json').then (function(data){
               .classed('x',true);
     hightlight.append("line")
               .classed('y',true);
-    });
+                                    });
+});
 
 });
 });
-//geo map data
-var cscale=d3.scaleOrdinal()
-             .domain([0,16])
-             .range(d3.schemeCategory10);
-d3.json('connections_by_station_name.json').then(function(d) {
-    connections=d;
-    d3.json('stations_by_name.json').then(function(d){
-     stations=d3.values(d);
-           stationsraw=d;
-           console.log(stations);
-     geox=geoxscale(stations);
-           geoy=geoyscale(stations);
-           geocanvas.selectAll(".GeoStationDot")
-                    .data(stations)
-                    .enter().append("circle")
-                    .attr("class","GeoStationDot")
-                    .attr("id", function(d){ return d.ST_NAME_EN; })
-                    .attr("r",1.2)
-                    .attr("cx",function(d){return geox(+d.LNG)})
-                    .attr("cy",function(d){return geoy(+d.LAT)})
-                    .style("fill","white")
-                    .style("fill-opacity","0.3")
-                    .style("stroke","white")
-                    .style("stroke-opacity","0.3")
-                    .on("mouseover",function(d){
-                         d3.select(this).attr("r",2);
-                         d3.select(this).attr("opacity",1);
-      div.transition()
-          .duration(200)
-          .style("opacity",0.9);
-      div.html(d.ST_NAME+"<div>"+d.ST_NAME_EN+"<div>"+"Line:"+d.LINE_NO)
-          .style("left",(d3.event.pageX+7)+"px")
-          .style("top",(d3.event.pageY+18)+"px");      
-     })
-     .on("mouseout",function(d){
-      d3.select(this).attr("r",1.2);
-      d3.select(this).attr("opacity",0.3);
-       div.transition()
-          .duration(1000)
-          .style("opacity",0)});
-   
-           geocanvas.selectAll(".connection")
-                .data(connections)
-                .enter().append("line")
-                .attr("class","connection")
-                .attr("id",function(d){return d[0]+'-'+d[1]+"line"+d[2];})
-                .attr("stroke",function(d){return linecolor(+d[2])})
-                .attr("stroke-linecap", "round")
-                .attr("x1", function(d) { return geox(+(stationsraw[d[0]].LNG)); })
-                .attr("y1", function(d) { return geoy(+(stationsraw[d[0]].LAT)); })
-                .attr("x2", function(d) { return geox(+(stationsraw[d[1]].LNG)); })
-                .attr("y2", function(d) { return geoy(+(stationsraw[d[1]].LAT)); });
-    });
-});
+
 function geoxscale(d){
     return d3.scaleLinear()
              .domain([d3.min(d,function(d){return +d.LNG}),d3.max(d,function(d){return +d.LNG})])
              .range([0,geocanvas.width]);
    };
-   function geoyscale(d){
+function geoyscale(d){
     return d3.scaleLinear()
              .domain([d3.min(d,function(d){return +d.LAT}),d3.max(d,function(d){return +d.LAT})])
              .range([geocanvas.height,0]);
@@ -237,13 +199,13 @@ var mint = "#05B89A",
   lawngreen="#7CFC00",
   rebeccapurple="#663399",
   mediumslateblue="#7b68ee",
-  orchid="#da70d6",
+  orchid="#ff1a75",
   blue="#4169E1",
   lightskyblue="#87cefa",
   mediumpurple="#9370db",
   saddlebrown="#8b4513",
-  green="#00FF00",
-  lightpink="#FFC0CB",
+  green="#004d00",
+  lightpink="#ff99cc",
   mediumaquamarine="#66DDAA",
   colors = [ "#05B89A", "#0B90B6", "#FFCE65", "#FFC039", "#FFC707", "#FF9339", "#FF6307", "#FF4739", "#FF1907", "960018" ],
   legendScale = ["0 - 3", "3 - 5.5", "5.5 - 6", "6 - 6.5", "6.5 - 7", "7 - 8.5", "8.5 - 9", "9 - 9.5", "9.5 - 10", "10+"];
@@ -268,6 +230,7 @@ svg1.selectAll("svg1")
    .attr("class","tile")
    .attr("x",x=i*4)
    .attr("y", function(d,j){ return y=d.index*8;})
+   .attr("id",function(d){return d.id;})
    .attr("width",3.8)
    .attr("height",7.8)
    .attr("transform", "translate(0,-20)")
@@ -275,7 +238,8 @@ svg1.selectAll("svg1")
    .style("opacity",1)
    .attr("class","rect")
      .on("mouseover",function(d){
-      //  console.log(this);
+      console.log(d);
+      console.log(this);
       hightlight.style("display",null)
             .attr("transform", "translate(0,-20)");
       hightlight.select("line.x")
@@ -284,8 +248,9 @@ svg1.selectAll("svg1")
             .attr("x2",(d3.select(this).attr('x')*2+3.8)/2)
             .attr("y2",(d3.select(this).attr('y')*2+7.8)/2);
       hightlight.select("line.y")
-            .attr("x1",0)
+            .attr("x1",100)
             .attr("y1",(d3.select(this).attr('y')*2+7.8)/2)
+            // .attr("x2",(d3.select(this).attr('x')*2+3.8)/2)
             .attr("x2",(d3.select(this).attr('x')*2+3.8)/2)
             .attr("y2",(d3.select(this).attr('y')*2+7.8)/2);
        div.transition()
@@ -293,7 +258,8 @@ svg1.selectAll("svg1")
           .style("opacity",0.9);
       div.html(d.station+""+d.pop)
           .style("left",(d3.event.pageX+7)+"px")
-          .style("top",(d3.event.pageY+18)+"px");      
+          .style("top",(d3.event.pageY+18)+"px");     
+      handlemouseover(d); 
      })
      .on("mouseout",function(d){
       // hightlight.style("display","none");
@@ -331,17 +297,21 @@ var linecolor=function(LINENO){
  else if(LINENO==13){return lightpink;}
  else if(LINENO==16){return mediumaquamarine;}
 };
-function Drawstationline(stationline){
-const circle= svg1.selectAll("body")
+function Drawstationline(){
+var circle= svg1.selectAll("body")
    .data(stationline)
    .enter().append("circle")
    .attr("cx",margin.left+100)
    .attr("cy", function(d){ return d.INDEX*8+4;})
+   .attr("id", function(d){ return d.ST_NAME; })
    .attr("r",3.7)
    .attr("transform", "translate(0,-20)")
    .style("fill",function(d){return linecolor(d.LINENO);})
      .on("mouseover",function(d){
        console.log(d);
+       console.log(this);
+      mouseoverimg(d);
+      handlemouseover(d);
        d3.select(this).attr("r",5);
        d3.select(this).attr("opacity",1);
       div.transition()
@@ -352,13 +322,14 @@ const circle= svg1.selectAll("body")
           .style("top",(d3.event.pageY-28)+"px");
      })
      .on("mouseout",function(d){
+      mouseoutimg(d);
        d3.select(this).attr("r",3.7);
        d3.select(this).attr("opacity",0.8);
        div.transition()
           .duration(500)
           .style("opacity",0);
      });
-    //  console.log(stationline)
+
   svg1.selectAll("body")
      .data(stationline)
        .enter().append("text")
@@ -371,8 +342,129 @@ const circle= svg1.selectAll("body")
       .style("font-size",7)
       .style("fill","white");
 }
- 
+var ImageRank=function(index){
+if(index>=0 && index<42){return 1;}
+else if(index>=42 && index<84){return 2;}
+else if(index>=84 && index<126){return 3;}
+else if(index>=126 && index<168){return 4;}
+else if(index>=168 && index<210){return 5;}
+else if(index>=210 && index<252){return 6;}
+else if(index>=252 && index<294){return 7;}
+};
 
+function  Drawstationimg(stationline){
+  var images= imgsvg.selectAll("body")
+   .data(stationline)
+   .enter().append("svg:image")
+                    .attr('id',"stationIMG")
+                    .attr('x', function(d){return ((d.INDEX%42)*35);})
+                    .attr('y', function(d){return (ImageRank(d.INDEX)*70);})
+                    .attr('width', 100)
+                    .attr('height', 60)
+                    .attr("xlink:href", function(d){return ("/pic/"+d.img);})
+                    .on("mouseover",function(d){
+                      console.log(d);
+                      console.log(this);
+                    })
+                    .on("mouseout",function(d){
+                    })
+  //  .attr("cx",margin.left+100)
+  //  .attr("cy", function(d){ return d.INDEX*8+4;})
+  //  .attr("id", function(d){ return d.ST_NAME; })
+   
+}
+
+function Drawgeocanvas(stationline){
+  geox=geoxscale(stationline);
+           geoy=geoyscale(stationline);
+           geocanvas.selectAll(".GeoStationDot")
+                    .data(stationline)
+                    .enter().append("circle")
+                    .attr("class","GeoStationDot")
+                    .attr("id", function(d){ return d.ST_NAME; })
+                    .attr("r",1.2)
+                    .attr("cx",function(d){return geox(+d.LNG)})
+                    .attr("cy",function(d){return geoy(+d.LAT)})
+                    .style("fill","white")
+                    // .style("fill","white")
+                    // .style("fill-opacity","0.3")
+                    // .style("stroke","white")
+                    // .style("stroke-opacity","0.3")
+                    .on("mouseover",function(d){
+                      console.log(d);
+                      console.log(this);
+                      console.log(d3.select(this).attr('id'));
+                      mouse=(d3.select(this).attr('id'));
+                     
+                      handlemouseover(d);
+                         d3.select(this).attr("r",3);
+                         d3.select(this).attr("opacity",1);
+                     div.transition()
+                        .duration(200)
+                        .style("opacity",0.9);
+                     div.html(d.ST_NAME+"<div>"+d.ST_NAME_EN+"<div>"+"Line:"+d.LINENO)
+                        .style("left",(d3.event.pageX+7)+"px")
+                        .style("top",(d3.event.pageY+18)+"px");      
+                           })
+                    .on("mouseout",function(d){
+                        d3.select(this).attr("r",1.2);
+                        d3.select(this).attr("opacity",0.5);
+                         div.transition()
+                            .duration(1000)
+                            .style("opacity",0)});
+          // console.log(connections)
+           geocanvas.selectAll(".connection")
+                .data(connections)
+                .enter().append("line")
+                .attr("class","connection")
+                .attr("id",function(d){return d[0]+'-'+d[1]+"line"+d[2];})
+                .attr("stroke",function(d){return linecolor(+d[2])})
+                .attr("stroke-width",0.9)
+                .attr("stroke-linecap", "round")
+                .attr("x1", function(d) { return geox(+(stationsraw[d[0]].LNG)); })
+                .attr("y1", function(d) { return geoy(+(stationsraw[d[0]].LAT)); })
+                .attr("x2", function(d) { return geox(+(stationsraw[d[1]].LNG)); })
+                .attr("y2", function(d) { return geoy(+(stationsraw[d[1]].LAT)); })
+                .on("mouseover",function(d){
+                      console.log(d);
+                      console.log(this);
+                      console.log(d3.select(this).attr('id'));
+                      d3.select(this).attr('id')
+                         .attr("stroke-width",3); 
+                  
+                      handlemouseover(d);
+                        //  d3.select(this).attr("stroke-width",3);
+                         d3.select(this).attr("opacity",1);})
+                    .on("mouseout",function(d){
+                        d3.select(this).attr("stroke-width",0.9);});
+};
+
+function handlemouseover(d){
+        console.log(String(mouse)); 
+        MOUSE=String(mouse);
+        d3.selectAll("#"+ MOUSE).style("fill","red");
+  console.log(stationline)
+       geopoint=d.ST_NAME
+      //  console.log(geopoint);
+        stationline.forEach (function(x,j){
+      if(x.ST_NAME==geopoint){
+        console.log(x); 
+      }
+      });
+}
+function mouseoverimg(d){
+   console.log(d.img);
+   svg1.append("svg:image")
+                    .attr('id',"stationIMG")
+                    .attr('x', -50)
+                    .attr('y', d.INDEX*8)
+                    .attr('width', 200)
+                    .attr('height', 248)
+                    .attr("xlink:href", "/pic/"+d.img)
+}
+function mouseoutimg(d){
+  svg1.select("#stationIMG").remove();
+}
     </script>
    
   </body>
