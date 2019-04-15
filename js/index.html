@@ -2,13 +2,14 @@
   <meta charset="utf-8">
   <title>SH Metro</title>
   <head>
-        <div id = 'chart'></div>  
+      <div id= 'img'></div>
         <div id = 'geo'></div> 
-        <div id= 'img'></div>
+        <div id = 'chart'></div> 
   </head>
   <style>
 body {
-background: linear-gradient(rgb(30,30,30), rgb(25,25,25));
+/* background: linear-gradient(rgb(30,30,30), rgb(25,25,25)); */
+background:rgb(30,30,30);
 background-attachment: fixed;
 background-repeat: no-repeat;
 }
@@ -70,7 +71,31 @@ line.y{
 }
 .shadow{
   fill:black;
-  opacity:0.75;
+  opacity:0.8;
+}
+.shadowL1{
+  fill: rgb(30,30,30);
+  opacity:0.9;
+}
+.shadowL2{
+  fill:rgb(30,30,30);
+  opacity:0.9;
+}
+.shadowL3{
+  fill:rgb(30,30,30);
+  opacity:0.7;
+}
+.shadowL4{
+  fill:rgb(30,30,30);
+  opacity:0.7;
+}
+.shadowL5{
+  fill:rgb(30,30,30);
+  opacity:0.5;
+}
+.shadowL6{
+  fill:rgb(30,30,30);
+  opacity:0.5;
 }
   </style>
   <body>
@@ -361,6 +386,9 @@ function  Drawstationimg(stationline){
   var imgappend;
   var imgshadow1;
   var imgshadow2;
+  var imgshadowL1;  var imgshadowL3;  var imgshadowL5;  
+  var imgshadowL2;  var imgshadowL4;   var imgshadowL6;   
+  var Row;
   var images= imgsvg.selectAll("body")
    .data(stationline)
    .enter().append("svg:image")
@@ -389,36 +417,6 @@ function  Drawstationimg(stationline){
                     .attr('height', 45)
                     .attr("xlink:href","/pic/"+d.img)
                     .style("pointer-events", "none");
-
-                    // stationline.forEach(function(d,i){
-                    //     if(ImageRank(d.INDEX)==imgRow && (d.INDEX%41)!=imgRowNo){
-                    //      console.log(d);
-                    //      if((d.INDEX%41)<imgRowNo){
-                    //       const widthUpdate=(imgRowX-50)/imgRowNo;
-                    //       //  console.log(widthUpdate);
-                    // imgshadow= imgsvg.append("svg:image")
-                    //       .attr('id',"ImgShadow")
-                    //       .attr('x',((d.INDEX%41)*widthUpdate-20))
-                    //       .attr('y',(ImageRank(d.INDEX)*70))
-                    //       .attr('width', 100)
-                    //       .attr('height', 45)
-                    //       .attr("xlink:href","/pic/"+d.img)
-                    //       .style("pointer-events", "none");
-                    //       }
-                    //       else if((d.INDEX%41)>imgRowNo){
-                    //       const widthUpdate2=(imgRowX-50)/imgRowNo;
-                    //       //  console.log(widthUpdate2);
-                    // imgshadow2= imgsvg.append("svg:image")
-                    //       .attr('id',"StationImg")
-                    //       .attr('x',((d.INDEX%41)*widthUpdate2-20))
-                    //       .attr('y',(ImageRank(d.INDEX)*70))
-                    //       .attr('width', 100)
-                    //       .attr('height', 45)
-                    //       .attr("xlink:href","/pic/"+d.img)
-                    //       .style("pointer-events", "none");
-                    //       }
-                    //     }  
-                    // })
                  
                     imgshadow1=imgsvg.append("rect")
                           .attr('id',"shadow1")
@@ -427,13 +425,65 @@ function  Drawstationimg(stationline){
                           .attr('class','shadow')
                           .attr('width', imgRowX-80)
                           .attr('height', 45)
-                 imgshadow2= imgsvg.append("rect")
+                    imgshadow2= imgsvg.append("rect")
                           .attr('id',"shadow2")
                           .attr('x', (d.INDEX%41)*35+80)
                           .attr('y', ImageRank(d.INDEX)*70)
                           .attr('class','shadow')
                           .attr('width', 1435-imgRowX)
-                          .attr('height', 45)
+                          .attr('height', 45);
+                
+                  imgshadowL1=imgsvg.append("rect")
+                          .attr('id',"shadowL1")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)-1)*70)
+                          .attr('class','shadowL1')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+                   imgshadowL2=imgsvg.append("rect")
+                          .attr('id',"shadowL2")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)+1)*70)
+                          .attr('class','shadowL2')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+                   imgshadowL3=imgsvg.append("rect")
+                          .attr('id',"shadowL3")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)-2)*70)
+                          .attr('class','shadowL3')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+                   imgshadowL4=imgsvg.append("rect")
+                          .attr('id',"shadowL4")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)+2)*70)
+                          .attr('class','shadowL4')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+                  imgshadowL5=imgsvg.append("rect")
+                          .attr('id',"shadowL5")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)-3)*70)
+                          .attr('class','shadowL5')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+                   imgshadowL6=imgsvg.append("rect")
+                          .attr('id',"shadowL6")
+                          .attr('x', 30)
+                          .attr('y', (ImageRank(d.INDEX)+3)*70)
+                          .attr('class','shadowL6')
+                          .attr('width', 1465)
+                          .attr('height', 45);
+
+                 var  imgbig = imgsvg.append("svg:image")
+                          .attr('id',"StationImg")
+                          .attr('x', 30)
+                          .attr('y', 600)
+                          .attr('width', 600)
+                    .attr('height', 270)
+                    .attr("xlink:href","/pic/"+d.img)
+                    .style("pointer-events", "none");
                 
                     })
                     .on("mouseout",imgmouseout)
@@ -442,6 +492,12 @@ function  Drawstationimg(stationline){
     // imgsvg.select("#ImgShadow").remove();
     imgsvg.select("#shadow1").remove();
     imgsvg.select("#shadow2").remove();
+    imgsvg.select("#shadowL1").remove();
+    imgsvg.select("#shadowL2").remove();
+    imgsvg.select("#shadowL3").remove();
+    imgsvg.select("#shadowL4").remove();
+    imgsvg.select("#shadowL5").remove();
+    imgsvg.select("#shadowL6").remove();
     // d3.select(this).style("opacity",0)
   }
    
