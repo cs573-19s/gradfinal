@@ -68,6 +68,10 @@ line.y{
   /* stroke-width: 0.9px; */
   opacity:0.8;
 }
+.shadow{
+  fill:black;
+  opacity:0.75;
+}
   </style>
   <body>
     
@@ -99,7 +103,7 @@ geocanvas.height=geo.height;
 
 //station image canvas
 var imgsvg=d3.select("#img").append("svg")
-       .attr("width",1500)
+       .attr("width",1500-margin.right)
        .attr("height",1500)
 
 //append div for tooltip on hover:
@@ -343,36 +347,105 @@ var circle= svg1.selectAll("body")
       .style("fill","white");
 }
 var ImageRank=function(index){
-if(index>=0 && index<42){return 1;}
-else if(index>=42 && index<84){return 2;}
-else if(index>=84 && index<126){return 3;}
-else if(index>=126 && index<168){return 4;}
-else if(index>=168 && index<210){return 5;}
-else if(index>=210 && index<252){return 6;}
-else if(index>=252 && index<294){return 7;}
+if(index>=0 && index<41){return 1;}
+else if(index>=41 && index<82){return 2;}
+else if(index>=82 && index<123){return 3;}
+else if(index>=123 && index<164){return 4;}
+else if(index>=164 && index<205){return 5;}
+else if(index>=205 && index<246){return 6;}
+else if(index>=246 && index<287){return 7;}
 };
 
 function  Drawstationimg(stationline){
+  var imagemouse;
+  var imgappend;
+  var imgshadow1;
+  var imgshadow2;
   var images= imgsvg.selectAll("body")
    .data(stationline)
    .enter().append("svg:image")
-                    .attr('id',"stationIMG")
-                    .attr('x', function(d){return ((d.INDEX%42)*35);})
+                    .attr('id',function(d){return d.ST_NAME_EN;})
+                    .attr('x', function(d){return ((d.INDEX%41)*35+30);})
                     .attr('y', function(d){return (ImageRank(d.INDEX)*70);})
                     .attr('width', 100)
-                    .attr('height', 60)
+                    .attr('height', 45)
+                    .attr("row",function(d){return ImageRank(d.INDEX);})
+                    .attr("rowNo",function(d){return (d.INDEX%41);})
                     .attr("xlink:href", function(d){return ("/pic/"+d.img);})
+                    .style("opacity",0.8)    
                     .on("mouseover",function(d){
+                      console.log(ImageRank(d.INDEX))
                       console.log(d);
                       console.log(this);
+                      imgRow=(d3.select(this).attr('row'));
+                      imgRowNo=(d3.select(this).attr('rowNo'));
+                      imgRowX=(d3.select(this).attr('x'));
+                      // console.log(imagemouse);
+                      imgappend = imgsvg.append("svg:image")
+                          .attr('id',"StationImg")
+                          .attr('x', (d.INDEX%41)*35-20)
+                          .attr('y', ImageRank(d.INDEX)*70)
+                          .attr('width', 100)
+                    .attr('height', 45)
+                    .attr("xlink:href","/pic/"+d.img)
+                    .style("pointer-events", "none");
+
+                    // stationline.forEach(function(d,i){
+                    //     if(ImageRank(d.INDEX)==imgRow && (d.INDEX%41)!=imgRowNo){
+                    //      console.log(d);
+                    //      if((d.INDEX%41)<imgRowNo){
+                    //       const widthUpdate=(imgRowX-50)/imgRowNo;
+                    //       //  console.log(widthUpdate);
+                    // imgshadow= imgsvg.append("svg:image")
+                    //       .attr('id',"ImgShadow")
+                    //       .attr('x',((d.INDEX%41)*widthUpdate-20))
+                    //       .attr('y',(ImageRank(d.INDEX)*70))
+                    //       .attr('width', 100)
+                    //       .attr('height', 45)
+                    //       .attr("xlink:href","/pic/"+d.img)
+                    //       .style("pointer-events", "none");
+                    //       }
+                    //       else if((d.INDEX%41)>imgRowNo){
+                    //       const widthUpdate2=(imgRowX-50)/imgRowNo;
+                    //       //  console.log(widthUpdate2);
+                    // imgshadow2= imgsvg.append("svg:image")
+                    //       .attr('id',"StationImg")
+                    //       .attr('x',((d.INDEX%41)*widthUpdate2-20))
+                    //       .attr('y',(ImageRank(d.INDEX)*70))
+                    //       .attr('width', 100)
+                    //       .attr('height', 45)
+                    //       .attr("xlink:href","/pic/"+d.img)
+                    //       .style("pointer-events", "none");
+                    //       }
+                    //     }  
+                    // })
+                 
+                    imgshadow1=imgsvg.append("rect")
+                          .attr('id',"shadow1")
+                          .attr('x', 30)
+                          .attr('y', ImageRank(d.INDEX)*70)
+                          .attr('class','shadow')
+                          .attr('width', imgRowX-80)
+                          .attr('height', 45)
+                 imgshadow2= imgsvg.append("rect")
+                          .attr('id',"shadow2")
+                          .attr('x', (d.INDEX%41)*35+80)
+                          .attr('y', ImageRank(d.INDEX)*70)
+                          .attr('class','shadow')
+                          .attr('width', 1435-imgRowX)
+                          .attr('height', 45)
+                
                     })
-                    .on("mouseout",function(d){
-                    })
-  //  .attr("cx",margin.left+100)
-  //  .attr("cy", function(d){ return d.INDEX*8+4;})
-  //  .attr("id", function(d){ return d.ST_NAME; })
+                    .on("mouseout",imgmouseout)
+  function imgmouseout(){
+    imgsvg.select("#StationImg").remove();
+    // imgsvg.select("#ImgShadow").remove();
+    imgsvg.select("#shadow1").remove();
+    imgsvg.select("#shadow2").remove();
+    // d3.select(this).style("opacity",0)
+  }
    
-}
+};
 
 function Drawgeocanvas(stationline){
   geox=geoxscale(stationline);
