@@ -477,7 +477,7 @@ function  Drawstationimg(stationline){
                           .attr('height', 45);
 
                  var  imgbig = imgsvg.append("svg:image")
-                          .attr('id',"StationImg")
+                          .attr('id',"StationImgbig")
                           .attr('x', 30)
                           .attr('y', 600)
                           .attr('width', 600)
@@ -489,6 +489,7 @@ function  Drawstationimg(stationline){
                     .on("mouseout",imgmouseout)
   function imgmouseout(){
     imgsvg.select("#StationImg").remove();
+    imgsvg.select("#StationImgbig").remove();
     // imgsvg.select("#ImgShadow").remove();
     imgsvg.select("#shadow1").remove();
     imgsvg.select("#shadow2").remove();
