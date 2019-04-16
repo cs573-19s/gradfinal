@@ -97,13 +97,18 @@ line.y{
   fill:rgb(30,30,30);
   opacity:0.5;
 }
+.imgline{
+  stroke:red;
+  stroke-width: 7.8px;
+  z-index: 30;
+}
   </style>
   <body>
     
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script>
 //canvas
-var margin={top:75, right:15, bottom:125, left:85},
+var margin={top:75, right:35, bottom:125, left:15},
   width=1200-margin.left,
   height=2500-margin.top-margin.bottom;
 var svg1=d3.select("#chart").append("svg")
@@ -145,7 +150,7 @@ d3.json('connections_by_station_name.json').then(function(d) {
 
 d3.json('stations_by_name.json').then (function(data){
   stationsraw=data;
-  console.log(stationsraw);
+  // console.log(stationsraw);
   var data=d3.keys(data)
       .map(function(d){
         return {"STATION":d,"LINE_NO":data[d].LINE_NO,"LAT":data[d].LAT,"LNG":data[d].LNG,"SERIAL_NO":data[d].SERIAL_NO,
@@ -166,7 +171,7 @@ d3.json('stations_by_name.json').then (function(data){
   Drawstationline(stationline)
   Drawgeocanvas(stationline)
   Drawstationimg(stationline)
-      
+  // Drawstationgeo(stationline)   
   //entry data
   d3.json('every5minute_entry0401_list.json').then (function(data){ 
        data=d3.keys(data)
@@ -201,18 +206,6 @@ d3.json('stations_by_name.json').then (function(data){
 
 });
 });
-
-function geoxscale(d){
-    return d3.scaleLinear()
-             .domain([d3.min(d,function(d){return +d.LNG}),d3.max(d,function(d){return +d.LNG})])
-             .range([0,geocanvas.width]);
-   };
-function geoyscale(d){
-    return d3.scaleLinear()
-             .domain([d3.min(d,function(d){return +d.LAT}),d3.max(d,function(d){return +d.LAT})])
-             .range([geocanvas.height,0]);
-   };
-
 
 // Variables for colors and legend:
 var mint = "#05B89A",
@@ -389,6 +382,122 @@ function  Drawstationimg(stationline){
   var imgshadowL1;  var imgshadowL3;  var imgshadowL5;  
   var imgshadowL2;  var imgshadowL4;   var imgshadowL6;   
   var Row;
+  function stationgeoxscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LNG}),d3.max(d,function(d){return +d.LNG})])
+             .range([0,400]);
+   };
+   function stationgeoyscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LAT}),d3.max(d,function(d){return +d.LAT})])
+             .range([400,0]);
+   };
+  var description= imgsvg.append("svg:text")
+                          .attr('id',"description")
+                          .attr('x', 30)
+                          .attr('y', 620)
+                          .text( "Data visualization plays an important role in urban data analysis that")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("has a huge impact on urban design and research. In this project,")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("Shanghai’s metro data is visualized and data on 2015/04/01 is chosen as an example.")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("Our target is to present ShangHai’s city streaming based on metros’ streaming.")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("And data is collected from ShangHai public transportation released from Shanghai government in 2015")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("We mainly focus on metro streaming and passenger streaming in different stations")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("along the timeline in a particular day. To provide more information for urban data analysis,")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("weather information at different times is added. What’s more is that the spatial division")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("is applied based on ShangHai administrative regions in order to reflect the relationship")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("between metros’ moving and regions’ functionalities.")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("This project aims to build a template for urban subway data visualization in China. ")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("We hope that citizens will have an overall understanding of metro streaming and urban")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 30)
+                          .attr('dy', 20)
+                          .text("designers will get new insights from our product.")
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",10)
+                          .style("fill","white")
+
   var images= imgsvg.selectAll("body")
    .data(stationline)
    .enter().append("svg:image")
@@ -402,7 +511,7 @@ function  Drawstationimg(stationline){
                     .attr("xlink:href", function(d){return ("/pic/"+d.img);})
                     .style("opacity",0.8)    
                     .on("mouseover",function(d){
-                      console.log(ImageRank(d.INDEX))
+                      console.log(d.LINENO)
                       console.log(d);
                       console.log(this);
                       imgRow=(d3.select(this).attr('row'));
@@ -484,13 +593,130 @@ function  Drawstationimg(stationline){
                     .attr('height', 270)
                     .attr("xlink:href","/pic/"+d.img)
                     .style("pointer-events", "none");
-                
+
+                var  imgbigtext = imgsvg.append("svg:text")
+                          .attr('id',"StationImgText")
+                          .attr('x', 680)
+                          .attr('y', 720)
+                          .text( "Line Number:"+""+d.LINENO)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("Station Name:" +d.STATION)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("Station Name:" + d.ST_NAME_EN)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("Station Latitude:" + d.LAT)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("Station Longitude:" + d.LNG)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x',680)
+                          .attr('dy', 20)
+                          .text("Transfer Tag:" + d.TRANSFER_TAG)
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("FIRST_T_TIME:" )
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                          .append('svg:tspan')
+                          .attr('x', 680)
+                          .attr('dy', 20)
+                          .text("LAST_T_TIME:" )
+                          .attr("text-anchor", "front")
+                          .style("font-family", "Avenir")
+                          .style("font-size",14)
+                          .style("fill","white")
+                    .style("pointer-events", "none");
+            var  imgbigline = imgsvg.append("line")
+                          .attr('id',"StationImgbigline")
+                          .attr('x1', 680)
+                          .attr('y1', 680)
+                          .attr('x2', 780)
+                          .attr('y2', 680)
+                          .attr("stroke",linecolor(d.LINENO))
+                          .attr("stroke-width",5)
+                          .attr("stroke-linecap", "round");
+            var  imgbigcircle = imgsvg.append("circle")
+                          .attr('id',"StationImgbigcircle")
+                          .attr('r',7)
+                          .attr('cx', 730)
+                          .attr('cy', 680)
+                          .style("fill",linecolor(d.LINENO));
+               imgsvg.selectAll(".geostationcircle").style("opacity",0.2);
+            var cover=imgsvg.append("rect")
+                    .attr("id","cover")
+                    .attr("x",1000)
+                    .attr("y",570)
+                    .attr("width",500)
+                    .attr("height",500)
+                    .style("fill","rgb(30,30,30)")
+                    .style("opacity",0.7)
+               var changeline= imgsvg.selectAll("body")
+                .data(connections)
+                .enter().append("line")
+                // .attr("class","stationconnect")
+                .attr("id","changestationline")
+                .attr("stroke",function(x,j){return linecolor(+x[2])})
+                .attr("stroke-width",2.5)
+                .attr("stroke-linecap", "round")
+                .attr("x1", function(x,j) { if(x[2]==d.LINENO)
+                {return stationgeox(+(stationsraw[x[0]].LNG))+1000; }})
+                .attr("y1", function(x,j) { if(x[2]==d.LINENO)
+                {return stationgeoy(+(stationsraw[x[0]].LAT))+570; }})
+                .attr("x2", function(x,j) { if(x[2]==d.LINENO)
+                {return stationgeox(+(stationsraw[x[1]].LNG))+1000; }})
+                .attr("y2", function(x,j) { if(x[2]==d.LINENO)
+                {return stationgeoy(+(stationsraw[x[1]].LAT))+570; }})
+            var changecircle=imgsvg.append("circle")
+                    .attr("id","changecircle")
+                    // .attr("class","geostationcircle")
+                    .attr("r",7)
+                    .attr("cx", stationgeox(+d.LNG)+1000)
+                    .attr("cy", stationgeoy(+d.LAT)+570)
+                    .style("fill", linecolor(d.LINENO))
                     })
+            
+                // imgsvg.selectAll(".stationconnect").style("opacity",0.4)
                     .on("mouseout",imgmouseout)
   function imgmouseout(){
     imgsvg.select("#StationImg").remove();
     imgsvg.select("#StationImgbig").remove();
-    // imgsvg.select("#ImgShadow").remove();
+    imgsvg.select("#StationImgbigline").remove();
+    imgsvg.select("#StationImgbigcircle").remove();
+    imgsvg.select("#StationImgText").remove();
     imgsvg.select("#shadow1").remove();
     imgsvg.select("#shadow2").remove();
     imgsvg.select("#shadowL1").remove();
@@ -499,10 +725,85 @@ function  Drawstationimg(stationline){
     imgsvg.select("#shadowL4").remove();
     imgsvg.select("#shadowL5").remove();
     imgsvg.select("#shadowL6").remove();
+    imgsvg.selectAll(".geostationcircle").style("opacity",1);
+    imgsvg.select("#changecircle").remove();
+    imgsvg.select("#cover").remove();
+    imgsvg.selectAll("#changestationline").remove();
+    // imgsvg.selectAll(".stationconnect").style("opacity",1);
+    // imgsvg.select("#"+String(d.ST_NAME_EN)).attr("r",1.5);
     // d3.select(this).style("opacity",0)
-  }
-   
+  };
+
+  //Railway Line
+  var imgline= imgsvg.selectAll("body")
+                       .data(stationline)
+                       .enter().append("line")
+                       .attr("x1",function(d){return ((d.INDEX%41)*35+30);})
+                       .attr("y1",function(d){return (ImageRank(d.INDEX)*70+50);})
+                       .attr("x2",function(d){return ((d.INDEX%41)*35+65);})
+                       .attr("y2",function(d){return (ImageRank(d.INDEX)*70+50);})
+                       .attr("id",function(d){return d.ST_NAME_EN;})
+                      //  .attr("class","imgline")
+                       .attr("stroke",function(d){return linecolor(d.LINENO);})
+                       .attr("stroke-width",2)
+                       .attr("stroke-linecap", "round");
+  imgsvg.selectAll("body")
+     .data(stationline)
+       .enter().append("text")
+      .text(function(d){return d.STATION;})
+      .attr("x",function(d){return ((d.INDEX%41)*35+40);})
+      .attr("y",function(d){return (ImageRank(d.INDEX)*70+57);})
+      // .attr("transform", "translate(0,-20)")
+      // .attr("transform",function(d){return "rotate(90)"})
+      .attr("text-anchor", "middle")
+      .style("font-family", "Avenir")
+      .style("font-size",5)
+      .style("fill","white");
+
+//stationGeoMap
+   stationgeox=stationgeoxscale(stationline);
+   stationgeoy=stationgeoyscale(stationline);
+           imgsvg.selectAll("body")
+                    .data(stationline)
+                    .enter().append("circle")
+                    .attr("id",function(d){return d.ST_NAME_EN;})
+                    .attr("class","geostationcircle")
+                    .attr("r",1.5)
+                    .attr("cx",function(d){return stationgeox(+d.LNG)+1000})
+                    .attr("cy",function(d){return stationgeoy(+d.LAT)+570})
+                    .style("fill",function(d){return linecolor(d.LINENO)})
+                    .style("opacity",1)
+                    .on("mouseover",function(d){console.log(d);
+                    console.log(this);})
+          imgsvg.selectAll(".connection")
+                .data(connections)
+                .enter().append("line")
+                .attr("class","stationconnect")
+                .attr("id","geostationline")
+                .attr("stroke",function(d){return linecolor(+d[2])})
+                .attr("stroke-width",1)
+                .attr("stroke-linecap", "round")
+                .attr("x1", function(d) { return stationgeox(+(stationsraw[d[0]].LNG))+1000; })
+                .attr("y1", function(d) { return stationgeoy(+(stationsraw[d[0]].LAT))+570; })
+                .attr("x2", function(d) { return stationgeox(+(stationsraw[d[1]].LNG))+1000; })
+                .attr("y2", function(d) { return stationgeoy(+(stationsraw[d[1]].LAT))+570; })
+                .style("opacity",1)
 };
+
+// function Drawstationgeo(stationline){
+
+// }
+
+function geoxscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LNG}),d3.max(d,function(d){return +d.LNG})])
+             .range([0,geocanvas.width]);
+   };
+function geoyscale(d){
+    return d3.scaleLinear()
+             .domain([d3.min(d,function(d){return +d.LAT}),d3.max(d,function(d){return +d.LAT})])
+             .range([geocanvas.height,0]);
+   };
 
 function Drawgeocanvas(stationline){
   geox=geoxscale(stationline);
@@ -516,10 +817,6 @@ function Drawgeocanvas(stationline){
                     .attr("cx",function(d){return geox(+d.LNG)})
                     .attr("cy",function(d){return geoy(+d.LAT)})
                     .style("fill","white")
-                    // .style("fill","white")
-                    // .style("fill-opacity","0.3")
-                    // .style("stroke","white")
-                    // .style("stroke-opacity","0.3")
                     .on("mouseover",function(d){
                       console.log(d);
                       console.log(this);
