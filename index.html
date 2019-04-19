@@ -9,13 +9,38 @@
       <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
 
     <style>
+
+    .line {
+      fill: none;
+      stroke: black;
+      stroke-width: 3;
+    }
+
+    body {
+      background-image: linear-gradient(to bottom, black, grey);;
+    }
     </style>
   
   </head>
   <body>
 
-    <div class="svg" id="SVG"></div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Hurricane Watcher</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">Hurricane Data</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </div>
+    </nav>
 
+    <div>
+      <div class="svg" id="SVG"></div>
+      <div class="svg", id="SVG2"></div>
+    </div>
     
 
     <script src="lineChart.js"></script>
@@ -26,8 +51,10 @@
       var hurricanes;
       var hurricanesFiltered;
 
+      var svgLines = []
+
       var width = window.innerWidth;
-      var height = window.innerHeight;
+      var height = window.innerHeight * .95;
 
       console.log(width)
       console.log(height)
@@ -45,6 +72,14 @@
         .attr('xlink:href', 'worldmap4.jpg')
         .attr('width', width/2)
         .attr('height', height)
+
+      var brush = d3.brush()
+          .extent([[8, 0], [width/2 - 8, height]])
+          .on("end", filterHurricanes);
+
+      svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
 
 
       // var lineFunction = d3.svg.line()
@@ -77,20 +112,20 @@
         hurricanes = data
         console.log(hurricanes)
 
-        
+        startAnimation()
       });
 
-      var brush = d3.brush()
-          .extent([[8, 0], [width/2 - 8, height]])
-          .on("end", filterHurricanes);
-
-      svg.append("g")
-        .attr("class", "brush")
-        .call(brush);
+      
 
 
       function filterHurricanes(){
         console.log("here")
+
+        svgLines.forEach(function(svgChart){
+          console.log(svgChart)
+          document.getElementById("SVG2").innerHTML = ""
+        })
+        
 
         var s = d3.event.selection;
         console.log(s)
@@ -117,8 +152,29 @@
 
         console.log(hurricanesFiltered)
 
-        createLineChart('#SVG', hurricanesFiltered, lat1, lat2, long1, long2)
+        svgLines = []
 
+        var serial = hurricanesFiltered[0].SerialNum;
+        var tempHurricane = []
+        for(var i = 0; i < hurricanesFiltered.length; i++){
+          if(i == hurricanesFiltered.length - 1){
+            tempHurricane.push(hurricanesFiltered[i])
+            svgLines.push(createLineChart('#SVG2', tempHurricane, lat1, lat2, long1, long2))
+          }
+          else if(hurricanesFiltered[i].SerialNum == serial){
+            tempHurricane.push(hurricanesFiltered[i])
+          }
+          else{
+            svgLines.push(createLineChart('#SVG2', tempHurricane, lat1, lat2, long1, long2))
+
+            tempHurricane = []
+            serial = hurricanesFiltered[i].SerialNum
+            tempHurricane.push(hurricanesFiltered[i])
+
+          }
+        }
+
+        console.log(svgLines)
       }
 
       function plotCoordinate(index){
@@ -216,26 +272,28 @@
       }
 
 
-
-      setInterval(function(){
-        //animate stuff
-        //console.log('here')
-        if(counter < hurricanes.length){
-          if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
-            svg.selectAll("line").style('opacity', .2)
+      function startAnimation(){
+        setInterval(function(){
+          //animate stuff
+          //console.log('here')
+          if(counter < hurricanes.length - 1){
+            if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
+              svg.selectAll("line").style('opacity', .4)
+            }
+            else{
+              plotCoordinate(counter);
+            }
+            currentHurricane = hurricanes[counter].SerialNum
+            counter += 1;
           }
           else{
-            plotCoordinate(counter);
+            counter = 0;
+            svg.selectAll("line").remove();
           }
-          currentHurricane = hurricanes[counter].SerialNum
-          counter += 1;
-        }
-        else{
-          counter = 0;
-          svg.selectAll("line").remove();
-        }
-        
-      }, 100);
+          
+        }, 100);
+      }
+      
 
 
     </script>

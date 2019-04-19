@@ -1,53 +1,67 @@
 
 function createLineChart(id, data, lat1, lat2, long1, long2){
 
-	// set the dimensions and margins of the graph
-	var margin = {top: 20, right: 20, bottom: 30, left: 50},
-	    width = 300 - margin.left - margin.right,
-	    height = 300 - margin.top - margin.bottom;
+	var margin = {top: 50, right: 50, bottom: 50, left: 50}
+	  , width = 300 - margin.left - margin.right  
+	  , height = 300 - margin.top - margin.bottom;
 
-	// set the ranges
-	var x = d3.scaleLinear().range([0, width]);
-	var y = d3.scaleLinear().range([height, 0]);
+	  // window.innerWidth 
+	  //window.innerHeight
 
-	// define the line
-	var valueline = d3.line()
-	    .x(function(d) { return x(d.Longitude); })
-	    .y(function(d) { return y(d.Latitude); });
+	var xScale = d3.scaleLinear()
+	    .domain([long1, long2]) 
+	    .range([0, width]); 
 
-	// append the svg obgect to the body of the page
-	// appends a 'group' element to 'svg'
-	// moves the 'group' element to the top left margin
-	var svg = d3.select(id).append("svg")
+
+	var yScale = d3.scaleLinear()
+	    .domain([lat2, lat1])  
+	    .range([height, 0]); 
+
+	// 7. d3's line generator
+	var line = d3.line()
+	    .x(function(d, i) { return xScale(d.Longitude); }) // set the x values for the line generator
+	    .y(function(d) { return yScale(d.Latitude); }) // set the y values for the line generator 
+	    .curve(d3.curveMonotoneX)
+	    
+
+	var svgLine = d3.select(id).append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	  	.append("g")
-	    .attr("transform",
-	          "translate(" + margin.left + "," + margin.top + ")");
-
-	console.log(lat1)
-        console.log(lat2)
-        console.log(long1)
-        console.log(long2)
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-	  // Scale the range of the data
-	  x.domain([long1, long2]);
-	  y.domain([lat2, lat1]);
 
-	  // Add the valueline path.
-	  // svg.append("path")
-	  //     .data([data])
-	  //     .attr("class", "line")
-	  //     .attr("d", valueline);
+	svgLine.append("g")
+	    .attr("class", "x axis")
+	    .attr("transform", "translate(0," + height + ")")
+	    .call(d3.axisBottom(xScale));
 
-	  // Add the X Axis
-	  svg.append("g")
-	      .attr("transform", "translate(0," + height + ")")
-	      .call(d3.axisBottom(x));
+	svgLine.append("g")
+	    .attr("class", "y axis")
+	    .call(d3.axisLeft(yScale)); 
 
-	  // Add the Y Axis
-	  svg.append("g")
-	      .call(d3.axisLeft(y));
 
+	for(var i = 0; i < data.length-1; i++){
+		svgLine.append("line")
+	      	.attr("x1", xScale(data[i].Longitude))
+	      	.attr("y1", yScale(data[i].Latitude))
+	      	.attr("x2", xScale(data[i+1].Longitude))
+	      	.attr("y2", yScale(data[i+1].Latitude))
+	      	.attr("stroke-width", 2)
+	      	.attr("stroke", hurricaneColor(data[i].Wind))
+    }
+
+	// svgLine.append("path")
+	//     .datum(data) // 10. Binds data to the line 
+	//     .attr("class", "line") // Assign a class for styling 
+	//     .attr("d", line)
+	//     .attr("stroke-width", 2)
+ //      	.attr("stroke", function(d){
+ //        	return hurricaneColor(d.Wind)
+ //      	});
+
+	return svgLine
 }
+
+
