@@ -18,30 +18,224 @@
 
     
 
-    
+    <script src="lineChart.js"></script>
     <script type="text/javascript">
 
-      var width = window.innerWidth - 100;
-      var height = window.innerHeight - 100;
+      console.log(d3)
+
+      var hurricanes;
+      var hurricanesFiltered;
+
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      console.log(width)
+      console.log(height)
+
+      var counter = 0;
+      var currentHurricane;
+
 
       var svg = d3.select('#SVG')
                   .append("svg")
-                  .attr("width", width)
+                  .attr("width", width/2)
                   .attr("height", height)
       
       var myimage = svg.append('image')
-        .attr('xlink:href', 'worldmap.jpg')
-        .attr('width', width)
+        .attr('xlink:href', 'worldmap4.jpg')
+        .attr('width', width/2)
         .attr('height', height)
 
 
+      // var lineFunction = d3.svg.line()
+      //    .x(function(d) { return d.x; })
+      //    .y(function(d) { return d.y; })
+      //    .interpolate("cardinal");
 
+      // var defs = svg.append("defs");
+      // var gradient = defs.append("linearGradient")
+      //    .attr("id", "svgGradient")
+      //    .attr("x1", "0%")
+      //    .attr("x2", "100%")
+      //    .attr("y1", "0%")
+      //    .attr("y2", "100%");
+      // gradient.append("stop")
+      //    .attr('class', 'start')
+      //    .attr("offset", "0%")
+      //    .attr("stop-color", "red")
+      //    .attr("stop-opacity", 1);
+      // gradient.append("stop")
+      //    .attr('class', 'end')
+      //    .attr("offset", "100%")
+      //    .attr("stop-color", "blue")
+      //    .attr("stop-opacity", 1);
+
+
+
+      d3.csv("FilteredStorms.csv", function(data) {
+        // console.log(data);
+        hurricanes = data
+        console.log(hurricanes)
+
+        
+      });
+
+      var brush = d3.brush()
+          .extent([[8, 0], [width/2 - 8, height]])
+          .on("end", filterHurricanes);
+
+      svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+
+      function filterHurricanes(){
+        console.log("here")
+
+        var s = d3.event.selection;
+        console.log(s)
+
+
+        var lat1 = ((height - s[0][1] - 0) * (90 - (-90)) / (height - 0) + (-90))
+        var lat2 = ((height - s[1][1] - 0) * (90 - (-90)) / (height - 0) + (-90))
+        var long1 = (s[0][0] - 0) * (180 - (-180)) / (width - 0) + (-180)
+        var long2 = (s[1][0] - 0) * (180 - (-180)) / (width - 0) + (-180)
+
+        console.log(lat1)
+        console.log(lat2)
+        console.log(long1)
+        console.log(long2)
+
+        hurricanesFiltered = [];
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricanes[x].Latitude < lat1 && hurricanes[x].Latitude > lat2 &&
+            hurricanes[x].Longitude < long2 && hurricanes[x].Longitude > long1){
+            hurricanesFiltered.push(hurricanes[x]);
+          }
+        }
+
+        console.log(hurricanesFiltered)
+
+        createLineChart('#SVG', hurricanesFiltered, lat1, lat2, long1, long2)
+
+      }
+
+      function plotCoordinate(index){
+        //console.log(hurricanes[index].Longitude*-1)
+
+        var latitude1 = parseFloat(hurricanes[index].Latitude)
+        var longitude1 = parseFloat(hurricanes[index].Longitude)
+        var latitude2 = parseFloat(hurricanes[index+1].Latitude)
+        var longitude2 = parseFloat(hurricanes[index+1].Longitude)
+
+        // console.log("lat = " + latitude)
+        // console.log("long = " + longitude)
+
+        var screenX1 = (longitude1 - (-180)) * (width - 0) / (180 - (-180)) + 0
+        var screenY1 = height - ((latitude1 - (-90)) * (height - 0) / (90 - (-90)) + 0)
+        var screenX2 = (longitude2 - (-180)) * (width - 0) / (180 - (-180)) + 0
+        var screenY2 = height - ((latitude2 - (-90)) * (height - 0) / (90 - (-90)) + 0)
+
+        // console.log(screenX)
+        // console.log(screenY)
+
+        svg.append("line")
+          .attr("x1", screenX1)
+          .attr("y1", screenY1)
+          .attr("x2", screenX1)
+          .attr("y2", screenY1)
+          .attr("stroke-width", 2)
+          .attr("stroke", function(){
+            return hurricaneColor(hurricanes[index].Wind)
+          })
+          .transition()
+          .duration(100)
+          .attr("x2", screenX2)
+          .attr("y2", screenY2)  
+          .attr('stroke', function(){
+              //console.log(hurricanes[index].Wind)
+
+              return hurricaneColor(hurricanes[index+1].Wind)
+              
+            });
+
+        // svg.append("path")
+        //   .attr("d", lineFunction(lineData))
+        //   .attr("stroke-width", 3)
+        //   .attr("stroke", "url(#svgGradient)")
+        //   .attr("fill", "none");
+
+        // svg.append('circle')
+        //     .attr('cx', screenX1)
+        //     .attr('cy', screenY1)
+        //     .attr('r', 2)
+        //     .attr('fill', function(){
+        //       //console.log(hurricanes[index].Wind)
+
+        //       if(hurricanes[index].Wind > 137){
+        //         return '#8b0000'
+        //       }
+        //       else if(hurricanes[index].Wind > 113){
+        //         return '#c0223b'
+        //       }
+        //       else if(hurricanes[index].Wind > 96){
+        //         return '#e75758'
+        //       }
+        //       else if(hurricanes[index].Wind > 83){
+        //         return '#fe906a'
+        //       }
+        //       else if(hurricanes[index].Wind > 64){
+        //         return '#ffcb91'
+        //       }
+        //       else{
+        //         return '#ffffe0'
+        //       }
+        //     });
+      }
+
+      function hurricaneColor(speed){
+        if(speed > 137){
+          return '#8b0000'
+        }
+        else if(speed > 113){
+          return '#c0223b'
+        }
+        else if(speed > 96){
+          return '#e75758'
+        }
+        else if(speed > 83){
+          return '#fe906a'
+        }
+        else if(speed > 64){
+          return '#ffcb91'
+        }
+        else{
+          return '#ffffe0'
+        }
+      }
 
 
 
       setInterval(function(){
         //animate stuff
-      }, 1000);
+        //console.log('here')
+        if(counter < hurricanes.length){
+          if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
+            svg.selectAll("line").style('opacity', .2)
+          }
+          else{
+            plotCoordinate(counter);
+          }
+          currentHurricane = hurricanes[counter].SerialNum
+          counter += 1;
+        }
+        else{
+          counter = 0;
+          svg.selectAll("line").remove();
+        }
+        
+      }, 100);
 
 
     </script>
