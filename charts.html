@@ -79,7 +79,7 @@
 <div id="group">
     <p id = "givenText">Test</p>
     <input type="text" value="" placeholder="Enter name" id="nameText"/>
-    <input type="text" value="" placeholder="Enter percent" id="valueText" autofocus/>
+    <input type="text" value="" placeholder="Enter value" id="valueText" autofocus/>
 
     <button id="nextButton" onClick="updateGraph()">Next Graph</button>
 
@@ -100,31 +100,27 @@
             }
         });
 
-    var format1 = d3.format("3");
+    let format1 = d3.format("3");
 
-    var format2 = d3.format("00.2f");
+    let format2 = d3.format("00.2f");
 
-    var data = Array(10);
+    let data = Array(10);
 
-    var name = "";
+    let name = "";
 
-    var count = 1;
+    let count = 1;
 
-    var givens = [];
+    let givens = [];
 
-    var actuals = [];
+    let actuals = [];
 
-    var reported = [];
+    let reported = [];
 
-    var types = [];
+    let types = [];
 
-    var marked = [0, 0];
+    let currentType = "";
 
-    var currentType = "";
-
-    var width = 450, height = 500, margin = 10;
-
-    var counts = [0, 0, 0, 0]; // brightness, length, area, velocity
+    let counts = [0, 0, 0, 0]; // brightness, length, area, velocity
 
     function randomBrightnessNumber() {
         return Math.floor(Math.random() * 96 + 5) / 100 ;
@@ -183,6 +179,16 @@
 
     function storeVelocityResults() {
 
+        name = document.getElementById('nameText').value;
+
+        reported.push(document.getElementById('valueText').value);
+
+        types.push(currentType);
+
+        // givens
+
+        // actuals
+
     }
 
     function displayResults() {
@@ -194,7 +200,7 @@
         document.getElementById("nameText").style.display = "none";
         document.getElementById("valueText").style.display = "none";
 
-        var html = "<table border = '1'1>";
+        let html = "<table border = '1'>";
 
         html += "<tr>";
         html += "<th>Name</th>";
@@ -204,7 +210,7 @@
         html += "<th>Actual Value</th>";
         html += "<th>Reported Value</th>";
 
-        for (i = 0; i < reported.length; i++) {
+        for (let i = 0; i < reported.length; i++) {
             html += "<tr>";
             html += "<td>" + name + "</td>";
             html += "<td>" + (i + 1) + "</td>";
@@ -222,7 +228,7 @@
 
     function chooseTest() {
 
-        var type = Math.floor(Math.random() * 4);
+        let type = Math.floor(Math.random() * 4);
         if (type === 0 && counts[0] < 10) {
             brightnessTest();
         } else if (type === 1 && counts[1] < 10) {
@@ -238,7 +244,7 @@
 
     function updateGraph() {
 
-        if (document.getElementById("nameText").value == "" || document.getElementById("valueText").value == "") {
+        if (document.getElementById("nameText").value === "" || document.getElementById("valueText").value === "") {
             alert("You must enter both a name and a percentage!");
             return;
         }
@@ -275,14 +281,14 @@
 
         currentType = 'Brightness';
 
-        var sideLength = 120;
+        let sideLength = 120;
 
         data = Array(2).fill(0).map(randomBrightnessNumber);
 
-        var svg = d3.select('svg');
+        let svg = d3.select('svg');
 
-        var x1 = 60;
-        var x2 = 270;
+        let x1 = 60;
+        let x2 = 270;
 
         svg.append('rect')
             .attr('x', x1)
@@ -314,9 +320,9 @@
 
         data = Array(2).fill(0).map(randomLengthNumber);
 
-        var svg = d3.select('svg');
+        let svg = d3.select('svg');
 
-        var x1 = 250, x2 = 300, y1 = 200;
+        let x1 = 250, x2 = 300, y1 = 200;
 
         svg.append('line')
             .attr('x1', x1)
@@ -348,10 +354,10 @@
 
         data = Array(2).fill(0).map(randomAreaNumber);
 
-        var svg = d3.select('svg');
+        let svg = d3.select('svg');
 
-        var x1 = 60;
-        var x2 = 270;
+        let x1 = 60;
+        let x2 = 270;
 
         svg.append('rect')
             .attr('x', x1)
@@ -380,30 +386,15 @@
 
         currentType = 'Velocity';
 
-        data = Array(5).fill(0).map(randomVelocityNumber);
+        // change velocity number calculation as needed, but DO NOT use any type of scale
+        data = Array(2).fill(0).map(randomVelocityNumber);
 
-        var svg = d3.select('svg');
 
-        var scale = d3.scaleLinear().domain([0, d3.max(data)]).range([0, height - margin * 3]);
+        let svg = d3.select('svg');
 
-        var barWidth = (width - margin) / data.length;
-
-        var xAxis = svg.append("line").attr("y1", 0).attr("y2", 0).attr("x1", margin + 25).attr("x2", height + 100).attr("stroke-width", 3).attr("stroke", "black");
-
-        var yAxis = svg.append("line").attr("y1", 0).attr("y2", barWidth * 3).attr("x1", margin + 25).attr("x2", margin + 25).attr("stroke-width", 3).attr("stroke", "black");
-
-        var currentY = margin + 5;
-
-        for (i = 0; i < 2; i++) {
-            svg.append('rect')
-                .attr('x', margin + 25)
-                .attr('y', currentY)
-                .attr('width', scale(data[i]))
-                .attr('height', barWidth)
-                .attr('fill', 'steelblue');
-
-            currentY += barWidth + 5;
-        }
+        /*
+        Enter velocity vis here using data and svg
+         */
 
 
         counts[3] += 1;
