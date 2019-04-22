@@ -30,7 +30,13 @@ function createLineChart(id, data, lat1, lat2, long1, long2){
 	  	.append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
+	svgLine.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("" + data[0].Name_x + " " + data[0].Season);
 
 	svgLine.append("g")
 	    .attr("class", "x axis")
