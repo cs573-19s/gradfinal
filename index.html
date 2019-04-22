@@ -1,0 +1,50 @@
+<!-- https://bost.ocks.org/mike/bar/3/ -->
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+
+<style>
+
+    a:link, a:visited {
+        background-color: #f44336;
+        color: white;
+        padding: 15px 30px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
+        border: 2px solid white;
+    }
+
+    a:hover, a:active {
+        background-color: white;
+        color: red;
+        border: 2px solid red;
+    }
+
+    h1{
+        text-align: center;
+    }
+
+    .description{
+        text-align: justify;
+    }
+
+    .button{
+        text-align: center;
+    }
+
+</style>
+
+<body>
+
+<h1>Experiment</h1>
+<p class="description">In this experiment, the participant will be presented with a randomly generated graph of 2 data points. Some will be bar charts, some will be circles, and some will be squares. <br>
+    The participant must enter the percentage of the bigger data point covered by the smaller data point. For bar charts, this means the length of the bar. For the circles and squares, this means the area of the shape. <br>
+    For example, if the participant believes the smaller data point is half the size of the bigger one, the participant would enter "50" into the text box. If the smaller data point is 3/4 the size of the bigger, the participant would enter "75". <br>
+    All entries should be whole numbers (no decimals or fractions).</p>
+
+<div class="button"><a href="charts.html">Start!</a></div>
+
+</body>
