@@ -137,7 +137,7 @@
 
     //define a range for the random velocity number****************
     function randomVelocityNumber() {
-        return Math.floor((Math.random() * 500) + 500);
+        return Math.floor((Math.random() * 1500) + 500);
     }
 
     function storeBrightnessResults() {
@@ -399,21 +399,21 @@
          */
          function circleTransition() {
 
-            var fastCircle = svg.append("circle")
+            let fastCircle = svg.append("circle")
                 .attr("fill", "steelblue")
                 .attr("r", 20);
-            var slowCircle = svg.append("circle")
+            let slowCircle = svg.append("circle")
                 .attr("fill", "steelblue")
-                .attr("r", 20)
+                .attr("r", 20);
             
-            var fastX = 200;
-            var slowX = 300;
+            let fastX = 200;
+            let slowX = 300;
 
-            var chosenLeft = Math.round(Math.random());
+            let chosenLeft = Math.round(Math.random());
 
-            if(chosenLeft == 1){
-                fastX = 300
-                slowX = 200
+            if(chosenLeft === 1){
+                fastX = 300;
+                slowX = 200;
             }
 
             repeat();
@@ -433,13 +433,13 @@
                     .duration(d3.max(data))
                     .attr('cy', 350)
                     .on("end", repeat);  // when both transitions finish, they start again together
-            };
+            }
 
-            document.getElementById("givenText").innerHTML = "Given value: " + format1(1500 - data[chosenLeft]);
+            document.getElementById("givenText").innerHTML = "Given value: " + format1(2000 - data[chosenLeft]);
 
             console.log(data);
             console.log(chosenLeft);
-        };
+        }
 
         circleTransition();
 
