@@ -134,8 +134,10 @@
         return Math.floor((Math.random() * 100) + 10);
     }
 
+
+    //define a range for the random velocity number****************
     function randomVelocityNumber() {
-        return Math.floor((Math.random() * 37) + 3);
+        return Math.floor((Math.random() * 500) + 500);
     }
 
     function storeBrightnessResults() {
@@ -395,11 +397,58 @@
         /*
         Enter velocity vis here using data and svg
          */
+         function circleTransition() {
+
+            var fastCircle = svg.append("circle")
+                .attr("fill", "steelblue")
+                .attr("r", 20);
+            var slowCircle = svg.append("circle")
+                .attr("fill", "steelblue")
+                .attr("r", 20)
+            
+            var fastX = 200;
+            var slowX = 300;
+
+            var chosenLeft = Math.round(Math.random());
+
+            if(chosenLeft == 1){
+                fastX = 300
+                slowX = 200
+            }
+
+            repeat();
+
+            function repeat() {
+
+                fastCircle
+                    .attr('cx', fastX)
+                    .attr('cy', 50)
+                    .transition()
+                    .duration(d3.min(data))
+                    .attr('cy', 350);
+                slowCircle
+                    .attr('cx', slowX)
+                    .attr('cy', 50)
+                    .transition()
+                    .duration(d3.max(data))
+                    .attr('cy', 350)
+                    .on("end", repeat);  // when both transitions finish, they start again together
+            };
+
+            document.getElementById("givenText").innerHTML = "Given value: " + format1(1500 - data[chosenLeft]);
+
+            console.log(data);
+            console.log(chosenLeft);
+        };
+
+        circleTransition();
+
 
 
         counts[3] += 1;
     }
 
-    chooseTest();
+    //chooseTest();
+    velocityTest();
 
 </script>
