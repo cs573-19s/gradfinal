@@ -16,6 +16,17 @@
       stroke-width: 3;
     }
 
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      stroke-width: 1px;
+      shape-rendering: crispEdges;
+    }
+    .x path {
+      display: none;
+    }
+
     body {
       background-image: linear-gradient(to bottom, #02aab0, #00cdac);;
     }
@@ -38,10 +49,31 @@
     </nav>
 
     <div>
+      <div class="col-sm-4" style="text-align: center">
+
+      </div>
+      <div class="col-sm-2" style="text-align: center">
+        <button id="playButton" type="button" class="btn-lg btn-success btn-block" onclick="Reset()">Play!</button>
+      </div>
+      <div class="col-sm-2" style="text-align: center">
+        <button id="pauseButton" type="button" class="btn-lg btn-danger btn-block" onclick="pauseAnimation()" disabled>Pause</button>
+      </div>
+      <div class="col-sm-4" style="text-align: center">
+
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+
       <div class="col-sm-6">
         <svg id="SVG"></svg>
       </div>
-      <div class = "col-sm-6">
+      <div class="col-sm-6">
+        <svg id="SVG3"></svg>
+        <svg id="SVG4"></svg>
+      </div>
+      <div class = "col-sm-12">
         <form>
           <H3>Filter by Storm Category</H3>
           <label class="checkbox-inline">
@@ -63,58 +95,6 @@
           <H3>Filter by Amount of Damages</H3>
         </form>
 
-        <H1>Filtered Hurricane Data</H1>
-        <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
-          <table class="table table-bordered table-striped mb-0">
-            <thead>
-              <tr>
-                <th scope="col">Hurricane</th>
-                <th scope="col">Deaths</th>
-                <th scope="col">Damages</th>
-                <th scope="col">Max Category</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
-
         </div>
         
       </div>
@@ -126,6 +106,7 @@
     
 
     <script src="lineChart.js"></script>
+    <script src="barChart.js"></script>
     <script type="text/javascript">
 
       //console.log(d3)
@@ -142,22 +123,39 @@
       console.log(width)
       console.log(height)
 
-      var counter = 0;
-      var currentHurricane;
+      var counter = 100000;
+      var currentHurricane = "";
+      var nextHurricane = "";
 
       var deathCounter = 0;
       var damageCounter = 0;
       var currentDate = "";
-      var y = ""
-      var md = ""
+      var yearDate = "";
+      var md = "";
 
       var filterBox = [90, -90, -180, 0];
+
+      var paused = false;
+      var intervalSpeed = 1;
 
 
       var svg = d3.select('#SVG')
                   // .append("svg")
                   .attr("width", width/2)
                   .attr("height", height)
+
+      var svgBar = d3.select("#SVG3")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
+      var svgBar2 = d3.select("#SVG4")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
+      var x = d3.scaleLinear()
+      var y = d3.scaleBand()
+      var x2 = d3.scaleLinear()
+      var y2 = d3.scaleBand()
       
       var myimage = svg.append('image')
         .attr('xlink:href', 'worldmap4.jpg')
@@ -199,7 +197,7 @@
             .attr("y", 90)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
-            .text("Year: " + y);
+            .text("Year: " + yearDate);
 
       var monthDay = svg.append("text")
             .attr("x", 150)             
@@ -208,6 +206,9 @@
             .style("font-size", "16px")   
             .text("Month/Day: " + md);
 
+      var deathBar;
+      var damagesBar;
+
 
       d3.csv("FilteredStorms.csv", function(data) {
         // console.log(data);
@@ -215,6 +216,10 @@
         hurricanesFiltered = hurricanes
         hurricanesDisplay = hurricanes
         console.log(hurricanes)
+
+        deathBar = createDeathBarChart(svgBar, hurricanes, x, y);
+
+        damagesBar = createDamagesBarChart(svgBar2, hurricanes, x2, y2);
 
         multipleViews()
 
@@ -437,37 +442,85 @@
         }
       }
 
+      function Reset(){
+        document.getElementById("playButton").disabled = true
+        document.getElementById("pauseButton").disabled = false
+
+        counter = 0;
+        deathCounter = 0;
+        damageCounter = 0;
+        svg.selectAll("line").remove();
+      }
+
+      function pauseAnimation(){
+        if(paused){
+          paused = false
+          document.getElementById("pauseButton").innerHTML = "Pause"
+        }
+        else{
+          paused = true
+          document.getElementById("pauseButton").innerHTML = "Resume"
+        }
+      }
+
 
       function startAnimation(){
-        setInterval(function(){
+
+        var anim = setInterval(function(){
           //animate stuff
           //console.log('here')
-          if(counter < hurricanesDisplay.length - 1){
-            if(hurricanesDisplay[counter].SerialNum != hurricanesDisplay[counter+1].SerialNum){
-              svg.selectAll("line").style('opacity', .4)
-              deathCounter += parseInt(hurricanesDisplay[counter].Deaths)
-              damageCounter += parseInt(hurricanesDisplay[counter].Damages)
+          if(!paused){
+            intervalSpeed+= 100;
+            if(counter < hurricanesDisplay.length - 1){
+              if(counter == 0){
+                deathCounter += parseInt(hurricanesDisplay[counter].Deaths)
+                damageCounter += parseInt(hurricanesDisplay[counter].Damages)
+
+                deathBar.data("Deaths").transition()
+                  .duration(400)
+                  .attr("width", x(deathCounter));
+
+                damagesBar.data("Damages").transition()
+                  .duration(400)
+                  .attr("width", x2(damageCounter * 1000000));
+
+                plotCoordinate(counter);
+              }
+              else if(hurricanesDisplay[counter].SerialNum != hurricanesDisplay[counter+1].SerialNum){
+                svg.selectAll("line").style('opacity', .4)
+                deathCounter += parseInt(hurricanesDisplay[counter+1].Deaths)
+                damageCounter += parseInt(hurricanesDisplay[counter+1].Damages)
+
+                deathBar.data("Deaths").transition()
+                  .duration(400)
+                  .attr("width", x(deathCounter));
+
+                damagesBar.data("Damages").transition()
+                  .duration(400)
+                  .attr("width", x2(damageCounter * 1000000));
+              }
+              else{
+                plotCoordinate(counter);
+              }
+              
+              currentHurricane = hurricanesDisplay[counter].SerialNum
+              nextHurricane = hurricanesDisplay[counter+1].SerialNum
+              currentDate = new Date(hurricanesDisplay[counter].ISOTime)
+              counter += 1;
+
+              deaths.text("Death Count: " + deathCounter)
+              damages.text("Damages: $" + damageCounter * 1000000)
+              year.text("Year: " + currentDate.getFullYear())
+              monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
             }
             else{
-              plotCoordinate(counter);
-            }
-            currentHurricane = hurricanesDisplay[counter].SerialNum
-            currentDate = new Date(hurricanesDisplay[counter].ISOTime)
-            counter += 1;
-          }
-          else{
-            counter = 0;
-            deathCounter = 0;
-            damageCounter = 0;
-            svg.selectAll("line").remove();
-          }
 
-          deaths.text("Death Count: " + deathCounter)
-          damages.text("Damages: $" + damageCounter * 1000000)
-          year.text("Year: " + currentDate.getFullYear())
-          monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
-          
-        }, 30);
+              document.getElementById("playButton").disabled = false;
+              document.getElementById("pauseButton").disabled = true;
+
+            }
+          }
+        }, intervalSpeed);
       }
       
 
