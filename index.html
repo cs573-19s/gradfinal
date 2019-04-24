@@ -17,7 +17,7 @@
     }
 
     body {
-      background-image: linear-gradient(to bottom, darkgreen, green);;
+      background-image: linear-gradient(to bottom, #02aab0, #00cdac);;
     }
     </style>
   
@@ -38,10 +38,12 @@
     </nav>
 
     <div>
-      <div >
+      <div class="col-sm-6">
         <svg id="SVG"></svg>
+      </div>
+      <div class = "col-sm-6">
         <form>
-          <H2>Filter by Storm Category</H2>
+          <H3>Filter by Storm Category</H3>
           <label class="checkbox-inline">
             <input type="checkbox" id="cat5" onchange="filterCategory()" checked=true>Category 5
           </label>
@@ -57,19 +59,76 @@
           <label class="checkbox-inline">
             <input type="checkbox" id="cat1" onchange="filterCategory()" checked=true>Category 1
           </label>
+          <H3>Filter by Death Count</H3>
+          <H3>Filter by Amount of Damages</H3>
         </form>
+
+        <H1>Filtered Hurricane Data</H1>
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+          <table class="table table-bordered table-striped mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Hurricane</th>
+                <th scope="col">Deaths</th>
+                <th scope="col">Damages</th>
+                <th scope="col">Max Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        
       </div>
 
       
 
-      <div class="svg", id="SVG2"></div>
+      <div class="col-sm-12", id="SVG2"></div>
     </div>
     
 
     <script src="lineChart.js"></script>
     <script type="text/javascript">
 
-      console.log(d3)
+      //console.log(d3)
 
       var hurricanes = [];
       var hurricanesFiltered = [];
@@ -85,6 +144,12 @@
 
       var counter = 0;
       var currentHurricane;
+
+      var deathCounter = 0;
+      var damageCounter = 0;
+      var currentDate = "";
+      var y = ""
+      var md = ""
 
       var filterBox = [90, -90, -180, 0];
 
@@ -107,30 +172,41 @@
         .attr("class", "brush")
         .call(brush);
 
+      var rectangle = svg.append("rect")
+          .attr("x", 20)
+          .attr("y", 35)
+          .attr("width", 250)
+          .attr("height", 80)
+          .attr("fill", "grey")
+          .attr("stroke", "black");
 
-      // var lineFunction = d3.svg.line()
-      //    .x(function(d) { return d.x; })
-      //    .y(function(d) { return d.y; })
-      //    .interpolate("cardinal");
+      var deaths = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 50)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Death Count: " + deathCounter);
 
-      // var defs = svg.append("defs");
-      // var gradient = defs.append("linearGradient")
-      //    .attr("id", "svgGradient")
-      //    .attr("x1", "0%")
-      //    .attr("x2", "100%")
-      //    .attr("y1", "0%")
-      //    .attr("y2", "100%");
-      // gradient.append("stop")
-      //    .attr('class', 'start')
-      //    .attr("offset", "0%")
-      //    .attr("stop-color", "red")
-      //    .attr("stop-opacity", 1);
-      // gradient.append("stop")
-      //    .attr('class', 'end')
-      //    .attr("offset", "100%")
-      //    .attr("stop-color", "blue")
-      //    .attr("stop-opacity", 1);
+      var damages = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 70)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Damages: $" + damageCounter * 1000000);
 
+      var year = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 90)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Year: " + y);
+
+      var monthDay = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 110)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Month/Day: " + md);
 
 
       d3.csv("FilteredStorms.csv", function(data) {
@@ -264,7 +340,6 @@
           }
         }
 
-        console.log(svgLines)
       }
 
 
@@ -370,19 +445,29 @@
           if(counter < hurricanesDisplay.length - 1){
             if(hurricanesDisplay[counter].SerialNum != hurricanesDisplay[counter+1].SerialNum){
               svg.selectAll("line").style('opacity', .4)
+              deathCounter += parseInt(hurricanesDisplay[counter].Deaths)
+              damageCounter += parseInt(hurricanesDisplay[counter].Damages)
             }
             else{
               plotCoordinate(counter);
             }
             currentHurricane = hurricanesDisplay[counter].SerialNum
+            currentDate = new Date(hurricanesDisplay[counter].ISOTime)
             counter += 1;
           }
           else{
             counter = 0;
+            deathCounter = 0;
+            damageCounter = 0;
             svg.selectAll("line").remove();
           }
+
+          deaths.text("Death Count: " + deathCounter)
+          damages.text("Damages: $" + damageCounter * 1000000)
+          year.text("Year: " + currentDate.getFullYear())
+          monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
           
-        }, 10);
+        }, 30);
       }
       
 
