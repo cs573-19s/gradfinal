@@ -123,22 +123,33 @@
     let counts = [0, 0, 0, 0]; // brightness, length, area, velocity
 
     function randomBrightnessNumber() {
-        return Math.floor(Math.random() * 96 + 5) / 100 ;
+        return Math.floor(Math.random() * 95 + 5) / 100 ;
     }
 
     function randomLengthNumber() {
-        return Math.floor((Math.random() * 150) + 50);
+        return Math.floor((Math.random() * 150) + 10);
     }
+
+    let lengthScale = d3.scaleLinear()
+        .domain([10, 200])
+        .range([1, 100]);
 
     function randomAreaNumber() {
-        return Math.floor((Math.random() * 100) + 10);
+        return Math.floor((Math.random() * 90) + 10);
     }
 
+    let areaScale = d3.scaleLinear()
+        .domain([100, 10000])
+        .range([1, 100]);
 
     //define a range for the random velocity number****************
     function randomVelocityNumber() {
-        return Math.floor((Math.random() * 1500) + 500);
+        return Math.floor((Math.random() * 2000) + 1000);
     }
+
+    let velocityScale = d3.scaleLinear()
+        .domain([1000, 3000])
+        .range([100, 1]);
 
     function storeBrightnessResults() {
 
@@ -342,7 +353,7 @@
             .attr('stroke', 'black')
             .attr('stroke-width', '4');
 
-        document.getElementById("givenText").innerHTML = "Given value: " + data[0];
+        document.getElementById("givenText").innerHTML = "Given value: " + Math.round(lengthScale(data[0]));
 
         counts[1] += 1;
     }
@@ -375,7 +386,7 @@
             .attr('height', data[1])
             .attr('class', 'rects');
 
-        document.getElementById("givenText").innerHTML = "Given value: " + format2(Math.pow(data[0], 2) / 100);
+        document.getElementById("givenText").innerHTML = "Given value: " + Math.round(areaScale(Math.pow(data[0], 2)));
 
         counts[2] += 1;
 
@@ -414,6 +425,9 @@
             if(chosenLeft === 1){
                 fastX = 300;
                 slowX = 200;
+                document.getElementById("givenText").innerHTML = "Given value: " + Math.round(velocityScale(d3.max(data)));
+            } else {
+                document.getElementById("givenText").innerHTML = "Given value: " + Math.round(velocityScale(d3.min(data)));
             }
 
             repeat();
@@ -435,9 +449,7 @@
                     .on("end", repeat);  // when both transitions finish, they start again together
             }
 
-            document.getElementById("givenText").innerHTML = "Given value: " + format1(2000 - data[chosenLeft]);
-
-            console.log(data);
+            console.log(velocityScale(data[0]), velocityScale(data[1]));
             console.log(chosenLeft);
         }
 
