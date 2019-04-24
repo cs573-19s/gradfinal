@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Project</title>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+
+    <style>
+        .state {
+            fill: #cccccc;
+            stroke: #ffffff;
+        }
+    </style>
+
+</head>
+<body>
+<svg id="svg" width="1000" height="1000"></svg>
+
+<script>
+
+
+let svg = d3.select('#svg');
+let width = svg.select('width');
+let height = svg.select('height');
+
+// D3 Projection
+let projection = d3.geoAlbersUsa()
+    .translate([width/2, height/2])    // translate to center of screen
+    .scale([1000]);          // scale things down so see entire US
+
+// Define path generator
+let path = d3.geoPath(projection);
+
+let map = svg.append('g');
+
+d3.json("us.json").then(us =>{
+    console.log(us);
+
+    map.selectAll('.state')
+        .data(topojson.feature(us, us.objects.states).features)
+        .enter()
+        .append('path')
+        .attr('class', 'state')
+        .attr('d', path)
+});
+
+// path generator that will convert GeoJSON to SVG paths
+// tell path generator to use albersUsa projection
+
+
+</script>
+</body>
+</html>
