@@ -77,7 +77,7 @@
 <h1 id="title"></h1>
 
 <div id="group">
-    <p id = "givenText">Test</p>
+    <p id="givenText">Test</p>
     <input type="text" value="" placeholder="Enter name" id="nameText"/>
     <input type="text" value="" placeholder="Enter value" id="valueText" autofocus/>
 
@@ -93,7 +93,7 @@
     console.log(d3);
 
     document.getElementById("valueText")
-        .addEventListener("keyup", function(event) {
+        .addEventListener("keyup", function (event) {
             event.preventDefault();
             if (event.keyCode === 13) {
                 document.getElementById("nextButton").click();
@@ -101,8 +101,6 @@
         });
 
     let format1 = d3.format("3");
-
-    let format2 = d3.format("00.2f");
 
     let data = Array(10);
 
@@ -120,10 +118,12 @@
 
     let currentType = "";
 
+    let side = 2;
+
     let counts = [0, 0, 0, 0]; // brightness, length, area, velocity
 
     function randomBrightnessNumber() {
-        return Math.floor(Math.random() * 95 + 5) / 100 ;
+        return Math.floor((Math.random() * 95) + 5);
     }
 
     function randomLengthNumber() {
@@ -131,7 +131,7 @@
     }
 
     let lengthScale = d3.scaleLinear()
-        .domain([10, 200])
+        .domain([10, 160])
         .range([1, 100]);
 
     function randomAreaNumber() {
@@ -142,7 +142,6 @@
         .domain([100, 10000])
         .range([1, 100]);
 
-    //define a range for the random velocity number****************
     function randomVelocityNumber() {
         return Math.floor((Math.random() * 2000) + 1000);
     }
@@ -159,9 +158,9 @@
 
         types.push(currentType);
 
-        givens.push(data[0] * 100);
+        givens.push(data[0]);
 
-        actuals.push(data[1] * 100);
+        actuals.push(data[1]);
 
     }
 
@@ -173,8 +172,9 @@
 
         types.push(currentType);
 
-        actuals.push(Math.abs(Math.round((3.14 * Math.pow(Math.min(data[0], data[1]), 2)) / (3.14 * Math.pow(Math
-            .max(data[0], data[1]), 2)) * 100)));
+        givens.push(Math.round(lengthScale(data[0])));
+
+        actuals.push(Math.round(lengthScale(data[1])));
     }
 
     function storeAreaResults() {
@@ -185,9 +185,9 @@
 
         types.push(currentType);
 
-        givens.push(Math.pow(data[0], 2) / 100);
+        givens.push(Math.round(areaScale(Math.pow(data[0], 2))));
 
-        actuals.push(Math.pow(data[1], 2) / 100);
+        actuals.push(Math.round(areaScale(Math.pow(data[1], 2))));
     }
 
     function storeVelocityResults() {
@@ -198,13 +198,20 @@
 
         types.push(currentType);
 
-        // givens
-
-        // actuals
+        if(side === 1) {
+            givens.push(Math.round(velocityScale(d3.max(data))));
+            actuals.push(Math.round(velocityScale(d3.min(data))));
+        } else {
+            givens.push(Math.round(velocityScale(d3.min(data))));
+            actuals.push(Math.round(velocityScale(d3.max(data))));
+        }
 
     }
 
     function displayResults() {
+
+        d3.select('body').style('background-color', 'white');
+        d3.select('#givenText').style('color', 'black');
 
         d3.select(".chart").attr("width", 0).attr("height", 0);
         document.getElementById("title").style.display = "block";
@@ -276,7 +283,7 @@
 
         d3.select(".chart").html("");
 
-        if (count < 40) {
+        if (count < 10) {
             chooseTest();
             count++;
         } else {
@@ -309,7 +316,7 @@
             .attr('width', sideLength)
             .attr('height', sideLength)
             .attr('fill', 'white')
-            .attr('opacity', data[0]);
+            .attr('opacity', data[0] / 100);
 
         svg.append('rect')
             .attr('x', x2)
@@ -317,9 +324,9 @@
             .attr('width', sideLength)
             .attr('height', sideLength)
             .attr('fill', 'white')
-            .attr('opacity', data[1]);
+            .attr('opacity', data[1] / 100);
 
-        document.getElementById("givenText").innerHTML = "Given value: " + format1(data[0] * 100);
+        document.getElementById("givenText").innerHTML = "Given value (left): " + format1(data[0]);
 
         counts[0] += 1;
     }
@@ -353,7 +360,7 @@
             .attr('stroke', 'black')
             .attr('stroke-width', '4');
 
-        document.getElementById("givenText").innerHTML = "Given value: " + Math.round(lengthScale(data[0]));
+        document.getElementById("givenText").innerHTML = "Given value (left): " + Math.round(lengthScale(data[0]));
 
         counts[1] += 1;
     }
@@ -386,7 +393,7 @@
             .attr('height', data[1])
             .attr('class', 'rects');
 
-        document.getElementById("givenText").innerHTML = "Given value: " + Math.round(areaScale(Math.pow(data[0], 2)));
+        document.getElementById("givenText").innerHTML = "Given value (left): " + Math.round(areaScale(Math.pow(data[0], 2)));
 
         counts[2] += 1;
 
@@ -399,16 +406,12 @@
 
         currentType = 'Velocity';
 
-        // change velocity number calculation as needed, but DO NOT use any type of scale
         data = Array(2).fill(0).map(randomVelocityNumber);
-
 
         let svg = d3.select('svg');
 
-        /*
-        Enter velocity vis here using data and svg
-         */
-         function circleTransition() {
+
+        function circleTransition() {
 
             let fastCircle = svg.append("circle")
                 .attr("fill", "steelblue")
@@ -416,18 +419,20 @@
             let slowCircle = svg.append("circle")
                 .attr("fill", "steelblue")
                 .attr("r", 20);
-            
+
             let fastX = 200;
             let slowX = 300;
 
             let chosenLeft = Math.round(Math.random());
 
-            if(chosenLeft === 1){
+            if (chosenLeft === 1) {
                 fastX = 300;
                 slowX = 200;
-                document.getElementById("givenText").innerHTML = "Given value: " + Math.round(velocityScale(d3.max(data)));
+                document.getElementById("givenText").innerHTML = "Given value (left): " + Math.round(velocityScale(d3.max(data)));
+                side = 1;
             } else {
-                document.getElementById("givenText").innerHTML = "Given value: " + Math.round(velocityScale(d3.min(data)));
+                document.getElementById("givenText").innerHTML = "Given value (left): " + Math.round(velocityScale(d3.min(data)));
+                side = 0;
             }
 
             repeat();
@@ -456,11 +461,9 @@
         circleTransition();
 
 
-
         counts[3] += 1;
     }
 
-    //chooseTest();
-    velocityTest();
+    chooseTest();
 
 </script>
