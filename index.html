@@ -49,22 +49,8 @@
     </nav>
 
     <div>
-      <div class="col-sm-4" style="text-align: center">
+      
 
-      </div>
-      <div class="col-sm-2" style="text-align: center">
-        <button id="playButton" type="button" class="btn-lg btn-success btn-block" onclick="Reset()">Play!</button>
-      </div>
-      <div class="col-sm-2" style="text-align: center">
-        <button id="pauseButton" type="button" class="btn-lg btn-danger btn-block" onclick="pauseAnimation()" disabled>Pause</button>
-      </div>
-      <div class="col-sm-4" style="text-align: center">
-
-      </div>
-      <br>
-      <br>
-      <br>
-      <br>
 
       <div class="col-sm-6">
         <svg id="SVG"></svg>
@@ -72,6 +58,21 @@
       <div class="col-sm-6">
         <svg id="SVG3"></svg>
         <svg id="SVG4"></svg>
+        <br>
+        <br>
+        <br>
+        <div class="col-sm-3" style="text-align: center">
+
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+          <button id="playButton" type="button" class="btn-lg btn-success btn-block" onclick="Reset()">Play!</button>
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+          <button id="pauseButton" type="button" class="btn-lg btn-danger btn-block" onclick="pauseAnimation()" disabled>Pause</button>
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+
+        </div>
       </div>
       <div class = "col-sm-12">
         <form>
@@ -224,6 +225,8 @@
         multipleViews()
 
         startAnimation()
+
+        animation()
       });
 
 
@@ -351,10 +354,10 @@
       function plotCoordinate(index){
         //console.log(hurricanes[index].Longitude*-1)
 
-        var latitude1 = parseFloat(hurricanesDisplay[index].Latitude)
-        var longitude1 = parseFloat(hurricanesDisplay[index].Longitude)
-        var latitude2 = parseFloat(hurricanesDisplay[index+1].Latitude)
-        var longitude2 = parseFloat(hurricanesDisplay[index+1].Longitude)
+        var latitude1 = parseFloat(hurricanes[index].Latitude)
+        var longitude1 = parseFloat(hurricanes[index].Longitude)
+        var latitude2 = parseFloat(hurricanes[index+1].Latitude)
+        var longitude2 = parseFloat(hurricanes[index+1].Longitude)
 
         // console.log("lat = " + latitude)
         // console.log("long = " + longitude)
@@ -374,7 +377,7 @@
           .attr("y2", screenY1)
           .attr("stroke-width", 2)
           .attr("stroke", function(){
-            return hurricaneColor(hurricanesDisplay[index].Wind)
+            return hurricaneColor(hurricanes[index].Wind)
           })
           .transition()
           .duration(100)
@@ -383,42 +386,9 @@
           .attr('stroke', function(){
               //console.log(hurricanes[index].Wind)
 
-              return hurricaneColor(hurricanesDisplay[index+1].Wind)
+              return hurricaneColor(hurricanes[index+1].Wind)
               
             });
-
-        // svg.append("path")
-        //   .attr("d", lineFunction(lineData))
-        //   .attr("stroke-width", 3)
-        //   .attr("stroke", "url(#svgGradient)")
-        //   .attr("fill", "none");
-
-        // svg.append('circle')
-        //     .attr('cx', screenX1)
-        //     .attr('cy', screenY1)
-        //     .attr('r', 2)
-        //     .attr('fill', function(){
-        //       //console.log(hurricanes[index].Wind)
-
-        //       if(hurricanes[index].Wind > 137){
-        //         return '#8b0000'
-        //       }
-        //       else if(hurricanes[index].Wind > 113){
-        //         return '#c0223b'
-        //       }
-        //       else if(hurricanes[index].Wind > 96){
-        //         return '#e75758'
-        //       }
-        //       else if(hurricanes[index].Wind > 83){
-        //         return '#fe906a'
-        //       }
-        //       else if(hurricanes[index].Wind > 64){
-        //         return '#ffcb91'
-        //       }
-        //       else{
-        //         return '#ffffe0'
-        //       }
-        //     });
       }
 
       function hurricaneColor(speed){
@@ -466,15 +436,16 @@
 
       function startAnimation(){
 
-        var anim = setInterval(function(){
+        var anim = d3.interval(function(elapsed){
           //animate stuff
           //console.log('here')
+          //console.log(elapsed);
           if(!paused){
             intervalSpeed+= 100;
-            if(counter < hurricanesDisplay.length - 1){
+            if(counter < hurricanes.length - 1){
               if(counter == 0){
-                deathCounter += parseInt(hurricanesDisplay[counter].Deaths)
-                damageCounter += parseInt(hurricanesDisplay[counter].Damages)
+                deathCounter += parseInt(hurricanes[counter].Deaths)
+                damageCounter += parseInt(hurricanes[counter].Damages)
 
                 deathBar.data("Deaths").transition()
                   .duration(400)
@@ -486,10 +457,10 @@
 
                 plotCoordinate(counter);
               }
-              else if(hurricanesDisplay[counter].SerialNum != hurricanesDisplay[counter+1].SerialNum){
+              else if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
                 svg.selectAll("line").style('opacity', .4)
-                deathCounter += parseInt(hurricanesDisplay[counter+1].Deaths)
-                damageCounter += parseInt(hurricanesDisplay[counter+1].Damages)
+                deathCounter += parseInt(hurricanes[counter+1].Deaths)
+                damageCounter += parseInt(hurricanes[counter+1].Damages)
 
                 deathBar.data("Deaths").transition()
                   .duration(400)
@@ -503,8 +474,8 @@
                 plotCoordinate(counter);
               }
               
-              currentHurricane = hurricanesDisplay[counter].SerialNum
-              nextHurricane = hurricanesDisplay[counter+1].SerialNum
+              currentHurricane = hurricanes[counter].SerialNum
+              nextHurricane = hurricanes[counter+1].SerialNum
               currentDate = new Date(hurricanesDisplay[counter].ISOTime)
               counter += 1;
 
@@ -520,8 +491,68 @@
 
             }
           }
-        }, intervalSpeed);
+        }, 50);
       }
+
+      function plotShit(serialNum){
+        if(serialNum == "1900239N15318"){
+          console.log("test")
+        }
+        else{
+          console.log("Here")
+        }
+        
+      }
+
+      function animation(){
+
+        majorDeathHurricanes = ["1900239N15318", "1963270N08327"]
+
+        console.log("FUnction")
+        console.log(hurricanes.length)
+
+        for(var i = 0; i < hurricanes.length; i++){
+
+          if(majorDeathHurricanes.includes(hurricanes[i].SerialNum)){
+            console.log("major")
+            window.setTimeout(plotShit(hurricanes[i].SerialNum), 10000);
+          }
+          else{
+            window.setTimeout(plotShit(hurricanes[i].SerialNum), 100);
+          }
+
+        }
+
+
+      }
+
+      function setDeceleratingTimeout(callback, speed) {
+          var internalCallback = (function(tick, counter){
+              return function(){
+                  if (--tick > 0) {
+                      window.setTimeout(internalCallback, speed);
+                      callback();
+                  }
+              }
+          })(1, 0);
+       
+          window.setTimeout(internalCallback, speed);
+      };
+       
+      function test_setDeceleratingTimeout(){
+          function sayhi(){
+              console.log("hi");
+          }
+       
+          function saybye(){
+              console.log("bye");
+          }
+       
+          setDeceleratingTimeout(sayhi, 1000);
+          setDeceleratingTimeout(saybye, 5000);
+      };
+       
+      test_setDeceleratingTimeout();
       
 
 
