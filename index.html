@@ -125,8 +125,6 @@
       console.log(height)
 
       var counter = 100000;
-      var currentHurricane = "";
-      var nextHurricane = "";
 
       var deathCounter = 0;
       var damageCounter = 0;
@@ -138,8 +136,8 @@
 
       var paused = false;
 
-      var interval = 50; // initial condition
-      var anim; // start setInterval as "run"
+      var interval = 25; 
+      var anim; 
 
 
       var svg = d3.select('#SVG')
@@ -186,14 +184,14 @@
             .attr("y", 50)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
-            .text("Death Count: " + deathCounter);
+            .text("Total Death Count: " + deathCounter);
 
       var damages = svg.append("text")
             .attr("x", 150)             
             .attr("y", 70)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
-            .text("Damages: $" + damageCounter * 1000000);
+            .text("Total Damages: $" + damageCounter * 1000000);
 
       var year = svg.append("text")
             .attr("x", 150)             
@@ -434,6 +432,65 @@
         }
       }
 
+      function updateBarCharts(speed){
+        deathBar.data("Deaths").transition()
+                .duration(speed)
+                .attr("width", x(deathCounter));
+
+        damagesBar.data("Damages").transition()
+          .duration(speed)
+          .attr("width", x2(damageCounter * 1000000));
+      }
+
+      var animName;
+      var animDeaths;
+      var animDamages;
+      function animationText(name, death, damage){
+        animText = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 400)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .style('opacity', 1)
+            .text(name);
+        animDeaths = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 420)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .style('opacity', 1)
+            .text("Number of Deaths: " + parseInt(death).toLocaleString('en'));
+
+        if(parseInt(damage) == 0){
+          animDamages = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 440)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .style('opacity', 1)
+            .text("Amount of Damages: Unknown");
+        }
+        else{
+          animDamages = svg.append("text")
+            .attr("x", 150)             
+            .attr("y", 440)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .style('opacity', 1)
+            .text("Amount of Damages: $" + (parseInt(damage) * 1000000).toLocaleString('en'));
+        }
+        
+
+        animText.transition()
+                .duration(10000)
+                .style('opacity', 0)
+        animDeaths.transition()
+                .duration(10000)
+                .style('opacity', 0)
+        animDamages.transition()
+                .duration(10000)
+                .style('opacity', 0)
+      }
 
 
 
@@ -441,6 +498,18 @@
 
         anim = setInterval(request , interval);
       }     
+
+      var majorHurricanes = ["2005236N23285", 
+                            "2012296N14283",
+                            "2008245N17323",
+                            "1992230N11325",
+                            "2005289N18282",
+
+                            "1900239N15318",
+                            "1998295N12284",
+                            "1963270N08327",
+                            "1974258N15295",
+                            "2004258N16300"];
 
       function request() { 
 
@@ -450,31 +519,28 @@
               deathCounter += parseInt(hurricanes[counter].Deaths)
               damageCounter += parseInt(hurricanes[counter].Damages)
 
-              deathBar.data("Deaths").transition()
-                .duration(400)
-                .attr("width", x(deathCounter));
-
-              damagesBar.data("Damages").transition()
-                .duration(400)
-                .attr("width", x2(damageCounter * 1000000));
-
+              
+              updateBarCharts(400)
               plotCoordinate(counter, 100);
             }
             else if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
-              svg.selectAll("line").style('opacity', .4)
+              svg.selectAll("line").style('opacity', .1)
               deathCounter += parseInt(hurricanes[counter+1].Deaths)
               damageCounter += parseInt(hurricanes[counter+1].Damages)
 
-              deathBar.data("Deaths").transition()
-                .duration(400)
-                .attr("width", x(deathCounter));
 
-              damagesBar.data("Damages").transition()
-                .duration(400)
-                .attr("width", x2(damageCounter * 1000000));
+              if(majorHurricanes.includes(hurricanes[counter+1].SerialNum)){
+                interval = 300
+                animationText(hurricanes[counter+1].Name_y, hurricanes[counter+1].Deaths, hurricanes[counter+1].Damages)
+                updateBarCharts(10000)
+              }
+              else{
+                interval = 25
+                updateBarCharts(400)
+              }  
             }
             else{
-              if(interval == 50){
+              if(interval == 25){
 
                 plotCoordinate(counter, 100);
               }
@@ -484,13 +550,11 @@
               
             }
             
-            currentHurricane = hurricanes[counter].SerialNum
-            nextHurricane = hurricanes[counter+1].SerialNum
             currentDate = new Date(hurricanesDisplay[counter].ISOTime)
             counter += 1;
 
-            deaths.text("Death Count: " + deathCounter)
-            damages.text("Damages: $" + damageCounter * 1000000)
+            deaths.text("Total Death Count: " + deathCounter.toLocaleString('en'))
+            damages.text("Total Damages: $" + (damageCounter * 1000000).toLocaleString('en'))
             year.text("Year: " + currentDate.getFullYear())
             monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
           }
@@ -501,14 +565,17 @@
 
           }
 
-          if(hurricanes[counter].SerialNum == "1900239N15318"){
-            interval = 500;
-          }
-          else{
-            interval = 50;
-          }
+          // if(counter != 100000){
+          //   if(majorHurricanes.includes(hurricanes[counter].SerialNum)){
+          //     interval = 300;
+          //   }
+          //   else{
+          //     interval = 25;
+          //   }
+          // }
+          
 
-          console.log(interval);
+          //console.log(interval);
           clearInterval(anim); 
           anim = setInterval(request, interval); 
         }
