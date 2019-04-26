@@ -1,0 +1,82 @@
+<head>
+    <title>SHMetro</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        body {
+          background-color: black;
+        }
+        /* Remove the navbar's default margin-bottom and rounded borders */ 
+        .navbar {
+          margin-bottom: 0;
+          border-radius: 0;
+        }
+        
+        /* Add a gray background color and some padding to the footer */
+        footer {
+          background-color: #f2f2f2;
+          padding: 25px;
+        }
+
+        .panel-body {background:#000000;}
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid  ">
+             <h class="navbar-brand" >SHMetro</h>
+        </div>
+    </nav>
+<div class="container text-center">
+    <h5>Please try hover effect on moving circles and bars when the animation is playing.</h5>
+    <h3>Animation: <button id="play-button">Pause</button></h3>
+    <div class="row align-items-center">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">GeoMap</div>
+                <div class="panel-body" ><svg id="geo"/></div>
+                <div class="panel-footer">SHMetro's 17 lines</div>
+            </div>  
+        </div>
+        <div class="col-sm-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">Time</div>
+                    <div class="panel-body"><p class="text-center" id="time" style="font-size: 15px; font-weight: bold;">05:00</p></div>
+                </div> 
+                <div class="panel panel-default" >
+                    <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">Lines</div>
+                    <div class="panel-body"> <svg id="LineButtonGroup"></svg> </div>
+                    
+                </div>
+            </div>
+    </div>
+    <div class="row align-items-center">
+      
+                
+
+            <div class="col-sm-12">
+                  <svg id="timerSVG"></svg>
+            </div>
+                    
+        
+    </div>
+
+
+</div>
+
+</body>
+<script src="./js/TimeSlider.js"></script>
+<script src="./js/Timer.js"></script>
+<script src="./js/Geolocation.js"></script>
+<script src="./js/LineButton.js"></script>
+<script src="./js/MetroFlow.js"></script>
+
+
+
+
