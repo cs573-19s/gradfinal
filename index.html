@@ -137,7 +137,9 @@
       var filterBox = [90, -90, -180, 0];
 
       var paused = false;
-      var intervalSpeed = 1;
+
+      var interval = 50; // initial condition
+      var anim; // start setInterval as "run"
 
 
       var svg = d3.select('#SVG')
@@ -226,7 +228,6 @@
 
         startAnimation()
 
-        animation()
       });
 
 
@@ -351,7 +352,7 @@
       }
 
 
-      function plotCoordinate(index){
+      function plotCoordinate(index, speed){
         //console.log(hurricanes[index].Longitude*-1)
 
         var latitude1 = parseFloat(hurricanes[index].Latitude)
@@ -380,7 +381,7 @@
             return hurricaneColor(hurricanes[index].Wind)
           })
           .transition()
-          .duration(100)
+          .duration(speed)
           .attr("x2", screenX2)
           .attr("y2", screenY2)  
           .attr('stroke', function(){
@@ -434,126 +435,84 @@
       }
 
 
+
+
       function startAnimation(){
 
-        var anim = d3.interval(function(elapsed){
-          //animate stuff
-          //console.log('here')
-          //console.log(elapsed);
-          if(!paused){
-            intervalSpeed+= 100;
-            if(counter < hurricanes.length - 1){
-              if(counter == 0){
-                deathCounter += parseInt(hurricanes[counter].Deaths)
-                damageCounter += parseInt(hurricanes[counter].Damages)
+        anim = setInterval(request , interval);
+      }     
 
-                deathBar.data("Deaths").transition()
-                  .duration(400)
-                  .attr("width", x(deathCounter));
+      function request() { 
 
-                damagesBar.data("Damages").transition()
-                  .duration(400)
-                  .attr("width", x2(damageCounter * 1000000));
+        if(!paused){
+          if(counter < hurricanes.length - 1){
+            if(counter == 0){
+              deathCounter += parseInt(hurricanes[counter].Deaths)
+              damageCounter += parseInt(hurricanes[counter].Damages)
 
-                plotCoordinate(counter);
-              }
-              else if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
-                svg.selectAll("line").style('opacity', .4)
-                deathCounter += parseInt(hurricanes[counter+1].Deaths)
-                damageCounter += parseInt(hurricanes[counter+1].Damages)
+              deathBar.data("Deaths").transition()
+                .duration(400)
+                .attr("width", x(deathCounter));
 
-                deathBar.data("Deaths").transition()
-                  .duration(400)
-                  .attr("width", x(deathCounter));
+              damagesBar.data("Damages").transition()
+                .duration(400)
+                .attr("width", x2(damageCounter * 1000000));
 
-                damagesBar.data("Damages").transition()
-                  .duration(400)
-                  .attr("width", x2(damageCounter * 1000000));
-              }
-              else{
-                plotCoordinate(counter);
-              }
-              
-              currentHurricane = hurricanes[counter].SerialNum
-              nextHurricane = hurricanes[counter+1].SerialNum
-              currentDate = new Date(hurricanesDisplay[counter].ISOTime)
-              counter += 1;
+              plotCoordinate(counter, 100);
+            }
+            else if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
+              svg.selectAll("line").style('opacity', .4)
+              deathCounter += parseInt(hurricanes[counter+1].Deaths)
+              damageCounter += parseInt(hurricanes[counter+1].Damages)
 
-              deaths.text("Death Count: " + deathCounter)
-              damages.text("Damages: $" + damageCounter * 1000000)
-              year.text("Year: " + currentDate.getFullYear())
-              monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
+              deathBar.data("Deaths").transition()
+                .duration(400)
+                .attr("width", x(deathCounter));
+
+              damagesBar.data("Damages").transition()
+                .duration(400)
+                .attr("width", x2(damageCounter * 1000000));
             }
             else{
+              if(interval == 50){
 
-              document.getElementById("playButton").disabled = false;
-              document.getElementById("pauseButton").disabled = true;
-
+                plotCoordinate(counter, 100);
+              }
+              else{
+                plotCoordinate(counter, 900);
+              }
+              
             }
-          }
-        }, 50);
-      }
+            
+            currentHurricane = hurricanes[counter].SerialNum
+            nextHurricane = hurricanes[counter+1].SerialNum
+            currentDate = new Date(hurricanesDisplay[counter].ISOTime)
+            counter += 1;
 
-      function plotShit(serialNum){
-        if(serialNum == "1900239N15318"){
-          console.log("test")
-        }
-        else{
-          console.log("Here")
-        }
-        
-      }
-
-      function animation(){
-
-        majorDeathHurricanes = ["1900239N15318", "1963270N08327"]
-
-        console.log("FUnction")
-        console.log(hurricanes.length)
-
-        for(var i = 0; i < hurricanes.length; i++){
-
-          if(majorDeathHurricanes.includes(hurricanes[i].SerialNum)){
-            console.log("major")
-            window.setTimeout(plotShit(hurricanes[i].SerialNum), 10000);
+            deaths.text("Death Count: " + deathCounter)
+            damages.text("Damages: $" + damageCounter * 1000000)
+            year.text("Year: " + currentDate.getFullYear())
+            monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
           }
           else{
-            window.setTimeout(plotShit(hurricanes[i].SerialNum), 100);
+
+            document.getElementById("playButton").disabled = false;
+            document.getElementById("pauseButton").disabled = true;
+
           }
 
+          if(hurricanes[counter].SerialNum == "1900239N15318"){
+            interval = 500;
+          }
+          else{
+            interval = 50;
+          }
+
+          console.log(interval);
+          clearInterval(anim); 
+          anim = setInterval(request, interval); 
         }
-
-
       }
-
-      function setDeceleratingTimeout(callback, speed) {
-          var internalCallback = (function(tick, counter){
-              return function(){
-                  if (--tick > 0) {
-                      window.setTimeout(internalCallback, speed);
-                      callback();
-                  }
-              }
-          })(1, 0);
-       
-          window.setTimeout(internalCallback, speed);
-      };
-       
-      function test_setDeceleratingTimeout(){
-          function sayhi(){
-              console.log("hi");
-          }
-       
-          function saybye(){
-              console.log("bye");
-          }
-       
-          setDeceleratingTimeout(sayhi, 1000);
-          setDeceleratingTimeout(saybye, 5000);
-      };
-       
-      test_setDeceleratingTimeout();
-      
 
 
     </script>
