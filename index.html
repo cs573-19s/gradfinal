@@ -38,12 +38,12 @@
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Hurricane Watcher</a>
+          <a class="navbar-brand" href="index.html">Hurricane Watcher</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Hurricane Data</a></li>
-          <li><a href="#">About</a></li>
+          <li class="active"><a href="index.html">Home</a></li>
+          <li><a href="hurricaneData.html">Hurricane Data</a></li>
+          <li><a href="about.html">About Us</a></li>
         </ul>
       </div>
     </nav>
@@ -76,31 +76,73 @@
       </div>
       <div class = "col-sm-12">
         <form>
-          <H3>Filter by Storm Category</H3>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="cat5" onchange="filterCategory()" checked=true>Category 5
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="cat4" onchange="filterCategory()" checked=true>Category 4
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="cat3" onchange="filterCategory()" checked=true>Category 3
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="cat2" onchange="filterCategory()" checked=true>Category 2
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" id="cat1" onchange="filterCategory()" checked=true>Category 1
-          </label>
-          <H3>Filter by Death Count</H3>
-          <H3>Filter by Amount of Damages</H3>
+          <div class="col-sm-4">
+            <H3>Filter by Storm Category</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat1" onchange="filterCategory()" checked=true>Cat 1
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat2" onchange="filterCategory()" checked=true>Cat 2
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat3" onchange="filterCategory()" checked=true>Cat 3
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat4" onchange="filterCategory()" checked=true>Cat 4
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat5" onchange="filterCategory()" checked=true>Cat 5
+            </label>
+          </div>
+
+          <div class="col-sm-4">
+            <H3>Filter by Death Count</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d5" onchange="filterCategory()" checked=true>0 - 99
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d4" onchange="filterCategory()" checked=true>100 - 999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d3" onchange="filterCategory()" checked=true>1000 - 2999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d2" onchange="filterCategory()" checked=true>3000 - 4999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d1" onchange="filterCategory()" checked=true>5000+
+            </label>
+          </div>
+
+          <div class="col-sm-4">
+            <H3>Filter by Amount of Damages</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da5" onchange="filterCategory()" checked=true>0- 499M
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da4" onchange="filterCategory()" checked=true>500M - 1B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da3" onchange="filterCategory()" checked=true>1B - 5B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da2" onchange="filterCategory()" checked=true>5B - 9B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da1" onchange="filterCategory()" checked=true>10B+
+            </label>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
         </form>
 
         </div>
         
       </div>
 
-      
+
 
       <div class="col-sm-12", id="SVG2"></div>
     </div>
@@ -237,11 +279,24 @@
         var cat4 = document.getElementById("cat4").checked
         var cat5 = document.getElementById("cat5").checked
 
+        var d1 = document.getElementById("d1").checked
+        var d2 = document.getElementById("d2").checked
+        var d3 = document.getElementById("d3").checked
+        var d4 = document.getElementById("d4").checked
+        var d5 = document.getElementById("d5").checked
+
+        var da1 = document.getElementById("da1").checked
+        var da2 = document.getElementById("da2").checked
+        var da3 = document.getElementById("da3").checked
+        var da4 = document.getElementById("da4").checked
+        var da5 = document.getElementById("da5").checked
+
         console.log(hurricanes)
 
         hurricanesDisplay = []
 
         hurricaneNumbers = []
+        hurricane1 = []
 
         for(var x = 0; x < hurricanes.length; x++){
           var speed = hurricanes[x].Wind
@@ -261,9 +316,67 @@
           else if(speed > 64 && cat1){
              hurricaneNumbers.push(hurricanes[x].SerialNum);
           }
-          // else{
-          //    hurricanesDisplay.push(hurricanesFiltered[x]);
-          // }
+        }
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricaneNumbers.includes(hurricanes[x].SerialNum)){
+            hurricane1.push(hurricanes[x])
+          }
+        }
+
+
+        hurricaneNumbers = []
+
+        for(var x = 0; x < hurricane1.length; x++){
+          var d = hurricane1[x].Deaths
+
+          if(d >= 5000 && d1){
+            hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 3000 && d2){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 1000 && d3){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 100 && d4){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 0 && d5){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+        }
+
+        hurricane1 = []
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricaneNumbers.includes(hurricanes[x].SerialNum)){
+            hurricane1.push(hurricanes[x])
+          }
+        }
+
+
+
+        hurricaneNumbers = []
+
+        for(var x = 0; x < hurricane1.length; x++){
+          var da = hurricane1[x].Damages
+
+          if(da >= 10000 && da1){
+            hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 5000 && da2){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 1000 && da3){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 500 && da4){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 0 && da5){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
         }
 
         for(var x = 0; x < hurricanes.length; x++){
@@ -599,7 +712,7 @@
               
             }
             
-            currentDate = new Date(hurricanesDisplay[counter].ISOTime)
+            currentDate = new Date(hurricanes[counter].ISOTime)
             counter += 1;
 
             deaths.text("Total Death Count: " + deathCounter.toLocaleString('en'))

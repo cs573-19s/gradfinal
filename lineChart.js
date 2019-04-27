@@ -47,6 +47,18 @@ function createLineChart(id, data, lat1, lat2, long1, long2){
         .style("text-decoration", "underline")  
         .text("" + data[0].Name_x + " " + data[0].Season);
 
+    svgLine.append("text")
+        .attr("x", 3)             
+        .attr("y", 15)
+        .style("font-size", "10px")   
+        .text("" + parseInt(data[0].Deaths).toLocaleString('en') + " Deaths");
+
+    svgLine.append("text")
+        .attr("x", 3)             
+        .attr("y", 25)
+        .style("font-size", "10px")   
+        .text("$" + (parseInt(data[0].Damages)*1000000).toLocaleString('en') + " Damages");
+
 	svgLine.append("g")
 	    .attr("class", "x axis")
 	    .attr("transform", "translate(0," + height + ")")
@@ -67,14 +79,7 @@ function createLineChart(id, data, lat1, lat2, long1, long2){
 	      	.attr("stroke", hurricaneColor(data[i].Wind))
     }
 
-	// svgLine.append("path")
-	//     .datum(data) // 10. Binds data to the line 
-	//     .attr("class", "line") // Assign a class for styling 
-	//     .attr("d", line)
-	//     .attr("stroke-width", 2)
- //      	.attr("stroke", function(d){
- //        	return hurricaneColor(d.Wind)
- //      	});
+	
 
 	return svgLine
 }

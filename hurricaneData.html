@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ >
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+
+    <style>
+
+    .jumbotron{
+      background-color: black;
+      color: white;
+    }
+
+    tr {
+      background-color: white;
+    }
+
+    body {
+      background-image: linear-gradient(to bottom, #02aab0, #00cdac);
+    }
+    </style>
+  
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">Hurricane Watcher</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="active"><a href="hurricaneData.html">Hurricane Data</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div>
+
+      <div class="jumbotron" style="text-align: center">
+        <H1>Hurricane Data</H1>
+      </div>
+      
+      <div class="col-sm-2">
+      </div>
+
+      <div class="col-sm-8">
+        <table id="dataTable" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Max Category</th>
+              <th>Deaths</th>
+              <th>Damages</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-2">
+      </div>
+      
+      
+        
+    </div>
+
+    <script type="text/javascript">
+      
+      var hurricanes;
+      var condensed = [];
+
+      d3.csv("FilteredStorms.csv", function(data) {
+        // console.log(data);
+        hurricanes = data
+
+        //console.log(hurricanes)
+
+        condenseHurricanes()
+        addRows();
+
+      });
+
+      function condenseHurricanes(){
+
+
+        var current = hurricanes[0].SerialNum
+        var max = parseInt(hurricanes[0].Wind);
+
+        for(var i = 0; i < hurricanes.length-1; i++){
+          current = hurricanes[i].SerialNum;
+
+          if(parseInt(hurricanes[i].Wind) > max){
+            max = parseInt(hurricanes[i].Wind)
+          }
+
+
+          if(i == hurricanes.length-2){
+            condensed.push({"Name": hurricanes[i].Name_y, "Year": hurricanes[i].Season, "Wind": hurricaneCat(max), "Deaths": hurricanes[i].Deaths, "Damages": damagesText(hurricanes[i].Damages)});
+          }
+          if(current != hurricanes[i+1].SerialNum){
+            condensed.push({"Name": hurricanes[i].Name_y, "Year": hurricanes[i].Season, "Wind": hurricaneCat(max), "Deaths": hurricanes[i].Deaths, "Damages": damagesText(hurricanes[i].Damages)});
+
+            max = hurricanes[i+1].Wind
+          }
+
+        }
+
+        //console.log(condensed)
+
+
+      }
+
+      function damagesText(damage){
+
+        if(parseInt(damage) == 0){
+          return "Unknown"
+        }
+        else{
+          return  damage
+        }
+
+      }
+
+      function hurricaneCat(speed){
+        if(speed > 137){
+          return 'Categoty 5'
+        }
+        else if(speed > 113){
+          return 'Categoty 4'
+        }
+        else if(speed > 96){
+          return 'Categoty 3'
+        }
+        else if(speed > 83){
+          return 'Categoty 2'
+        }
+        else if(speed > 64){
+          return 'Categoty 1'
+        }
+        else{
+          return 'Tropical'
+        }
+      }
+
+
+      function addRows() {
+
+        var table = document.getElementById("dataTable");
+
+
+        for(var i = 0; i < condensed.length; i++){
+          var newRow = table.insertRow(-1);
+
+          var newCell1 = newRow.insertCell(0);
+          var newCell2 = newRow.insertCell(1);
+          var newCell3 = newRow.insertCell(2);
+          var newCell4 = newRow.insertCell(3);
+          var newCell5 = newRow.insertCell(4);
+
+          var newText1 = document.createTextNode(condensed[i].Name);
+          var newText2 = document.createTextNode(condensed[i].Year);
+          var newText3 = document.createTextNode(condensed[i].Wind);
+          var newText4 = document.createTextNode(condensed[i].Deaths);
+          var newText5 = document.createTextNode(condensed[i].Damages);
+
+          newCell1.appendChild(newText1);
+          newCell2.appendChild(newText2);
+          newCell3.appendChild(newText3);
+          newCell4.appendChild(newText4);
+          newCell5.appendChild(newText5);
+        }
+        
+      }
+
+    </script>
+
+
+  </body>
+</html>
