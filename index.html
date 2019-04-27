@@ -172,37 +172,37 @@
         .call(brush);
 
       var rectangle = svg.append("rect")
-          .attr("x", 20)
-          .attr("y", 35)
-          .attr("width", 250)
-          .attr("height", 80)
+          .attr("x", width*.015)
+          .attr("y", height*.84)
+          .attr("width", 270)
+          .attr("height", 100)
           .attr("fill", "grey")
           .attr("stroke", "black");
 
       var deaths = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 50)
+            .attr("x", width*.1)             
+            .attr("y", height*.87)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Total Death Count: " + deathCounter);
 
       var damages = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 70)
+            .attr("x", width*.1)             
+            .attr("y", height*.90)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Total Damages: $" + damageCounter * 1000000);
 
       var year = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 90)
+            .attr("x", width*.1)             
+            .attr("y", height*.93)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Year: " + yearDate);
 
       var monthDay = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 110)
+            .attr("x", width*.1)             
+            .attr("y", height*.96)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Month/Day: " + md);
@@ -445,50 +445,99 @@
       var animName;
       var animDeaths;
       var animDamages;
-      function animationText(name, death, damage){
-        animText = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 400)
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px")   
-            .style('opacity', 1)
-            .text(name);
-        animDeaths = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 420)
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px")   
-            .style('opacity', 1)
-            .text("Number of Deaths: " + parseInt(death).toLocaleString('en'));
+      var animEvacuate;
+      var background;
+      function animationText(name, year, death, damage, evacuate, num){
 
-        if(parseInt(damage) == 0){
-          animDamages = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 440)
+        var background = svg.append("rect")
+          .attr("x", width*.015)
+          .attr("y", height*.07)
+          .attr("width", 400)
+          .attr("height", 100)
+          .attr("fill", "grey")
+          .attr("stroke", "black");
+
+        animText = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.1)
             .attr("text-anchor", "middle")  
-            .style("font-size", "16px")   
+            .style("font-size", "20px")   
             .style('opacity', 1)
-            .text("Amount of Damages: Unknown");
-        }
-        else{
-          animDamages = svg.append("text")
-            .attr("x", 150)             
-            .attr("y", 440)
+            .text("Hurricane " + name + " " + year);
+
+        animDeaths = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.13)
             .attr("text-anchor", "middle")  
-            .style("font-size", "16px")   
+            .style("font-size", "20px")   
             .style('opacity', 1)
-            .text("Amount of Damages: $" + (parseInt(damage) * 1000000).toLocaleString('en'));
-        }
+            .text("Number of Deaths: " + parseInt(death).toLocaleString('en'))
+            .style("fill", function(){
+              if(parseInt(death) > 1000){
+                return "red"
+              }
+              else{
+                return "black"
+              }
+            });
+
+        animDamages = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.16)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text(function(){
+              if(parseInt(damage) == 0){
+                return "Amount of Damages: Unknown"
+              }
+              else{
+                return "Amount of Damages: $" + (parseInt(damage) * 1000000).toLocaleString('en');
+              }
+            })
+            .style("fill", function(){
+              if(parseInt(damage) > 10000){
+                return "red"
+              }
+              else{
+                return "black"
+              }
+            });
+
+        animEvacuate = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.19)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text("Evacuation Type: " + evacuate)
+            .style("fill", function(){
+              if(evacuate == "Mandatory"){
+                return "red"
+              }
+              else if(evacuate == "Voluntary"){
+                return "orange"
+              }
+              else{
+                return "black"
+              }
+            });
         
 
         animText.transition()
-                .duration(10000)
+                .duration(num * 400)
                 .style('opacity', 0)
         animDeaths.transition()
-                .duration(10000)
+                .duration(num * 400)
                 .style('opacity', 0)
         animDamages.transition()
-                .duration(10000)
+                .duration(num * 400)
+                .style('opacity', 0)
+        animEvacuate.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+        background.transition()
+                .duration(num * 400)
                 .style('opacity', 0)
       }
 
@@ -531,8 +580,8 @@
 
               if(majorHurricanes.includes(hurricanes[counter+1].SerialNum)){
                 interval = 300
-                animationText(hurricanes[counter+1].Name_y, hurricanes[counter+1].Deaths, hurricanes[counter+1].Damages)
-                updateBarCharts(10000)
+                animationText(hurricanes[counter+1].Name_y, hurricanes[counter+1].Season, hurricanes[counter+1].Deaths, hurricanes[counter+1].Damages, hurricanes[counter+1].EvacuationType, hurricanes[counter+1].NumEntries)
+                updateBarCharts(hurricanes[counter+1].NumEntries * 350)
               }
               else{
                 interval = 25
@@ -564,15 +613,6 @@
             document.getElementById("pauseButton").disabled = true;
 
           }
-
-          // if(counter != 100000){
-          //   if(majorHurricanes.includes(hurricanes[counter].SerialNum)){
-          //     interval = 300;
-          //   }
-          //   else{
-          //     interval = 25;
-          //   }
-          // }
           
 
           //console.log(interval);
