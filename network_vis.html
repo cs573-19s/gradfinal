@@ -62,12 +62,17 @@ d3.json("ips.json", function(data) {
     .on("click", function(d){
       console.log("hit")
       this_node = d
-       d3.selectAll("line")
+      edges = selectEdgeNodes(this_node.id);
+      lines = d3.selectAll("line")
        .filter(function(d) {
        return (d.source === this_node) || (d.target === this_node);
-       })
-       .transition().style("stroke", "black")
+       }).transition().attr("stroke-width", 5).style("stroke", "black")
 
+       d3.selectAll("circle")
+        .filter((d) => edges.includes(d.id))
+        .transition().attr("r", 22).style("fill", "black")
+
+      d3.select(this).transition().attr("r", 30).style("fill", "black")
 
 
     })
@@ -141,6 +146,10 @@ d3.json("ips.json", function(data) {
 
     return a.concat(b);
   }
+
+
+
+
 
 });
 

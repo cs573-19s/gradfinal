@@ -18,6 +18,8 @@ var colors = {
 
 };
 
+var newData = {};
+
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 40},
@@ -41,36 +43,50 @@ d3.json("ips.json", function(data) {
     .style("background", "transparent")
     .text("a simple tooltip");
 
-  // Initialize the links
-  var link = svg
-    .selectAll("line")
-    .data(data.links)
-    .enter()
-    .append("line")
-      .attr("stroke-width", 1)
-      .style("stroke", colors["unselected_link"])
-
+ 
+  
   // Initialize the nodes
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+  update(data)
+
+  
+
+  function update(data) {
+  var t = d3.transition().duration(2500);
+
+  // DATA JOIN
+  // Join new data with old elements, if any.
+  
+
+
   var node = svg
     .selectAll("circle")
     .data(data.nodes)
-    .enter()
-    .append("circle")
-      .attr("r", 20)
-      .style("fill", colors["unselected_node"])
     
-    .on("click", function(d){
-      console.log("hit")
-      this_node = d
-       d3.selectAll("line")
-       .filter(function(d) {
-       return (d.source === this_node) || (d.target === this_node);
-       })
-       .transition().style("stroke", "black")
-
-
-
-    })
+    
+    
 
     .on("mouseover", function(d){
       this_node = d
@@ -83,7 +99,7 @@ d3.json("ips.json", function(data) {
       d3.select(this)
       .transition().attr("r", 30).style("fill", colors["selected_node"]);
       tooltip.text(d.name);
-      edges = selectEdgeNodes(this_node.id);
+      edges = selectEdgeNodes(data, this_node.id);
       d3.selectAll("circle")
       .filter((d) => edges.includes(d.id))
       .transition().attr("r", 22).style("fill", colors["selected_edge_nodes"])
@@ -105,6 +121,69 @@ d3.json("ips.json", function(data) {
       .transition().attr("r", 20).style("fill", colors["unselected_node"]);
        tooltip.style("visibility", "hidden");
     })
+
+  
+  // Initialize the links
+  var link = svg
+    .selectAll("line")
+    .data(data.links)
+    link.exit()
+    .transition(t)
+    .attr('class', 'exit')
+    .attr('y1', 1090)
+    .attr('y2', 1090)
+    .style('stroke-width', 0)
+    .remove(); 
+
+  // UPDATE
+  // Update old elements as needed.
+  link
+    .transition(t)
+    .attr("class", "update")
+    
+
+    // ENTER new elements present in new data.
+  link.enter()
+      .append("line")
+      .transition(t)
+      .attr("class", "enter")
+      .attr("stroke-width", 1)
+      .style("stroke", colors["unselected_link"])
+
+  // Exit and remove old elements
+  node.exit()
+    .transition(t)
+    .attr('class', 'exit')
+    .attr('cy', 1090)
+    .style('fill-opacity', 1e-6)
+    .remove(); 
+
+  // UPDATE
+  // Update old elements as needed.
+  node
+    .transition(t)
+    .attr("class", "update")
+    .style('fill-opacity', 1)
+    
+
+    // ENTER new elements present in new data.
+  node.enter()
+      .append("circle")
+      .transition(t)
+      .attr("class", "enter")
+      .attr("r", 20)
+      .style("fill", colors["unselected_node"])
+      
+
+
+
+    
+      
+
+
+
+
+
 
   // Let's list the force we wanna apply on the network
   var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
@@ -133,7 +212,66 @@ d3.json("ips.json", function(data) {
   }
 
 
-  function selectEdgeNodes(sourceNode){
+ 
+
+
+
+}
+
+
+
+
+
+svg.selectAll("circle")
+.on("click", function(d){
+      console.log("hit")
+      this_node = d
+      edges = selectEdgeNodes(data, this_node.id);
+      lines = d3.selectAll("line")
+       .filter(function(d) {
+       return (d.source === this_node) || (d.target === this_node);
+       }).transition().attr("stroke-width", 5).style("stroke", "black")
+
+      // hasn't been populated yet, nothing has been clicked
+
+      if (newData.len === 0){
+        newData.nodes  = data.nodes
+                           .filter((d) => edges.includes(d.id))
+
+      newData.nodes.push(this_node);
+
+      newData.links  = data.links
+                           .filter(function(d) {
+       return (d.source === this_node) || (d.target === this_node);
+       })
+      } 
+      
+      //there's already some data in here
+      else{
+        edges = selectEdgeNodes(data, this_node)
+        newData.nodes  = newData.nodes
+                           .filter((d) => edges.includes(d.id))
+
+      newData.nodes.push(this_node);
+
+      newData.links  = newData.links
+                           .filter(function(d) {
+       return (d.source === this_node) || (d.target === this_node);
+       })
+      } 
+
+      
+
+       console.log(newData)
+
+       update(newData);
+
+     
+
+
+    })
+
+ function selectEdgeNodes(data, sourceNode){
 
     //maps source
     a = data.links.filter((x)=>x["target"]["id"] === sourceNode).map((x)=>x["source"]["id"])
@@ -143,179 +281,12 @@ d3.json("ips.json", function(data) {
   }
 
 
-function update(nodes, links){
-
-  var t = d3.transition().duration(2500);
-
-  // DATA JOIN
-  // Join new data with old elements, if any.
-  var circles = g.selectAll("circle")
-    .data(nodes, function(d) { 
-    return d.name; });
-
-  var links = g.selectAll("line")
-    .data(links, function(d) {
-    return d});
-
-  // Exit and remove old circles and links
-
-  links.exit()
-    .transition(t)
-    .attr('class', 'exit')
-    .attr('y1', 1090)
-    .attr('y2', 1100)
-    .style('stroke-width', 0)
-
-  circles.exit()
-    .transition(t)
-    .attr('class', 'exit')
-    .attr('cy', 1090)
-    .style('fill-opacity', 1e-6)
-    .remove(); 
-
-  // UPDATE
-  // Update old elements as needed.
-  circles
-    .transition(t)
-    .attr("class", "update")
-    .attr("cy", function(d, i) { return mpg_yscale(d.Miles_per_Gallon); })
 
 
-  links
-    .transition(t)
-    .attr('class', 'update')
-    .attr()
-
-    // ENTER new elements present in new data.
-  circles.enter()
-      .append("circle")
-      .transition(t)
-      .attr("class", "enter")
-      .attr("r", 5)
-      .attr("cx", function(d, i) { return hp_xscale(d.Horsepower); })
-      .attr("cy", 20);
-
-
-}
-
-update(
-svg.selectAll("circle")
-   .on("click", function(d){
-       this_node = d 
-
-   .filter((d) => edges.includes(d.id))      
-
-  }), svg.selectAll("line")
-         .filter(function(d) {
-         return (d.source === this_node) || (d.target === this_node);
-       })  
-)
 });
 
 
 
 
 
-
-
 </script>
-
-
-
-
-
-
-<html>
-  <head>
-  </head>
-  <body>
-
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://unpkg.com/jeezy@1.11.2/lib/jeezy.min.js"></script>
-    <script>
-
-    var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-    var width = window.innerWidth,
-        height = window.innerHeight;
-
-    var nodes = randomizeData();
-
-    var simulation = d3.forceSimulation(nodes)
-        .force("charge", d3.forceManyBody().strength(-150))
-        .force("forceX", d3.forceX().strength(.1))
-        .force("forceY", d3.forceY().strength(.1))
-        .force("center", d3.forceCenter())
-        .alphaTarget(1)
-        .on("tick", ticked);
-
-    var svg = d3.select("body")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height)
-        
-        g = svg.append("g")
-               .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")"),
-        
-        node = g.append("g")
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 1.5)
-                .selectAll(".node");
-
-    d3.interval(function(){
-      restart(randomizeData())
-    }, 2000);
-
-    function restart(nodes) {
-
-      // transition
-      var t = d3.transition()
-          .duration(750);
-
-      // Apply the general update pattern to the nodes.
-      node = node.data(nodes, function(d) { return d.name;});
-
-      node.exit()
-          .style("fill", "#b26745")
-          .transition(t)
-          .attr("r", 1e-6)
-          .remove();
-
-      node
-          .transition(t)
-            .style("fill", "#3a403d")
-            .attr("r", function(d){ return d.size; });
-
-      node = node.enter().append("circle")
-          .style("fill", "#45b29d")
-          .attr("r", function(d){ return d.size })
-          .merge(node);
-
-      // Update and restart the simulation.
-      simulation.nodes(nodes)
-        .force("collide", d3.forceCollide().strength(1).radius(function(d){ return d.size + 10; }).iterations(1));
-
-    }
-
-    function ticked() {
-      node.attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; })
-
-    }
-
-    function randomizeData(){
-      var d0 = jz.arr.shuffle(alphabet),
-        d1 = [],
-        d2 = [];
-      for (var i = 0; i < jz.num.randBetween(1, alphabet.length); i++){
-        d1.push(d0[i]);
-      }
-      d1.forEach(function(d){
-        d2.push({name: d, size: jz.num.randBetween(0, 50)})
-      });
-      return d2;
-    }
-
-    </script>
-  </body>
-</html>
