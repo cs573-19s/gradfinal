@@ -18,8 +18,6 @@ var colors = {
 
 };
 
-var newData = {};
-
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 40},
@@ -43,7 +41,6 @@ d3.json("ips.json", function(data) {
     .style("background", "transparent")
     .text("a simple tooltip");
 
- 
   
   // Initialize the nodes
   update(data)
@@ -99,7 +96,7 @@ d3.json("ips.json", function(data) {
       d3.select(this)
       .transition().attr("r", 30).style("fill", colors["selected_node"]);
       tooltip.text(d.name);
-      edges = selectEdgeNodes(data, this_node.id);
+      edges = selectEdgeNodes(this_node.id);
       d3.selectAll("circle")
       .filter((d) => edges.includes(d.id))
       .transition().attr("r", 22).style("fill", colors["selected_edge_nodes"])
@@ -226,16 +223,15 @@ svg.selectAll("circle")
 .on("click", function(d){
       console.log("hit")
       this_node = d
-      edges = selectEdgeNodes(data, this_node.id);
+      edges = selectEdgeNodes(this_node.id);
       lines = d3.selectAll("line")
        .filter(function(d) {
        return (d.source === this_node) || (d.target === this_node);
        }).transition().attr("stroke-width", 5).style("stroke", "black")
 
-      // hasn't been populated yet, nothing has been clicked
 
-      if (newData.len === 0){
-        newData.nodes  = data.nodes
+      var newData = {};
+      newData.nodes  = data.nodes
                            .filter((d) => edges.includes(d.id))
 
       newData.nodes.push(this_node);
@@ -244,23 +240,6 @@ svg.selectAll("circle")
                            .filter(function(d) {
        return (d.source === this_node) || (d.target === this_node);
        })
-      } 
-      
-      //there's already some data in here
-      else{
-        edges = selectEdgeNodes(data, this_node)
-        newData.nodes  = newData.nodes
-                           .filter((d) => edges.includes(d.id))
-
-      newData.nodes.push(this_node);
-
-      newData.links  = newData.links
-                           .filter(function(d) {
-       return (d.source === this_node) || (d.target === this_node);
-       })
-      } 
-
-      
 
        console.log(newData)
 
@@ -271,7 +250,7 @@ svg.selectAll("circle")
 
     })
 
- function selectEdgeNodes(data, sourceNode){
+ function selectEdgeNodes(sourceNode){
 
     //maps source
     a = data.links.filter((x)=>x["target"]["id"] === sourceNode).map((x)=>x["source"]["id"])
