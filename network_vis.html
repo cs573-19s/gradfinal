@@ -6,14 +6,25 @@
 
 <!-- Create a div where the graph will take place -->
 <div id="network_graph"></div>
-
+<style>
+  body {
+        margin: 0;
+        background-color: #2A2C39;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+        font-weight: 200;
+        font-size: 40px;
+        color: #FFEFD5;
+      }
+</style>
 <script>
 
 var colors = {
   "selected_links": "#6D6875",
   "selected_node": "#32A287",
   "selected_edge_nodes": "#44CF6C",
-  "unselected_node": "#82A39B",
+  "unselected_node_Asleep": "#1E90FF",//"#82A39B",
+  "unselected_node_Ready":  "#32CD32",//"#82A39B",
+  "unselected_node_Unreachable": "#778899",//"#82A39B",
   "unselected_link": "#AAAAAA"
 
 };
@@ -32,7 +43,35 @@ var svg = d3.select("#network_graph")
 .append("g")
 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("ips.json", function(data) {
+//d3.json("ips.json", function(data) {
+d3.csv("./bots.csv", function(data){
+  var links = []
+  var nodes = []
+  for (i in data){
+    var node = {"id":i, "name":data[i].ip_addr, "state":data[i].state, "neighbors":data[i].neighbors, "lastCMD":data[i].lastCMD}
+    nodes.push(node)
+  }
+  for (i in nodes){
+    var neighbors= nodes[i].neighbors
+    var parsedString = ""
+    for (char in neighbors){
+      if (!(neighbors[char] === '[' || neighbors[char] ===']' || neighbors[char] ==='"' || neighbors[char] ==="'" || neighbors[char] ===" ")){
+        parsedString += neighbors[char]
+      }
+    }
+    var neighborsList = parsedString.split(',')
+    for (n in neighborsList){
+      if (!(neighborsList[n] === "")){
+        var target = nodes.find(target=> target.name === neighborsList[n])
+        console.log("Test", target)
+        var link = {'source':nodes[i].id, 'target':target.id}
+        if (!links.includes(link) && !links.includes({'source':target.id, 'target':nodes[i].id})) {
+          links.push(link)
+          console.log(link)
+        }
+      }
+    }
+  }
   var tooltip = d3.select("#network_graph")
     .append("div")
     .style("position", "absolute")
@@ -44,21 +83,32 @@ d3.json("ips.json", function(data) {
   // Initialize the links
   var link = svg
     .selectAll("line")
-    .data(data.links)
+    .data(links)
     .enter()
     .append("line")
       .attr("stroke-width", 1)
       .style("stroke", colors["unselected_link"])
 
+
+  function colorState(node){
+      if (node.state === "Ready"){
+        return colors["unselected_node_Ready"]
+      }else if (node.state === "Asleep"){
+        return colors["unselected_node_Asleep"]
+      }else{
+        return colors["unselected_node_Unreachable"]
+      }
+    };
+
   // Initialize the nodes
   var node = svg
     .selectAll("circle")
-    .data(data.nodes)
+    .data(nodes)
     .enter()
     .append("circle")
-      .attr("r", 20)
-      .style("fill", colors["unselected_node"])
-    
+      .attr("r", 30)
+      .style("fill", function(d){return colorState(d)})//colors["unselected_node"])
+
     .on("click", function(d){
       console.log("hit")
       this_node = d
@@ -112,10 +162,10 @@ d3.json("ips.json", function(data) {
     })
 
   // Let's list the force we wanna apply on the network
-  var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
+  var simulation = d3.forceSimulation(nodes)                 // Force algorithm is applied to data.nodes
       .force("link", d3.forceLink()                               // This force provides links between nodes
             .id(function(d) { return d.id; })                     // This provide  the id of a node
-            .links(data.links)                                    // and this the list of links
+            .links( links)                                    // and this the list of links
       )
       .force("charge", d3.forceManyBody().strength(-800))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
       .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
@@ -141,8 +191,8 @@ d3.json("ips.json", function(data) {
   function selectEdgeNodes(sourceNode){
 
     //maps source
-    a = data.links.filter((x)=>x["target"]["id"] === sourceNode).map((x)=>x["source"]["id"])
-    b = data.links.filter((x)=>x["source"]["id"] === sourceNode).map((x)=>x["target"]["id"])
+    a = links.filter((x)=>x["target"]["id"] === sourceNode).map((x)=>x["source"]["id"])
+    b = links.filter((x)=>x["source"]["id"] === sourceNode).map((x)=>x["target"]["id"])
 
     return a.concat(b);
   }
