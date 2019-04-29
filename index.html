@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ >
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.3/lib/alea.min.js"></script>
+
+    <style>
+
+    .line {
+      fill: none;
+      stroke: black;
+      stroke-width: 3;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      stroke-width: 1px;
+      shape-rendering: crispEdges;
+    }
+    .x path {
+      display: none;
+    }
+
+    body {
+      background-image: linear-gradient(to bottom, #02aab0, #00cdac);;
+    }
+    </style>
+  
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">Hurricane Ignorance</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="index.html">Home</a></li>
+          <li><a href="hurricaneData.html">Hurricane Data</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div>
+      
+
+
+      <div class="col-sm-6">
+        <svg id="SVG"></svg>
+      </div>
+      <div class="col-sm-6">
+        <h3>Hurricane Deaths</h3>
+        <svg id="SVG3"></svg>
+        <h3>Hurricane Damages</h3>
+        <svg id="SVG4"></svg>
+        <h3>Number of Hurricane Proof Rooms that could be made</h3>
+        <svg id="SVG5"></svg>
+        <br>
+        <br>
+        <br>
+        <div class="col-sm-3" style="text-align: center">
+
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+          <button id="playButton" type="button" class="btn-lg btn-success btn-block" onclick="Reset()">Play!</button>
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+          <button id="pauseButton" type="button" class="btn-lg btn-danger btn-block" onclick="pauseAnimation()" disabled>Pause</button>
+        </div>
+        <div class="col-sm-3" style="text-align: center">
+
+        </div>
+      </div>
+      <div class = "col-sm-12">
+        <form>
+          <div class="col-sm-4">
+            <H3>Filter by Storm Category</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat1" onchange="filterCategory()" checked=true>Cat 1
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat2" onchange="filterCategory()" checked=true>Cat 2
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat3" onchange="filterCategory()" checked=true>Cat 3
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat4" onchange="filterCategory()" checked=true>Cat 4
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="cat5" onchange="filterCategory()" checked=true>Cat 5
+            </label>
+          </div>
+
+          <div class="col-sm-4">
+            <H3>Filter by Death Count</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d5" onchange="filterCategory()" checked=true>0 - 99
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d4" onchange="filterCategory()" checked=true>100 - 999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d3" onchange="filterCategory()" checked=true>1000 - 2999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d2" onchange="filterCategory()" checked=true>3000 - 4999
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="d1" onchange="filterCategory()" checked=true>5000+
+            </label>
+          </div>
+
+          <div class="col-sm-4">
+            <H3>Filter by Amount of Damages</H3>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da5" onchange="filterCategory()" checked=true>0- 499M
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da4" onchange="filterCategory()" checked=true>500M - 1B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da3" onchange="filterCategory()" checked=true>1B - 5B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da2" onchange="filterCategory()" checked=true>5B - 9B
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="da1" onchange="filterCategory()" checked=true>10B+
+            </label>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+        </form>
+
+        </div>
+        
+      </div>
+
+
+
+      <div class="col-sm-12", id="SVG2"></div>
+    </div>
+    
+
+    <script src="lineChart.js"></script>
+    <script src="barChart.js"></script>
+    <script type="text/javascript">
+
+      //console.log(d3)
+
+      var hurricanes = [];
+      var hurricanesFiltered = [];
+      var hurricanesDisplay = [];
+
+      var svgLines = []
+
+      var width = window.innerWidth;
+      var height = window.innerHeight * .95;
+
+      console.log(width)
+      console.log(height)
+
+      var counter = 100000;
+
+      var deathCounter = 0;
+      var damageCounter = 0;
+      var currentDate = "";
+      var yearDate = "";
+      var md = "";
+
+      var filterBox = [90, -90, -180, 0];
+
+      var paused = false;
+
+      var interval = 25; 
+      var anim; 
+
+
+      var svg = d3.select('#SVG')
+                  // .append("svg")
+                  .attr("width", width/2)
+                  .attr("height", height)
+
+      var svgBar = d3.select("#SVG3")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
+      var svgBar2 = d3.select("#SVG4")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
+      var svgBar3 = d3.select("#SVG5")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
+      var x = d3.scaleLinear()
+      var y = d3.scaleBand()
+      var x2 = d3.scaleLinear()
+      var y2 = d3.scaleBand()
+      var x3 = d3.scaleLinear()
+      var y3 = d3.scaleBand()
+      
+      var myimage = svg.append('image')
+        .attr('xlink:href', 'worldmap4.jpg')
+        .attr('width', width/2)
+        .attr('height', height)
+
+      var brush = d3.brush()
+          .extent([[8, 0], [width/2 - 8, height]])
+          .on("end", filterHurricanes);
+
+      svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+      var rectangle = svg.append("rect")
+          .attr("x", width*.015)
+          .attr("y", height*.81)
+          .attr("width", width*.17)
+          .attr("height", height*.16)
+          .attr("fill", "grey")
+          .attr("stroke", "black");
+
+      var deaths = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.84)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Total Death Count: " + deathCounter);
+
+      var damages = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.87)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Total Damages: $" + damageCounter * 1000000);
+
+      var rooms = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.90)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Num Hurricane Safe Rooms: " + Math.ceil((damageCounter * 1000000) / 3100));
+
+      var year = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.93)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Year: " + yearDate);
+
+      var monthDay = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.96)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Month/Day: " + md);
+
+      var deathBar;
+      var damagesBar;
+      var houseBar;
+
+
+      d3.csv("FilteredStorms.csv", function(data) {
+        // console.log(data);
+        hurricanes = data
+        hurricanesFiltered = hurricanes
+        hurricanesDisplay = hurricanes
+        console.log(hurricanes)
+
+        deathBar = createDeathBarChart(svgBar, hurricanes, x, y);
+
+        damagesBar = createDamagesBarChart(svgBar2, hurricanes, x2, y2);
+
+        houseBar = createHouseBarChart(svgBar3, hurricanes, x3, y3);
+
+        multipleViews()
+
+        startAnimation()
+
+      });
+
+
+      function filterCategory(){
+
+        var cat1 = document.getElementById("cat1").checked
+        var cat2 = document.getElementById("cat2").checked
+        var cat3 = document.getElementById("cat3").checked
+        var cat4 = document.getElementById("cat4").checked
+        var cat5 = document.getElementById("cat5").checked
+
+        var d1 = document.getElementById("d1").checked
+        var d2 = document.getElementById("d2").checked
+        var d3 = document.getElementById("d3").checked
+        var d4 = document.getElementById("d4").checked
+        var d5 = document.getElementById("d5").checked
+
+        var da1 = document.getElementById("da1").checked
+        var da2 = document.getElementById("da2").checked
+        var da3 = document.getElementById("da3").checked
+        var da4 = document.getElementById("da4").checked
+        var da5 = document.getElementById("da5").checked
+
+        console.log(hurricanes)
+
+        hurricanesDisplay = []
+
+        hurricaneNumbers = []
+        hurricane1 = []
+
+        for(var x = 0; x < hurricanes.length; x++){
+          var speed = hurricanes[x].Wind
+
+          if(speed > 137 && cat5){
+            hurricaneNumbers.push(hurricanes[x].SerialNum);
+          }
+          else if(speed > 113 && cat4){
+             hurricaneNumbers.push(hurricanes[x].SerialNum);
+          }
+          else if(speed > 96 && cat3){
+             hurricaneNumbers.push(hurricanes[x].SerialNum);
+          }
+          else if(speed > 83 && cat2){
+             hurricaneNumbers.push(hurricanes[x].SerialNum);
+          }
+          else if(speed > 64 && cat1){
+             hurricaneNumbers.push(hurricanes[x].SerialNum);
+          }
+        }
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricaneNumbers.includes(hurricanes[x].SerialNum)){
+            hurricane1.push(hurricanes[x])
+          }
+        }
+
+
+        hurricaneNumbers = []
+
+        for(var x = 0; x < hurricane1.length; x++){
+          var d = hurricane1[x].Deaths
+
+          if(d >= 5000 && d1){
+            hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 3000 && d2){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 1000 && d3){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 100 && d4){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(d >= 0 && d5){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+        }
+
+        hurricane1 = []
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricaneNumbers.includes(hurricanes[x].SerialNum)){
+            hurricane1.push(hurricanes[x])
+          }
+        }
+
+
+
+        hurricaneNumbers = []
+
+        for(var x = 0; x < hurricane1.length; x++){
+          var da = hurricane1[x].Damages
+
+          if(da >= 10000 && da1){
+            hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 5000 && da2){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 1000 && da3){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 500 && da4){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+          else if(da >= 0 && da5){
+             hurricaneNumbers.push(hurricane1[x].SerialNum);
+          }
+        }
+
+        for(var x = 0; x < hurricanes.length; x++){
+          if(hurricaneNumbers.includes(hurricanes[x].SerialNum)){
+            hurricanesDisplay.push(hurricanes[x])
+          }
+        }
+
+        //console.log(hurricanesDisplay)
+
+        multipleViews();
+      }      
+
+
+      function filterHurricanes(){
+
+        var s = d3.event.selection;
+        //console.log(s)
+
+
+        var lat1 = ((height - s[0][1] - 0) * (90 - (-90)) / (height - 0) + (-90))
+        var lat2 = ((height - s[1][1] - 0) * (90 - (-90)) / (height - 0) + (-90))
+        var long1 = (s[0][0] - 0) * (180 - (-180)) / (width - 0) + (-180)
+        var long2 = (s[1][0] - 0) * (180 - (-180)) / (width - 0) + (-180)
+
+        // console.log(lat1)
+        // console.log(lat2)
+        // console.log(long1)
+        // console.log(long2)
+
+        filterBox = [lat1, lat2, long1, long2];
+
+        //console.log(filterBox)
+
+        multipleViews()
+
+        
+      }
+
+
+      function multipleViews(){
+
+        svgLines.forEach(function(svgChart){
+          //console.log(svgChart)
+          document.getElementById("SVG2").innerHTML = ""
+        })
+
+        hurricanesFiltered = [];
+
+
+        for(var x = 0; x < hurricanesDisplay.length; x++){
+          if(hurricanesDisplay[x].Latitude < filterBox[0] && 
+            hurricanesDisplay[x].Latitude > filterBox[1] &&
+            hurricanesDisplay[x].Longitude < filterBox[3] && 
+            hurricanesDisplay[x].Longitude > filterBox[2]){
+            hurricanesFiltered.push(hurricanesDisplay[x]);
+          }
+        }
+
+        //console.log(hurricanesFiltered)
+
+        svgLines = []
+
+        var serial = hurricanesFiltered[0].SerialNum;
+        var tempHurricane = []
+        for(var i = 0; i < hurricanesFiltered.length; i++){
+          if(i == hurricanesFiltered.length - 1){
+            tempHurricane.push(hurricanesFiltered[i])
+            svgLines.push(createLineChart('#SVG2', tempHurricane, filterBox[0], filterBox[1], filterBox[2], filterBox[3]))
+          }
+          else if(hurricanesFiltered[i].SerialNum == serial){
+            tempHurricane.push(hurricanesFiltered[i])
+          }
+          else{
+            svgLines.push(createLineChart('#SVG2', tempHurricane, filterBox[0], filterBox[1], filterBox[2], filterBox[3]))
+
+            tempHurricane = []
+            serial = hurricanesFiltered[i].SerialNum
+            tempHurricane.push(hurricanesFiltered[i])
+
+          }
+        }
+
+      }
+
+
+      function plotCoordinate(index, speed){
+        //console.log(hurricanes[index].Longitude*-1)
+
+        var latitude1 = parseFloat(hurricanes[index].Latitude)
+        var longitude1 = parseFloat(hurricanes[index].Longitude)
+        var latitude2 = parseFloat(hurricanes[index+1].Latitude)
+        var longitude2 = parseFloat(hurricanes[index+1].Longitude)
+
+        // console.log("lat = " + latitude)
+        // console.log("long = " + longitude)
+
+        var screenX1 = (longitude1 - (-180)) * (width - 0) / (180 - (-180)) + 0
+        var screenY1 = height - ((latitude1 - (-90)) * (height - 0) / (90 - (-90)) + 0)
+        var screenX2 = (longitude2 - (-180)) * (width - 0) / (180 - (-180)) + 0
+        var screenY2 = height - ((latitude2 - (-90)) * (height - 0) / (90 - (-90)) + 0)
+
+        // console.log(screenX)
+        // console.log(screenY)
+
+        svg.append("line")
+          .attr("x1", screenX1)
+          .attr("y1", screenY1)
+          .attr("x2", screenX1)
+          .attr("y2", screenY1)
+          .attr("stroke-width", 2)
+          .attr("stroke", function(){
+            return hurricaneColor(hurricanes[index].Wind)
+          })
+          .transition()
+          .duration(speed)
+          .attr("x2", screenX2)
+          .attr("y2", screenY2)  
+          .attr('stroke', function(){
+              //console.log(hurricanes[index].Wind)
+
+              return hurricaneColor(hurricanes[index+1].Wind)
+              
+            });
+      }
+
+      function hurricaneColor(speed){
+        if(speed > 137){
+          return '#8b0000'
+        }
+        else if(speed > 113){
+          return '#c0223b'
+        }
+        else if(speed > 96){
+          return '#e75758'
+        }
+        else if(speed > 83){
+          return '#fe906a'
+        }
+        else if(speed > 64){
+          return '#ffcb91'
+        }
+        else{
+          return '#ffffe0'
+        }
+      }
+
+      function Reset(){
+        document.getElementById("playButton").disabled = true
+        document.getElementById("pauseButton").disabled = false
+
+        counter = 0;
+        deathCounter = 0;
+        damageCounter = 0;
+        svg.selectAll("line").remove();
+      }
+
+      function pauseAnimation(){
+        if(paused){
+          paused = false
+          document.getElementById("pauseButton").innerHTML = "Pause"
+        }
+        else{
+          paused = true
+          document.getElementById("pauseButton").innerHTML = "Resume"
+        }
+      }
+
+      function updateBarCharts(speed){
+        deathBar.data("Deaths").transition()
+                .duration(speed)
+                .attr("width", x(deathCounter));
+
+        damagesBar.data("Damages").transition()
+          .duration(speed)
+          .attr("width", x2(damageCounter * 1000000));
+
+        houseBar.data("Rooms").transition()
+          .duration(speed)
+          .attr("width", x3((damageCounter * 1000000) / 3100));
+      }
+
+      var animName;
+      var animDeaths;
+      var animDamages;
+      var animEvacuate;
+      var background;
+      function animationText(name, year, death, damage, evacuate, num){
+
+        var background = svg.append("rect")
+          .attr("x", width*.015)
+          .attr("y", height*.07)
+          .attr("width", width*.25)
+          .attr("height", height*.13)
+          .attr("fill", "grey")
+          .attr("stroke", "black");
+
+        animText = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.1)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text("Hurricane " + name + " " + year);
+
+        animDeaths = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.13)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text("Number of Deaths: " + parseInt(death).toLocaleString('en'))
+            .style("fill", function(){
+              if(parseInt(death) > 1000){
+                return "red"
+              }
+              else{
+                return "black"
+              }
+            });
+
+        animDamages = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.16)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text(function(){
+              if(parseInt(damage) == 0){
+                return "Amount of Damages: Unknown"
+              }
+              else{
+                return "Amount of Damages: $" + (parseInt(damage) * 1000000).toLocaleString('en');
+              }
+            })
+            .style("fill", function(){
+              if(parseInt(damage) > 10000){
+                return "red"
+              }
+              else{
+                return "black"
+              }
+            });
+
+        animEvacuate = svg.append("text")
+            .attr("x", width*.15)             
+            .attr("y", height*.19)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "20px")   
+            .style('opacity', 1)
+            .text("Evacuation Type: " + evacuate)
+            .style("fill", function(){
+              if(evacuate == "Mandatory"){
+                return "red"
+              }
+              else if(evacuate == "Voluntary"){
+                return "orange"
+              }
+              else{
+                return "black"
+              }
+            });
+        
+
+        animText.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+        animDeaths.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+        animDamages.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+        animEvacuate.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+        background.transition()
+                .duration(num * 400)
+                .style('opacity', 0)
+      }
+
+
+
+      function startAnimation(){
+
+        anim = setInterval(request , interval);
+      }     
+
+      var majorHurricanes = ["2005236N23285", 
+                            "2012296N14283",
+                            "2008245N17323",
+                            "1992230N11325",
+                            "2005289N18282",
+
+                            "1900239N15318",
+                            "1998295N12284",
+                            "1963270N08327",
+                            "1974258N15295",
+                            "2004258N16300"];
+
+      function request() { 
+
+        if(!paused){
+          if(counter < hurricanes.length - 1){
+            if(counter == 0){
+              deathCounter += parseInt(hurricanes[counter].Deaths)
+              damageCounter += parseInt(hurricanes[counter].Damages)
+
+              
+              updateBarCharts(400)
+              plotCoordinate(counter, 100);
+            }
+            else if(hurricanes[counter].SerialNum != hurricanes[counter+1].SerialNum){
+              svg.selectAll("line").style('opacity', .1)
+              deathCounter += parseInt(hurricanes[counter+1].Deaths)
+              damageCounter += parseInt(hurricanes[counter+1].Damages)
+
+
+              if(majorHurricanes.includes(hurricanes[counter+1].SerialNum)){
+                interval = 300
+                animationText(hurricanes[counter+1].Name_y, hurricanes[counter+1].Season, hurricanes[counter+1].Deaths, hurricanes[counter+1].Damages, hurricanes[counter+1].EvacuationType, hurricanes[counter+1].NumEntries)
+                updateBarCharts(hurricanes[counter+1].NumEntries * 350)
+              }
+              else{
+                interval = 25
+                updateBarCharts(400)
+              }  
+            }
+            else{
+              if(interval == 25){
+
+                plotCoordinate(counter, 100);
+              }
+              else{
+                plotCoordinate(counter, 900);
+              }
+              
+            }
+            
+            currentDate = new Date(hurricanes[counter].ISOTime)
+            counter += 1;
+
+            deaths.text("Total Death Count: " + deathCounter.toLocaleString('en'))
+            damages.text("Total Damages: $" + (damageCounter * 1000000).toLocaleString('en'))
+            rooms.text("Num Hurricane Safe Rooms: " + Math.ceil((damageCounter * 1000000) / 3100).toLocaleString('en'))
+            year.text("Year: " + currentDate.getFullYear())
+            monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
+          }
+          else{
+
+            document.getElementById("playButton").disabled = false;
+            document.getElementById("pauseButton").disabled = true;
+
+          }
+          
+
+          //console.log(interval);
+          clearInterval(anim); 
+          anim = setInterval(request, interval); 
+        }
+      }
+
+
+    </script>
+    
+  </body>
+</html>

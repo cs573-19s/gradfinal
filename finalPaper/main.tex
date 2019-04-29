@@ -1,0 +1,119 @@
+\documentclass[journal]{vgtc}
+
+% TVCG Packages
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{times}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+
+
+\input{packages.tex}
+\input{figures.tex}
+\input{tables.tex}
+
+\usepackage[bookmarks,backref=true,linkcolor=black]{hyperref} %,colorlinks
+\hypersetup{
+  pdfauthor = {},
+  pdftitle = {},
+  pdfsubject = {},
+  pdfkeywords = {},
+  colorlinks=true,
+  linkcolor= black,
+  citecolor= black,
+  pageanchor=true,
+  urlcolor = blue,
+  plainpages = false,
+  linktocpage
+}
+
+%% If you are submitting a paper to a conference for review with a double
+%% blind reviewing process, please replace the value ``0'' below with your
+%% OnlineID. Otherwise, you may safely leave it at ``0''.
+\onlineid{0}
+
+%% declare the category of your paper, only shown in review mode
+\vgtccategory{Exploration}
+
+\vgtcinsertpkg
+
+
+\title{Ignorance of Hurricanes}
+
+\author{Jason Abel}
+\authorfooter{
+\item
+ Jason Abel is with Worcester Polytechnic Institute. E-mail: jabel@wpi.edu
+
+}
+
+%other entries to be set up for journal
+\shortauthortitle{Author \MakeLowercase{\textit{et al.}}: Title}
+
+
+
+%% Abstract section.
+\abstract{
+The objective of this paper is to inform people of the dangers of hurricanes through a story animation. Over the years many people have died to hurricanes and there has been lots of damages. This paper takes a look at hurricane paths, death count, damage count, and evacuation types of large scale hurricanes in the Atlantic ocean. From the information gathered, it was concluded that people may underestimate hurricanes and may not prepare for hurricanes well enough due to the large amounts of death and damages accumulated over time. It is important to note that the number of deaths has significantly reduced over the years however the amount of damages has increase significantly as well. It is estimated that if we took all the money accumulated in damages, we could produce over 120 million hurricane proof rooms. The main message that this story animation is that people should prepare for hurricanes much more and to not underestimate hurricanes. This paper aims to get people to understand that hurricanes are unpredictable. This paper will talk about the background of hurricane related information as well as the methodology of how this animation was created in order to tell the story about hurricanes ignorance. Finally, the results found were stated and discussed along with a final conclusion made about the project.
+} 
+
+\keywords{Hurricanes, Visualization, Animation, Story, Information}
+
+%% ACM Computing Classification System (CCS). 
+%% See <http://www.acm.org/class/1998/> for details.
+%% The ``\CCScat'' command takes four arguments.
+
+% \CCScatlist{ % not used in journal version
+%  \CCScat{K.6.1}{Management of Computing and Information Systems}%
+% {Project and People Management}{Life Cycle};
+%  \CCScat{K.7.m}{The Computing Profession}{Miscellaneous}{Ethics}
+% }
+
+%% Uncomment below to include a teaser figure.
+% Teaser should be jnds for -pcp versus +pcp (distinguishable; not distinguishable; target; not distinguishable; distinguishable)
+\teaser{
+  \centering
+  \includegraphics[width=\textwidth]{img/teaser}
+  \caption{Hurricane animation currently displaying Hurricane Andrew}
+  \label{fig:teaser}
+}
+
+%% Uncomment below to disable the manuscript note
+%\renewcommand{\manuscriptnotetxt}{}
+
+%% Copyright space is enabled by default as required by guidelines.
+%% It is disabled by the 'review' option or via the following command:
+% \nocopyrightspace
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% START OF THE PAPER %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%% The ``\maketitle'' command must be the first command after the
+%% ``\begin{document}'' command. It prepares and prints the title block.
+
+%% the only exception to this rule is the \firstsection command
+\firstsection{Introduction}
+
+\maketitle
+
+%% \section{Introduction} %for journal use above \firstsection{..} instead
+
+\input{body.tex}
+
+%% if specified like this the section will be committed in review mode
+\acknowledgments{
+The Author would like to acknowledge Lane Harrison for his insight in helping come up with ideas on how to build the visualization and the guidance provided throughout the project. 
+}
+
+\bibliographystyle{abbrv}
+\bibliography{paper.bib}
+
+
+\end{document}
