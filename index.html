@@ -1,5 +1,5 @@
 <head>
-    <title>SHMetro</title>
+    <title>SH Metro</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -11,71 +11,97 @@
         body {
           background-color: black;
         }
-        /* Remove the navbar's default margin-bottom and rounded borders */ 
-        .navbar {
-          margin-bottom: 0;
-          border-radius: 0;
-        }
-        
-        /* Add a gray background color and some padding to the footer */
-        footer {
-          background-color: #f2f2f2;
-          padding: 25px;
-        }
-
         .panel-body {background:#000000;}
+        #brand{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:20px;
+            top:12px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand1{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:15px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand2{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:35px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand3{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:55px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #logo{
+            position:absolute;
+            top:200px;
+            left:500px;
+        }
+        p{
+            position:absolute;
+            top:650px;
+            left:670px;
+            font-family:'Times New Roman';
+            font-size:13px;
+        }
     </style>
 </head>
 
-<body>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid  ">
-             <h class="navbar-brand" >SHMetro</h>
-        </div>
-    </nav>
-<div class="container text-center">
-    <h5>Please try hover effect on moving circles and bars when the animation is playing.</h5>
-    <h3>Animation: <button id="play-button">Pause</button></h3>
-    <div class="row align-items-center">
-        <div class="col-md-10">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">GeoMap</div>
-                <div class="panel-body" ><svg id="geo"/></div>
-                <div class="panel-footer">SHMetro's 17 lines</div>
-            </div>  
-        </div>
-        <div class="col-sm-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">Time</div>
-                    <div class="panel-body"><p class="text-center" id="time" style="font-size: 15px; font-weight: bold;">05:00</p></div>
-                </div> 
-                <div class="panel panel-default" >
-                    <div class="panel-heading" style="background-color: #212121; color:#FFFFFF; border-color: #212121">Lines</div>
-                    <div class="panel-body"> <svg id="LineButtonGroup"></svg> </div>
-                    
-                </div>
-            </div>
-    </div>
-    <div class="row align-items-center">
-      
-                
-
-            <div class="col-sm-12">
-                  <svg id="timerSVG"></svg>
-            </div>
-                    
-        
-    </div>
-
-
-</div>
+<body>     
+                <h id="brand"  >
+                    <div style="color:gold">SHMetro</div>
+                    <div id="brand1" style="color:grey" onclick="javascript:window.location='Traffic.html'">TrafficFlow</div>
+                    <div id="brand2" style="color:grey" onclick="javascript:window.location='Entrance.html'">EntranceFlow</div>
+                    <div id="brand3" style="color:grey" onclick="javascript:window.location='Exit.html'">ExitFlow</div>
+                </h>
+                 <div id="logo">
+                     <img src="logo.gif" alt="logo" style="width:450px;height:450px;">
+                 </div>
+                 <p style="color:grey">Vis of One day in ShangHai Metro</p>
 
 </body>
-<script src="./js/TimeSlider.js"></script>
-<script src="./js/Timer.js"></script>
-<script src="./js/Geolocation.js"></script>
-<script src="./js/LineButton.js"></script>
-<script src="./js/MetroFlow.js"></script>
+<script>
+    d3.select("#brand1")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+      d3.select("#brand2")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+      d3.select("#brand3")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+</script>
 
 
 
