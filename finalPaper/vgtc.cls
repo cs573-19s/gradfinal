@@ -253,9 +253,9 @@
 
 %%Comment from here
 \newcommand{\manuscriptnotetxt}{
-Manuscript received 31 March 2014; accepted 1 August 2014; posted online 13 October 2014; mailed on 4 October 2014.\par
+Manuscript created 29 April 2019.\par
 For information on obtaining reprints of this article, please send \par
-e-mail to: tvcg@computer.org.
+e-mail to: jabel@wpi.edu.
 }
 %% to here to not use the blank
 
@@ -549,12 +549,12 @@ e-mail to: tvcg@computer.org.
        \begin{center}%
            \renewcommand{\thanks}[1]{}
            {\sffamily\ifvgtcjournal\huge\else\LARGE\bfseries\fi%
-	      \vgtc@sectionfont%
-	      \@title \par}%
+        \vgtc@sectionfont%
+        \@title \par}%
            \vspace{1\baselineskip}%
            {Category: \vgtc@category \par}%
-%            \vspace{0.25\baselineskip}%	% no longer needed (1996)
-%            {Format: \vgtc@format \par}%	% no longer needed (1996)
+%            \vspace{0.25\baselineskip}%  % no longer needed (1996)
+%            {Format: \vgtc@format \par}% % no longer needed (1996)
            \vspace{\titlespace}%
            \ifx\vgtc@teaser\vgtc@empty \else%
                \begingroup%
@@ -567,13 +567,13 @@ e-mail to: tvcg@computer.org.
    \else
        \begin{center}%
            {\sffamily\ifvgtcjournal\huge\else\LARGE\bfseries\fi%
-	      \vgtc@sectionfont%
-	      \@title \par}%
+        \vgtc@sectionfont%
+        \@title \par}%
            \ifvgtcjournal%
              %\vspace{2\baselineskip}%
              \vspace{14pt}%
            \else%
-	    \vspace{1\baselineskip}\fi%
+      \vspace{1\baselineskip}\fi%
            \large\sffamily\vgtc@sectionfont 
            \begin{tabular}[t]{c}%
                \@author
@@ -618,11 +618,11 @@ e-mail to: tvcg@computer.org.
 %%              \endgroup\par%
 %%          \fi%
         }%
-	\begin{center}\includegraphics{img/diamondrule.pdf}\end{center}
+  \begin{center}\includegraphics{img/diamondrule.pdf}\end{center}
        %\vspace{\abstxtspace}%
-	\ifx\firstsectiontxt\vgtc@empty \else
-	  \section{\firstsectiontxt}
-	\fi
+  \ifx\firstsectiontxt\vgtc@empty \else
+    \section{\firstsectiontxt}
+  \fi
     \fi%
 }
 
@@ -798,8 +798,8 @@ e-mail to: tvcg@computer.org.
            {\large \vgtc@affiliation \par}%
            \addvspace{3\baselineskip}%
            {Category: \vgtc@category \par}%
-%            \vspace{0.5\baselineskip}%		% no longer needed (1996)
-%            {Format: \vgtc@format \par}%	% no longer needed (1996)
+%            \vspace{0.5\baselineskip}%   % no longer needed (1996)
+%            {Format: \vgtc@format \par}% % no longer needed (1996)
            \vspace{3\baselineskip}%
            \begin{tabular}{ll}
                Contact: & \vgtc@contactname \\[1\baselineskip]
