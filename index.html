@@ -56,8 +56,12 @@
         <svg id="SVG"></svg>
       </div>
       <div class="col-sm-6">
+        <h3>Hurricane Deaths</h3>
         <svg id="SVG3"></svg>
+        <h3>Hurricane Damages</h3>
         <svg id="SVG4"></svg>
+        <h3>Number of Hurricane Proof Rooms that could be made</h3>
+        <svg id="SVG5"></svg>
         <br>
         <br>
         <br>
@@ -195,10 +199,16 @@
         .attr("width", (width/2) * .95)
         .attr("height", height * .2)
 
+      var svgBar3 = d3.select("#SVG5")
+        .attr("width", (width/2) * .95)
+        .attr("height", height * .2)
+
       var x = d3.scaleLinear()
       var y = d3.scaleBand()
       var x2 = d3.scaleLinear()
       var y2 = d3.scaleBand()
+      var x3 = d3.scaleLinear()
+      var y3 = d3.scaleBand()
       
       var myimage = svg.append('image')
         .attr('xlink:href', 'worldmap4.jpg')
@@ -215,25 +225,32 @@
 
       var rectangle = svg.append("rect")
           .attr("x", width*.015)
-          .attr("y", height*.84)
+          .attr("y", height*.81)
           .attr("width", width*.17)
-          .attr("height", height*.13)
+          .attr("height", height*.16)
           .attr("fill", "grey")
           .attr("stroke", "black");
 
       var deaths = svg.append("text")
             .attr("x", width*.1)             
-            .attr("y", height*.87)
+            .attr("y", height*.84)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Total Death Count: " + deathCounter);
 
       var damages = svg.append("text")
             .attr("x", width*.1)             
-            .attr("y", height*.90)
+            .attr("y", height*.87)
             .attr("text-anchor", "middle")  
             .style("font-size", "16px")   
             .text("Total Damages: $" + damageCounter * 1000000);
+
+      var rooms = svg.append("text")
+            .attr("x", width*.1)             
+            .attr("y", height*.90)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px")   
+            .text("Num Hurricane Safe Rooms: " + Math.ceil((damageCounter * 1000000) / 3100));
 
       var year = svg.append("text")
             .attr("x", width*.1)             
@@ -251,6 +268,7 @@
 
       var deathBar;
       var damagesBar;
+      var houseBar;
 
 
       d3.csv("FilteredStorms.csv", function(data) {
@@ -263,6 +281,8 @@
         deathBar = createDeathBarChart(svgBar, hurricanes, x, y);
 
         damagesBar = createDamagesBarChart(svgBar2, hurricanes, x2, y2);
+
+        houseBar = createHouseBarChart(svgBar3, hurricanes, x3, y3);
 
         multipleViews()
 
@@ -553,6 +573,10 @@
         damagesBar.data("Damages").transition()
           .duration(speed)
           .attr("width", x2(damageCounter * 1000000));
+
+        houseBar.data("Rooms").transition()
+          .duration(speed)
+          .attr("width", x3((damageCounter * 1000000) / 3100));
       }
 
       var animName;
@@ -717,6 +741,7 @@
 
             deaths.text("Total Death Count: " + deathCounter.toLocaleString('en'))
             damages.text("Total Damages: $" + (damageCounter * 1000000).toLocaleString('en'))
+            rooms.text("Num Hurricane Safe Rooms: " + Math.ceil((damageCounter * 1000000) / 3100).toLocaleString('en'))
             year.text("Year: " + currentDate.getFullYear())
             monthDay.text("Month/Day: " + (currentDate.getMonth()+1) + "/" + currentDate.getDate())
           }
