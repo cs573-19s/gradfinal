@@ -1,0 +1,108 @@
+<head>
+    <title>SH Metro</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        body {
+          background-color: black;
+        }
+        .panel-body {background:#000000;}
+        #brand{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:20px;
+            top:12px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand1{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:15px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand2{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:35px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #brand3{
+            position:fixed;
+            position:-webkit-sticky;
+            position:sticky;
+            font-size:15px;
+            top:55px;
+            left:-15px;
+            font-family:'Times New Roman';
+        }
+        #logo{
+            position:absolute;
+            top:200px;
+            left:500px;
+        }
+        p{
+            position:absolute;
+            top:650px;
+            left:670px;
+            font-family:'Times New Roman';
+            font-size:13px;
+        }
+    </style>
+</head>
+
+<body>     
+                <h id="brand"  >
+                    <div style="color:gold">SHMetro</div>
+                    <div id="brand1" style="color:grey" onclick="javascript:window.location='Traffic.html'">TrafficFlow</div>
+                    <div id="brand2" style="color:grey" onclick="javascript:window.location='Entrance.html'">EntranceFlow</div>
+                    <div id="brand3" style="color:grey" onclick="javascript:window.location='Exit.html'">ExitFlow</div>
+                </h>
+                 <div id="logo">
+                     <img src="logo.gif" alt="logo" style="width:450px;height:450px;">
+                 </div>
+                 <p style="color:grey">One Day Of ShangHai Metro</p>
+
+</body>
+<script>
+    d3.select("#brand1")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+      d3.select("#brand2")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+      d3.select("#brand3")
+      .on("mouseover",function(d){
+          console.log(this)
+          d3.select(this).style("color","white")
+      })
+      .on("mouseout",function(d){
+          d3.select(this).style("color","grey")
+      })
+</script>
+
+
+
+
