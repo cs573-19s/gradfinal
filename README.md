@@ -21,7 +21,7 @@ Jupiter notebook code
 ![jupiternotebook](dvProject.ipynb)
 
 3D barChart code
-![img1](https://xiaoduwpi.github.io/gradfinal/PythonProject/index.html);
+https://xiaoduwpi.github.io/gradfinal/PythonProject/index.html
 
 Boston crash heatmap
 ![heatmap](https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html);
