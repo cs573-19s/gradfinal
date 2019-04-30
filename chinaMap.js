@@ -37,7 +37,7 @@
                 },
                 isShowLinearGradient: false, // 是否显示渐变图例
                 isShowSouthSea: false,  // 是否显示南海
-                chinaGeoUrl: 'china.geojson',
+                chinaGeoUrl: 'china.geo.json',
                 isShowProvince: false,  // 是否显示省级详细地图
                 provinceData: [], // 省辖市的数据
                 provinceMapUrl: 'geoProvince/', // 省级地图的根路径
