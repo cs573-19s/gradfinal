@@ -1,4 +1,4 @@
-cs573 grad final
+One day of SHMetro
 ---
 
 Demo Video: https://www.youtube.com/watch?v=0AUQpKVXM7k&app=desktop
