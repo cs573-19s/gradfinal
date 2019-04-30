@@ -156,11 +156,8 @@ Promise.all(arr)
                         return "<div>" +
                             "<p>YEAR:"+target.YEAR+"</p>"+
                             "<p>ENROLL:"+target.ENROLL+"</p>"+
-                            "<p>TOTAL_REVENUE:"+target.TOTAL_REVENUE+"</p>"+
-                            "<p>FEDERAL_REVENUE:"+target.FEDERAL_REVENUE+"</p>"+
-                            "<p>STATE_REVENUE:"+target.STATE_REVENUE+"</p>"+
-                            "<p>LOCAL_REVENUE:"+target.LOCAL_REVENUE+"</p>"+
-                            "<p>TOTAL_EXPENDITURE:"+target.TOTAL_EXPENDITURE+"</p>"+
+                            "<p>TOTAL REVENUE:"+target.TOTAL_REVENUE+"</p>"+
+                            "<p>TOTAL EXPENDITURE:"+target.TOTAL_EXPENDITURE+"</p>"+
                         "</div>"
                     }else {
                         return null;
