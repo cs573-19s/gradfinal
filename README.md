@@ -35,4 +35,5 @@ Design Achievements
 - Metro flow is presented to audience by button clicking effect.
 - Screenshots of stations bridge the gap between abstract metro map with the real world.
 - Animation on the home page 
+- Hover effect on page names motivates audience to click the button
 
