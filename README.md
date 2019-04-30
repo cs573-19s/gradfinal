@@ -5,6 +5,8 @@ Demo Video: https://www.youtube.com/watch?v=0AUQpKVXM7k&app=desktop
 
 Weblink: https://yutinghan.github.io/gradfinal/
 
+Paper Location: SHMetroPaper/SHMetro.pdf
+
 HomePage:
 ![SHMetro1](/gif/SHMetro1.gif)
 ------
