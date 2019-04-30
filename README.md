@@ -1,6 +1,12 @@
-cs573 grad final
+CS573 Grad Final:
 ---
 
-This is where you'll include your code, analysis, and final report.
+Files/Folders:
 
-`/paper` contains a LaTeX TVCG template. This is the template you should use for your final report. See `/paper` for details.
+R-plots - Files and code for generating R plots in our paper.
+Java/Flask-code - Files and code for generating visual system
+Python-Python-preprocessing - Code for creating csv files for needed in Java and R folders. 
+
+Link to Divvy Bike Share Data: 
+
+
