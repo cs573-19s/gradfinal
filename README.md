@@ -14,6 +14,9 @@ Final paper
 python's code
 ![pythoncode](PythonProject/main.py);
 
+Jupiter notebook code
+![jupiternotebook](dvProject.ipynb)
+
 3D barChart code
 ![img1](PythonProject/render.html);
 
