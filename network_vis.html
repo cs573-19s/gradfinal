@@ -37,43 +37,13 @@ var margin = {top: 10, right: 30, bottom: 30, left: 40},
 
 // append the svg object to the body of the page
 var svg = d3.select("#network_graph")
-.append("svg")
-.attr("width", width + margin.left + margin.right)
-.attr("height", height + margin.top + margin.bottom)
-.append("g")
-.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//d3.json("ips.json", function(data) {
-function readData(){  
-  d3.csv("./bots.csv", function(data){
-    var links = []
-    var nodes = []
-    for (i in data){
-      var node = {"id":i, "name":data[i].ip_addr, "state":data[i].state, "neighbors":data[i].neighbors, "lastCMD":data[i].lastCMD}
-      nodes.push(node)
-    }
-    for (i in nodes){
-      var neighbors= nodes[i].neighbors
-      var parsedString = ""
-      for (char in neighbors){
-        if (!(neighbors[char] === '[' || neighbors[char] ===']' || neighbors[char] ==='"' || neighbors[char] ==="'" || neighbors[char] ===" ")){
-          parsedString += neighbors[char]
-        }
-      }
-      var neighborsList = parsedString.split(',')
-      for (n in neighborsList){
-        if (!(neighborsList[n] === "")){
-          var target = nodes.find(target=> target.name === neighborsList[n])
-          console.log("Test", target)
-          var link = {'source':nodes[i].id, 'target':target.id}
-          if (!links.includes(link) && !links.includes({'source':target.id, 'target':nodes[i].id})) {
-            links.push(link)
-            console.log(link)
-          }
-        }
-      }
-    }
-    var tooltip = d3.select("#network_graph")
+var tooltip = d3.select("#network_graph")
       .append("div")
       .style("position", "absolute")
       .style("z-index", "10")
@@ -81,14 +51,60 @@ function readData(){
       .style("background", "transparent")
       .text("a simple tooltip");
 
+//d3.json("ips.json", function(data) {
+ 
+
+
+function readData(){  
+  var nodes = []
+   var links = []
+  d3.csv("./bots.csv", function(data){
+   
+    
+
+    for (i in data){
+      var node = {"id":i, "name":data[i].ip_addr, "state":data[i].state, "neighbors":data[i].neighbors, "lastCMD":data[i].lastCMD}
+      nodes.push(node)
+    }
+
+	    for (i in nodes){
+	      var neighbors= nodes[i].neighbors
+	      var parsedString = ""
+	      for (char in neighbors){
+		if (!(neighbors[char] === '[' || neighbors[char] ===']' || neighbors[char] ==='"' || neighbors[char] ==="'" || neighbors[char] ===" ")){
+		  parsedString += neighbors[char]
+		}
+	      }
+	      var neighborsList = parsedString.split(',')
+	      for (n in neighborsList){
+		if (!(neighborsList[n] === "")){
+		  var target = nodes.find(target=> target.name === neighborsList[n])
+		  console.log("Test", target)
+		  var link = {'source':nodes[i].id, 'target':target.id}
+		  if (!links.includes(link) && !links.includes({'source':target.id, 'target':nodes[i].id})) {
+		    links.push(link)
+		    console.log(link)
+		  }
+		}
+	      }
+	    }    
+  
+
+   
     // Initialize the links
     var link = svg
       .selectAll("line")
       .data(links)
+
+    link.transition().duration(1).style("stroke", colors["unselected_link"])
+    
+    link
       .enter()
       .append("line")
         .attr("stroke-width", 1)
         .style("stroke", colors["unselected_link"])
+
+    link.exit().remove();
 
 
     function colorState(node){
@@ -102,16 +118,24 @@ function readData(){
       };
 
     // Initialize the nodes
+    //svg.selectAll("circle").remove()
     var node = svg
       .selectAll("circle")
       .data(nodes)
+
+    node.transition().duration(1)
+	.style("fill", function(d){return colorState(d)})//colors["unselected_node"])
+    
+    node
       .enter()
       .append("circle")
-        .attr("r", 30)
+        .attr("r", 20)
         .style("fill", function(d){return colorState(d)})//colors["unselected_node"])
 
+    node.exit().remove(); 
+     
+    node
       .on("click", function(d){
-        console.log("hit")
         this_node = d
         edges = selectEdgeNodes(this_node.id);
         lines = d3.selectAll("line")
@@ -156,22 +180,26 @@ function readData(){
         .transition().attr("stroke-width", 1).style("stroke", colors["unselected_link"])
         d3.selectAll("circle")
           .filter((d) => edges.includes(d.id))
-          .transition().attr("r", 20).style("fill", colors["unselected_node"])
+          .transition().attr("r", 20).style("fill", function(d){return colorState(d)})
         d3.select(this)
-        .transition().attr("r", 20).style("fill", colors["unselected_node"]);
+        .transition().attr("r", 20).style("fill", function(d){return colorState(d)});
          tooltip.style("visibility", "hidden");
       })
+    // node.exit().remove()
 
+    
     // Let's list the force we wanna apply on the network
     var simulation = d3.forceSimulation(nodes)                 // Force algorithm is applied to data.nodes
         .force("link", d3.forceLink()                               // This force provides links between nodes
               .id(function(d) { return d.id; })                     // This provide  the id of a node
               .links( links)                                    // and this the list of links
         )
-        .force("charge", d3.forceManyBody().strength(-800))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-        .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+        .force("charge", d3.forceManyBody().strength(-1500))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+        .force("center", d3.forceCenter((width / 2), (height / 2)))     /// This force attracts nodes to the center of the svg area
+        .force("x", d3.forceX())
+	.force("y", d3.forceY())
+        //.alphaTarget(1)
         .on("end", ticked);
-
 
 
 
@@ -188,7 +216,7 @@ function readData(){
            .attr("cy", function(d) { return d.y-6; });
     }
 
-
+    
     function selectEdgeNodes(sourceNode){
 
       //maps source
@@ -197,173 +225,35 @@ function readData(){
 
       return a.concat(b);
     }
-  });
+   });
+  
 }
 
 
 readData();
-var inter = setInterval(function() {
-                readData();
-        }, 1000); 
+setInterval(readData, 1000)
 
 
+function restart(){
+ // Apply the general update pattern to the nodes.
+  
 
-// function update(){
+  node = node.data(nodes, function(d) { return d.id;});
+  node.exit().remove();
+  node = node.enter().append("circle").attr("fill", function(d) { return color(d.id); }).attr("r", 8).merge(node);
 
-//   d3.csv("./bots.csv", function(data){
-//     var links = []
-//     var nodes = []
-//     for (i in data){
-//       var node = {"id":i, "name":data[i].ip_addr, "state":data[i].state, "neighbors":data[i].neighbors, "lastCMD":data[i].lastCMD}
-//       nodes.push(node)
-//     }
-//     for (i in nodes){
-//       var neighbors= nodes[i].neighbors
-//       var parsedString = ""
-//       for (char in neighbors){
-//         if (!(neighbors[char] === '[' || neighbors[char] ===']' || neighbors[char] ==='"' || neighbors[char] ==="'" || neighbors[char] ===" ")){
-//           parsedString += neighbors[char]
-//         }
-//       }
-//       var neighborsList = parsedString.split(',')
-//       for (n in neighborsList){
-//         if (!(neighborsList[n] === "")){
-//           var target = nodes.find(target=> target.name === neighborsList[n])
-//           console.log("Test", target)
-//           var link = {'source':nodes[i].id, 'target':target.id}
-//           if (!links.includes(link) && !links.includes({'source':target.id, 'target':nodes[i].id})) {
-//             links.push(link)
-//             console.log(link)
-//           }
-//         }
-//       }
-//     }
-//     var tooltip = d3.select("#network_graph")
-//       .append("div")
-//       .style("position", "absolute")
-//       .style("z-index", "10")
-//       .style("visibility", "hidden")
-//       .style("background", "transparent")
-//       .text("a simple tooltip");
+  // Apply the general update pattern to the links.
+  link = link.data(links, function(d) { return d.source + "-" + d.target; });
+  link.exit().remove();
+  link = link.enter().append("line").merge(link);
 
-//     // Initialize the links
-//     var link = svg
-//       .selectAll("line")
-//       .data(links)
-//       .enter()
-//       .append("line")
-//         .attr("stroke-width", 1)
-//         .style("stroke", colors["unselected_link"])
+  // Update and restart the simulation.
+  simulation.nodes(nodes);
+  simulation.force("link").links(links);
+  simulation.alpha(1).restart();
 
 
-//     function colorState(node){
-//         if (node.state === "Ready"){
-//           return colors["unselected_node_Ready"]
-//         }else if (node.state === "Asleep"){
-//           return colors["unselected_node_Asleep"]
-//         }else{
-//           return colors["unselected_node_Unreachable"]
-//         }
-//       };
-
-//     // Initialize the nodes
-//     var node = svg
-//       .selectAll("circle")
-//       .data(nodes)
-//       .enter()
-//       .append("circle")
-//         .attr("r", 30)
-//         .style("fill", function(d){return colorState(d)})//colors["unselected_node"])
-
-//       .on("click", function(d){
-//         console.log("hit")
-//         this_node = d
-//         edges = selectEdgeNodes(this_node.id);
-//         lines = d3.selectAll("line")
-//          .filter(function(d) {
-//          return (d.source === this_node) || (d.target === this_node);
-//          }).transition().attr("stroke-width", 5).style("stroke", "black")
-
-//          d3.selectAll("circle")
-//           .filter((d) => edges.includes(d.id))
-//           .transition().attr("r", 22).style("fill", "black")
-
-//         d3.select(this).transition().attr("r", 30).style("fill", "black")
-
-
-//       })
-
-//       .on("mouseover", function(d){
-//         this_node = d
-//         d3.selectAll("line")
-//          .filter(function(d) {
-//          return (d.source === this_node) || (d.target === this_node);
-//          })
-//         .transition().attr("stroke-width", 5).style("stroke", colors["selected_links"])
-
-//         d3.select(this)
-//         .transition().attr("r", 30).style("fill", colors["selected_node"]);
-//         tooltip.text(d.name);
-//         edges = selectEdgeNodes(this_node.id);
-//         d3.selectAll("circle")
-//         .filter((d) => edges.includes(d.id))
-//         .transition().attr("r", 22).style("fill", colors["selected_edge_nodes"])
-//         tooltip.style("visibility", "visible");
-//       })
-
-//       .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-
-//       .on("mouseout", function(d){
-//         d3.selectAll("line")
-//          .filter(function(d) {
-//          return (d.source === this_node) || (d.target === this_node);
-//          })
-//         .transition().attr("stroke-width", 1).style("stroke", colors["unselected_link"])
-//         d3.selectAll("circle")
-//           .filter((d) => edges.includes(d.id))
-//           .transition().attr("r", 20).style("fill", colors["unselected_node"])
-//         d3.select(this)
-//         .transition().attr("r", 20).style("fill", colors["unselected_node"]);
-//          tooltip.style("visibility", "hidden");
-//       })
-
-//     // Let's list the force we wanna apply on the network
-//     var simulation = d3.forceSimulation(nodes)                 // Force algorithm is applied to data.nodes
-//         .force("link", d3.forceLink()                               // This force provides links between nodes
-//               .id(function(d) { return d.id; })                     // This provide  the id of a node
-//               .links( links)                                    // and this the list of links
-//         )
-//         .force("charge", d3.forceManyBody().strength(-800))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-//         .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
-//         .on("end", ticked);
-
-
-
-
-//     // This function is run at each iteration of the force algorithm, updating the nodes position.
-//     function ticked() {
-//       link
-//           .attr("x1", function(d) { return d.source.x; })
-//           .attr("y1", function(d) { return d.source.y; })
-//           .attr("x2", function(d) { return d.target.x; })
-//           .attr("y2", function(d) { return d.target.y; });
-
-//       node
-//            .attr("cx", function (d) { return d.x+6; })
-//            .attr("cy", function(d) { return d.y-6; });
-//     }
-
-
-//     function selectEdgeNodes(sourceNode){
-
-//       //maps source
-//       a = links.filter((x)=>x["target"]["id"] === sourceNode).map((x)=>x["source"]["id"])
-//       b = links.filter((x)=>x["source"]["id"] === sourceNode).map((x)=>x["target"]["id"])
-
-//       return a.concat(b);
-//     }
-//   });
-// };
+}
 
 
 
