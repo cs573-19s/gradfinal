@@ -27,7 +27,7 @@ Boston crash heatmap
 https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html;
 
 Nearby areas with highest accident frequency
-https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html3;
+https://xiaoduwpi.github.io/gradfinal/PythonProject/map3.html;
 
 accident count in different time bar chart
 https://xiaoduwpi.github.io/gradfinal/PythonProject/bar_chart.html;
