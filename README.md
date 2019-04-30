@@ -34,4 +34,5 @@ Design Achievements
 - Linked interactions in multiple views 
 - Metro flow is presented to audience by button clicking effect.
 - Screenshots of stations bridge the gap between abstract metro map with the real world.
+- Animation on the home page 
 
