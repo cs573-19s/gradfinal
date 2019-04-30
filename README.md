@@ -7,13 +7,17 @@ This is where you'll include your code, analysis, and final report.
 
 `/paper` contains a LaTeX TVCG template. This is the template you should use for your final report. See `/paper` for details.
 
+HomePage:
 ![ggplot2](/gif/SHMetro1.gif)
 ------
 
+TrafficFlow: 
 ![ggplot2](/gif/SHMetro2.gif)
 ------
 
+EntranceFlow: 
 ![ggplot2](/gif/SHMetro3.gif)
 ------
 
+ExitFlow:
 ![ggplot2](/gif/SHMetro4.gif)
