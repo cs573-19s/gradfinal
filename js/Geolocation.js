@@ -4,8 +4,8 @@
 */
 //Canvas and margin setting
 var geo = d3.select("#geo");
-	geo.width=660;
-	geo.height=600;
+	geo.width=950;
+	geo.height=850;
 	geo.attr("width",geo.width).attr("height",geo.height);
 	geo.margin = ({top: 5, right: 5, bottom: 5, left: 5});
 
@@ -22,21 +22,21 @@ var mint = "#05B89A",
   corn = "#FFCE65",
   yellow = "#FFC039",
   gold = "#FFC707",
-  orange = "#FF9339",
+  orange = "#DC7633",
   sun = "#FF6307",
   heart = "#FF4739",
-  red = "#FF1907",
+  red = "#F44336",
   hot = "960018",
-  lawngreen="#7CFC00",
+  lawngreen="#D4E157",
   rebeccapurple="#663399",
   mediumslateblue="#7b68ee",
-  orchid="#ff1a75",
+  orchid="#F06292",
   blue="#4169E1",
   lightskyblue="#87cefa",
   mediumpurple="#9370db",
-  saddlebrown="#8b4513",
-  green="#004d00",
-  lightpink="#ff99cc",
+  saddlebrown="#5D4037",
+  green="#388E3C",
+  lightpink="#FFCDD2",
   mediumaquamarine="#66DDAA";
 
 var linecolor=function(LINENO){

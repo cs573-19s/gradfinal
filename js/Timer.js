@@ -5,3 +5,12 @@ function minsToTime(m){
     if(m<10){m="0"+m;}
     return h+":"+m;
 }
+
+// var timecircle=d3.select("#time")
+//                 .append("circle")
+//                 .attr("r",45)
+//                 .attr("cx",50)
+//                 .attr("cy",80)
+//                 .style("stroke-width",2)
+//                 .style("stroke","white");
+               

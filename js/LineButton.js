@@ -1,5 +1,7 @@
 
-LineButtonGroup=d3.select("#LineButtonGroup").attr("width",100).attr("height",500);
+LineButtonGroup=d3.select("#LineButtonGroup")
+                  .attr("width",100)
+                  .attr("height",500);
 LineIDs=[1,2,3,4,5,6,7,8,9,10,11,12,13,16];
 LineIDs.forEach(function(id,i){
      button=LineButtonGroup.append("g").attr("active","false");
