@@ -9,10 +9,10 @@ Project link
 https://xiaoduwpi.github.io/gradfinal/
 
 Bibliography's link
-![bibliography](final_Annotated%20Bibliography.pdf);
+![bibliography](https://xiaoduwpi.github.io/gradfinal/PythonProject/final_Annotated%20Bibliography.pdf);
 
 Final paper
-![paper](final_paper.pdf)
+![paper](https://xiaoduwpi.github.io/gradfinal/PythonProject/final_paper.pdf)
 
 python's code
 ![pythoncode](PythonProject/main.py);
