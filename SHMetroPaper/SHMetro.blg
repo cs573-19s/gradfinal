@@ -1,0 +1,91 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: SHMetro.aux
+The style file: abbrv.bst
+Database file #1: SHMetro.bib
+Too many commas in name 1 of "Zuchao Wang, Min Lu, Xiaoru Yuan, Junping Zhang, Huub van de Wetering" for entry 4
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Zuchao Wang, Min Lu, Xiaoru Yuan, Junping Zhang, Huub van de Wetering" for entry 4
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Jiansu Pu, Siyuan Liu, Ye Ding, Lionel Ni" for entry 5
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1049 of file abbrv.bst
+Too many commas in name 1 of "Jiansu Pu, Siyuan Liu, Ye Ding, Lionel Ni" for entry 5
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 7
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Till Nagel, Martina Maitan, Erik Duval, Andrew Vande Moere, Joris Klerkx2, Kristian Kloeckl, Carlo Ratti" for entry 8
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Zuchao Wang, Min Lu, Xiaoru Yuan, Junping Zhang, Huub van de Wetering" for entry 4
+while executing---line 1090 of file abbrv.bst
+Too many commas in name 1 of "Zuchao Wang, Min Lu, Xiaoru Yuan, Junping Zhang, Huub van de Wetering" for entry 4
+while executing---line 1090 of file abbrv.bst
+You've used 8 entries,
+            2118 wiz_defined-function locations,
+            526 strings with 5073 characters,
+and the built_in function-call counts, 1876 in all, are:
+= -- 189
+> -- 56
+< -- 1
++ -- 25
+- -- 16
+* -- 79
+:= -- 340
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 32
+chr.to.int$ -- 0
+cite$ -- 8
+duplicate$ -- 92
+empty$ -- 155
+format.name$ -- 16
+if$ -- 388
+int.to.chr$ -- 0
+int.to.str$ -- 8
+missing$ -- 8
+newline$ -- 43
+num.names$ -- 16
+pop$ -- 32
+preamble$ -- 1
+purify$ -- 24
+quote$ -- 0
+skip$ -- 71
+stack$ -- 0
+substring$ -- 81
+swap$ -- 19
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 32
+warning$ -- 0
+while$ -- 19
+width$ -- 9
+write$ -- 83
+(There were 22 error messages)
