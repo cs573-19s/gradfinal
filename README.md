@@ -7,6 +7,9 @@ Data: https://www.kaggle.com/noriuk/us-education-datasets-unification-project
 Description
 ---
 We made several kinds of charts in including map, pie chart, slope chart and bubble chart in order to find ou relationship between education and economy in US.
+![image](imgs/1.gif)
+![image](imgs/2.gif)
+![image](imgs/3.gif)
 
 Technical achievement
 ---
