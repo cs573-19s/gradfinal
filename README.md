@@ -31,7 +31,7 @@ Technical Achievements
 
 Design Achievements
 ------
-- Linked interactions in multiple views
-- Present metro flow to audience by button clicking effect.
-- Screenshots of stations linked abstract metro map with the real world.
+- Linked interactions in multiple views 
+- Metro flow is presented to audience by button clicking effect.
+- Screenshots of stations bridge the gap between abstract metro map with the real world.
 
