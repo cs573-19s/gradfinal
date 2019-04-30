@@ -18,11 +18,19 @@ Educational access remains uneven in China. Students born into affluent families
 
 Views:
 ---
-![image](image/map.png)
-![image](image/timeline.png)
+
 ![image](image/result1.png)
+
 ![image](image/result2.png)
+
 ![image](image/result3.png)
+
+
+![image](image/timeline.png)
+
+
+![image](image/map.png)
+
 
 Technical Achievements:
 ---
