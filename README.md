@@ -1,6 +1,22 @@
-cs573 grad final
+One day of SHMetro
 ---
 
-This is where you'll include your code, analysis, and final report.
+Demo Video: https://www.youtube.com/watch?v=0AUQpKVXM7k&app=desktop
 
-`/paper` contains a LaTeX TVCG template. This is the template you should use for your final report. See `/paper` for details.
+Weblink: https://yutinghan.github.io/gradfinal/
+
+HomePage:
+![SHMetro1](/gif/SHMetro1.gif)
+------
+
+TrafficFlow: 
+![SHMetro2](/gif/SHMetro2.gif)
+------
+
+EntranceFlow: 
+![SHMetro3](/gif/SHMetro3.gif)
+------
+
+ExitFlow:
+![SHMetro4](/gif/SHMetro4.gif)
+------
