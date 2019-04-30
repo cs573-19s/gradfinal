@@ -32,13 +32,20 @@ let mymap = null;
 // 加载geojson数据
 arr.push(d3.json('data/gz_2010_us_040_00_20m.json'));
 
+arr.push(d3.csv('data/Reading.csv',row=>{
+    row.YEAR = +row.YEAR;
+    row.AverageScaleScore = +row.AverageScaleScore;
+
+    return row;
+}));
+
 arr.push(d3.csv('data/states.csv'));
 
 Promise.all(arr)
-    .then(([csv,math, us, states])=>{
+    .then(([csv,math, us, reading, states])=>{
         math.sort((a,b)=>a.YEAR - b.YEAR);
         let groupByYear = d3.nest().key(d=>d.YEAR).entries(csv);
-        console.log(groupByYear);
+        console.log(d3.nest().key(d=>d.YEAR).entries(reading));
 
         let idx = 0;
         let flag = 'TOTAL_REVENUE';
@@ -361,8 +368,8 @@ Promise.all(arr)
 
         /*csv = csv.filter(d=>(d.YEAR===1993 || d.YEAR===2001 || d.YEAR===2009 || d.YEAR===2016));
         math = math.filter(d=>(d.YEAR===1996 || d.YEAR===2000 || d.YEAR===2009 || d.YEAR===2017));*/
-        step3(csv.filter(d=>(d.YEAR===1993 || d.YEAR===2001 || d.YEAR===2009 || d.YEAR===2016)),
-            'TOTAL_REVENUE');
+        step3(reading.filter(d=>(d.YEAR===2002 || d.YEAR===2007 || d.YEAR===2011 || d.YEAR===2017)),
+            'AverageScaleScore');
 
         d3.selectAll('.page3_btn')
             .on('click',function () {
@@ -371,8 +378,8 @@ Promise.all(arr)
                     step3(math.filter(d=>(d.YEAR===1996 || d.YEAR===2000 || d.YEAR===2009 || d.YEAR===2017)),
                         'AverageScaleScore');
                 }else {
-                    step3(csv.filter(d=>(d.YEAR===1993 || d.YEAR===2001 || d.YEAR===2009 || d.YEAR===2016)),
-                        'TOTAL_REVENUE');
+                    step3(reading.filter(d=>(d.YEAR===2002 || d.YEAR===2007 || d.YEAR===2011 || d.YEAR===2017)),
+                        'AverageScaleScore');
                 }
             });
 
@@ -478,7 +485,6 @@ Promise.all(arr)
                         .attr('y', h/2 * Math.sin(i*per_PI))
                         .html(t2.Abbreviation);
                 })
-
             };
 
 
