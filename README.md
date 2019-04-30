@@ -1,5 +1,5 @@
 cs573 grad final
----
+-
 Link: https://ianhuang96.github.io/gradfinal/index.html
 
 Data: https://www.kaggle.com/noriuk/us-education-datasets-unification-project
