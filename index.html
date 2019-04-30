@@ -1,0 +1,85 @@
+﻿<html>  
+	<head>  
+	    <meta charset="utf-8">  
+	    <title>ChinaMap</title>  
+	</head> 
+	<style>
+		.mapBox{width: 1400px; height: 450px; margin: 50px auto;}
+		.mapBox>div{ float:left;}
+		.map{ width: 700px; height: 450px; }
+		.provinceMap{width: 700px; height: 450px;}
+	</style>
+<body>
+<div class="mapBox">
+	<div class="ChinaMap"></div>
+	<div class="provinceMap"></div>
+</div>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="chinaMap.js" charset="utf-8"></script>
+<script type="text/javascript">
+	var provinceData = [
+			{"name": "北京", "value":	472.507},
+			{"name": "天津", "value":	360.3884},
+			{"name": "河北", "value":	268.0772},
+			{"name": "山西", "value":	203.518},
+			{"name": "辽宁", "value":	238.6263},
+			{"name": "内蒙古", "value":	359.2102},
+			{"name": "吉林", "value":	232.094},
+			{"name": "黑龙江", "value":	216.5987},
+			{"name": "上海", "value":	594.9309},
+			{"name": "江苏", "value":	485.7162},
+			{"name": "浙江", "value":	516.4947},
+			{"name": "安徽", "value":	235.4715},
+			{"name": "福建", "value":	428.5232},
+			{"name": "江西", "value":	190.8453},
+			{"name": "山东", "value":	360.4136},
+			{"name": "河南", "value":	222.2419},
+			{"name": "湖北", "value":	253.2521},
+			{"name": "湖南", "value":	266.2815},
+			{"name": "广东", "value":	465.8076},
+			{"name": "广西", "value":	213.7217},
+			{"name": "海南", "value":	240.5682},
+			{"name": "重庆", "value":	260.0714},
+			{"name": "四川", "value":	246.5841},
+			{"name": "贵州", "value":	215.7214},
+			{"name": "云南", "value":	231.9924},
+			{"name": "西藏", "value":	368.236},
+			{"name": "陕西", "value":	204.7766},
+			{"name": "甘肃", "value":	160.015},
+			{"name": "青海", "value":	391.7657},
+			{"name": "宁夏", "value":	284.3567},
+			{"name": "新疆", "value":	314.5075},	
+			{"name": "澳门", "value":	0},
+			{"name": "台湾", "value":	0},
+	
+		];
+
+	var provinceData2 = [
+                {"name": "锡林郭勒盟", "value": 1544.94},
+                {"name": "鄂尔多斯市", "value": 3720.24},
+                {"name": "赤峰市", "value": 6263.69},
+                {"name": "巴彦淖尔市", "value":    2771.96},
+                {"name": "通辽市", "value": 4494.77},
+                {"name": "乌兰察布市", "value":    3835.48},
+                {"name": "兴安盟", "value": 5493.23},
+                {"name": "包头市", "value": 12299.72},
+                {"name": "呼和浩特市", "value": 14151.74},
+                {"name": "乌海市", "value": 1562.67}
+            ];
+
+
+	var opt = {
+		data: provinceData,
+		container: '.ChinaMap',
+		isShowLinearGradient: true,
+		isShowSouthSea: true,
+		isShowProvince: true,
+		isShowLinearGradient: true,
+		provinceData: provinceData2
+	}
+	new ChinaMap(opt);
+
+</script>
+</body>  
+</html>  
