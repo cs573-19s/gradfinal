@@ -21,12 +21,12 @@ Jupiter notebook code
 ![jupiternotebook](dvProject.ipynb)
 
 3D barChart code
-![img1](http://htmlpreview.github.io/?https://github.com/XiaoDuWPI/gradfinal/blob/master/PythonProject/render.html);
+![img1](https://xiaoduwpi.github.io/gradfinal/PythonProject/index.html);
 
 Boston crash heatmap
-![heatmap](PythonProject/map2.html);
+![heatmap](https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html);
 
 Nearby areas with highest accident frequency
-![scatterplot](PythonProject/map3.html);
+![scatterplot](https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html3);
 
 
