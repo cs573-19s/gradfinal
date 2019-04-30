@@ -9,10 +9,10 @@ Project link
 https://xiaoduwpi.github.io/gradfinal/
 
 Bibliography's link
-https://xiaoduwpi.github.io/gradfinal/PythonProject/final_Annotated%20Bibliography.pdf
+![bibliography](final_Annotated%20Bibliography.pdf);
 
 Final paper
-https://xiaoduwpi.github.io/gradfinal/PythonProject/final_paper.pdf
+![paper](final_paper.pdf)
 
 python's code
 ![pythoncode](PythonProject/main.py);
@@ -28,5 +28,8 @@ https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html;
 
 Nearby areas with highest accident frequency
 https://xiaoduwpi.github.io/gradfinal/PythonProject/map2.html3;
+
+accident count in different time bar chart
+https://xiaoduwpi.github.io/gradfinal/PythonProject/bar_chart.html;
 
 
