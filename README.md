@@ -20,3 +20,18 @@ EntranceFlow:
 ExitFlow:
 ![SHMetro4](/gif/SHMetro4.gif)
 ------
+
+
+Technical Achievements
+------
+- Dirty data cleaning by python pandas, self designed functions and Jupyter notebook.
+- Fixed element when scrolling
+- Entry, transition and exit animations
+
+
+Design Achievements
+------
+- Linked interactions in multiple views
+- Present metro flow to audience by button clicking effect.
+- Screenshots of stations linked abstract metro map with the real world.
+
