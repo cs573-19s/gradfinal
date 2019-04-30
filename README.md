@@ -18,20 +18,27 @@ Educational access remains uneven in China. Students born into affluent families
 
 Views:
 ---
-
-
-
-
-
+![image](image/map.png)
+![image](image/timeline.png)
+![image](image/result1.png)
+![image](image/result2.png)
+![image](image/result3.png)
 
 Technical Achievements:
 ---
--
--
+-Using python to deal with the raw data
+-Using d3 to Map latitude and longitude when plot a map
+-Function to make the amount of the data determines the depth of the color
+-Moving the mouse up to display specific data and the name of each province
+-Time slider to select the year and change the data
+
 
 
 
 Design Achievements:
 ---
--
--
+-Plot the data to real map
+-Choose nice looking color schemes
+-Collected data on funds and population of undergraduate
+-Used outside js insdead of code in the javascript code
+
