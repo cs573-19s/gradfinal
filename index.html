@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>China Map</title>
+    <script src="http://d3js.org/d3.v5.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+</head>
+<body>
+<h2>Funding per graduate changing from 1993 to 2017</h2>
+<div class="row align-items-center">
+        <div class="col-sm-2"><p id="value-time"></p></div>
+        <div class="col-sm"><div id="slider-time"></div></div>
+</div>
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+  crossorigin="anonymous"
+/>
+
+<script type="text/javascript">
+    //创建svg
+    var width = 1200, height = 900;
+
+    var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    //create projection
+    var projection = d3.geoMercator()
+	    .translate([width / 2, height / 2])
+	    .center([105, 38])
+	    .scale(900);
+
+    //create path
+    var path = d3.geoPath().projection(projection);
+	
+    //get map json
+    d3.json("china.geo.json").then(function(json) {
+        d3.csv("per_graduate.csv").then(function(data2) {
+        svg.selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("id",function
+            (d){return d.id;})
+            .on('mouseover', function(data) {
+        //d3.select(this).attr('fill', rgba(2,2,139,0.61))
+        // update(data2);
+
+        //创建显示tooltip用的矩形
+        svg.append("rect")
+                .attr("id", "tooltip1")
+                .attr("x", 50)
+                .attr("y",50)
+                .attr("width",140)
+                .attr("height",130)
+                .attr("stroke","black")
+                .attr("fill","none")
+                // .attr("mouseon", )
+                ;
+
+        //创建显示tooltip文本
+        svg.append("text")
+                .attr("id", "tooltip2")
+                .attr("x", 100)
+                .attr("y", 100)
+                .attr("text-anchor", "middle")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "11px")
+                .attr("font-weight", "bold")
+                .attr("fill", "black")
+                .text(data.properties.name)
+                })
+                .on('mouseout', function(data) {
+    
+                    d3.select("#tooltip1").remove();
+                    d3.select("#tooltip2").remove();
+                })
+                .attr('fill', 'rgba(128,124,139,0.61)')
+                .attr('stroke', 'rgba(255,255,255,1)')
+                .attr('stroke-width', 1);
+
+    
+        var maxvalue = 600;
+        var minvalue = 0;
+
+        var linear = d3.scaleLinear()
+                    .domain([minvalue, maxvalue])
+                    .range([0, 1]);
+
+        var a = d3.rgb(0,255,255);  //浅蓝色
+        var b = d3.rgb(0,0,255);    //蓝色
+        var computeColor = d3.interpolate(a,b);
+
+        function update(data){
+            var values = [];
+            var year = document.getElementById('value-time').innerHTML;
+            
+            // for(var i=0; i<30; i++){
+            // var name = data2[i]['Region'];
+            // var value = data2[i].year;
+            // values[name] = value;
+            // }
+           
+            //console.log( svg.selectAll("path"));
+            for(var i=0; i<31; i++){
+                console.log(data2[i]["Region"]);
+                d3.select("#"+data2[i]["Region"])
+                .attr("fill",function(d){
+                    // return "red";
+                    var t = linear( data2[i][year]);
+                    var color = computeColor(t);
+                    return color.toString();
+                });
+            // var name = data2[i]['Region'];
+            // var value = data2[i].year;
+            // values[name] = value;
+            }
+        }
+        
+            
+    //         svg.selectAll("path")
+    //         .data(json.features)
+    //         .enter()
+    //         .style("fill", function(json,i){
+    //         var t = linear( values[d.id] );
+    //         //console.log(t);
+    //         var color = computeColor(t);
+    //         //console.log(color);
+    //         return color.toString();
+    // });
+    var dataTime = d3.range(0, 25).map(function(d) {
+    return new Date(1993 + d, 10, 3);
+    });
+
+    var sliderTime = d3
+    .sliderBottom()
+    .min(d3.min(dataTime))
+    .max(d3.max(dataTime))
+    .step(1000 * 60 * 60 * 24 * 365)
+    .width(700)
+    .tickFormat(d3.timeFormat('%Y'))
+    .tickValues(dataTime)
+    .default(new Date(1993, 10, 3))
+    .on('onchange', val => {
+      d3.select('p#value-time').text(d3.timeFormat('%Y')(val));
+        update(data2);
+    });
+
+    var gTime = d3
+    .select('div#slider-time')
+    .append('svg')
+    .attr('width', 900)
+    .attr('height', 100)
+    .append('g')
+    .attr('transform', 'translate(30,30)');
+
+    gTime.call(sliderTime);
+
+    d3.select('p#value-time').text(d3.timeFormat('%Y')(sliderTime.value()));
+
+    
+       
+    });
+
+    // var dataTime = d3.range(0, 25).map(function(d) {
+    // return new Date(1993 + d, 10, 3);
+    // });
+
+    // var sliderTime = d3
+    // .sliderBottom()
+    // .min(d3.min(dataTime))
+    // .max(d3.max(dataTime))
+    // .step(1000 * 60 * 60 * 24 * 365)
+    // .width(700)
+    // .tickFormat(d3.timeFormat('%Y'))
+    // .tickValues(dataTime)
+    // .default(new Date(1993, 10, 3))
+    // .on('onchange', val => {
+    //   d3.select('p#value-time').text(d3.timeFormat('%Y')(val));
+    //     update(data2);
+    // });
+
+    // var gTime = d3
+    // .select('div#slider-time')
+    // .append('svg')
+    // .attr('width', 900)
+    // .attr('height', 100)
+    // .append('g')
+    // .attr('transform', 'translate(30,30)');
+
+    // gTime.call(sliderTime);
+
+    // d3.select('p#value-time').text(d3.timeFormat('%Y')(sliderTime.value()));
+
+    
+
+        //    return{
+    
+        //        province : d.Region,
+        //        2017 : +d["2017"],
+        //        2016 : +d["2016"],
+        //        2015 : +d["2015"],
+        //        2014 : +d["2014"],
+        //        2013 : +d["2013"],
+        //        2012 : +d["2012"],
+        //        2011 : +d["2011"],
+            //    2010 : +d["2010"],
+            //    2009 : +d["2009"],
+            //    2008 : +d["2008"],
+            //    2007 : +d["2007"],
+            //    2006 : +d["2006"],
+            //    2005 : +d["2005"],
+            //    2004 : +d["2004"],
+            //    2003 : +d["2003"],
+            //    2002 : +d["2002"],
+            //    2001 : +d["2001"],
+            //    2000 : +d["2000"],
+            //    1999 : +d["1999"],
+            //    1998 : +d["1998"],
+            //    1997 : +d["1997"],
+            //    1996 : +d["1996"],
+            //    1995 : +d["1995"],
+            //    1994 : +d["1994"],
+            //    1993 : +d["1993"]
+        //    }
+    // console.log(data2);
+    
+    // var maxvalue = 520;
+    // var minvalue = 0;
+
+    // var linear = d3.scaleLinear()
+    //                 .domain([minvalue, maxvalue])
+    //                 .range([0, 1]);
+
+    // var a = d3.rgb(0,255,255);  //浅蓝色
+    // var b = d3.rgb(0,0,255);    //蓝色
+    // var computeColor = d3.interpolate(a,b);
+    
+    // var values = [];
+    //     for(var i=0; i<32; i++){
+    //         console.log(data2);
+    //         var name = data2[i]['Region'];
+    //         var value = data2[i]['2017'];
+    //         values[name] = value;
+    // }
+    //         svg.selectAll("path")
+    //         .style("fill", function(d,i){
+    //         var t = linear( values[d.properties.name] );
+    //         var color = computeColor(t);
+    //         return color.toString();
+    // });
+    });
+</script>
+</body>
+</html>
