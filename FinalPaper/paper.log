@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 MAY 2019 00:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 MAY 2019 01:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -871,7 +871,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 152.
 
-<img/teaser.jpeg, id=40, 1913.1475pt x 818.05624pt>
+<img/teaser.jpeg, id=44, 1913.1475pt x 818.05624pt>
 File: img/teaser.jpeg Graphic file (type jpg)
  <use img/teaser.jpeg>
 Package pdftex.def Info: img/teaser.jpeg used on input line 152.
@@ -884,7 +884,7 @@ See the caption package documentation for explanation.
 
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <8> not available
 (Font)              Font shape `OT1/phv/b/n' tried instead on input line 152.
-<img/diamondrule.pdf, id=42, 213.79875pt x 12.045pt>
+<img/diamondrule.pdf, id=46, 213.79875pt x 12.045pt>
 File: img/diamondrule.pdf Graphic file (type pdf)
  <use img/diamondrule.pdf>
 Package pdftex.def Info: img/diamondrule.pdf used on input line 152.
@@ -912,58 +912,71 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
  <./img/teaser.jpeg> <./img/diamondrule.pdf>]
-<img/test.jpeg, id=58, 1641.13126pt x 707.64375pt>
+<img/test.jpeg, id=63, 1641.13126pt x 707.64375pt>
 File: img/test.jpeg Graphic file (type jpg)
  <use img/test.jpeg>
 Package pdftex.def Info: img/test.jpeg used on input line 14.
 (pdftex.def)             Requested size: 251.31898pt x 108.36632pt.
 
-<img/test2.jpeg, id=61, 1217.54875pt x 537.00626pt>
+<img/test2.jpeg, id=66, 1217.54875pt x 537.00626pt>
 File: img/test2.jpeg Graphic file (type jpg)
  <use img/test2.jpeg>
 Package pdftex.def Info: img/test2.jpeg used on input line 33.
 (pdftex.def)             Requested size: 251.31898pt x 110.84084pt.
 
-<img/test3.jpeg, id=63, 1275.76625pt x 466.74374pt>
+<img/test3.jpeg, id=71, 1275.76625pt x 466.74374pt>
 File: img/test3.jpeg Graphic file (type jpg)
  <use img/test3.jpeg>
-Package pdftex.def Info: img/test3.jpeg used on input line 44.
+Package pdftex.def Info: img/test3.jpeg used on input line 46.
 (pdftex.def)             Requested size: 251.31898pt x 91.94406pt.
 
-<img/test4.jpeg, id=65, 435.6275pt x 278.03876pt>
+<img/test4.jpeg, id=74, 435.6275pt x 278.03876pt>
 File: img/test4.jpeg Graphic file (type jpg)
  <use img/test4.jpeg>
-Package pdftex.def Info: img/test4.jpeg used on input line 48.
+Package pdftex.def Info: img/test4.jpeg used on input line 50.
 (pdftex.def)             Requested size: 251.31898pt x 160.40135pt.
- [2 <./img/test.jpeg> <./img/test2.jpeg> <./img/test3.jpeg>]) (./paper.bbl)
+
+<img/test5.jpeg, id=75, 595.22375pt x 279.0425pt>
+File: img/test5.jpeg Graphic file (type jpg)
+ <use img/test5.jpeg>
+Package pdftex.def Info: img/test5.jpeg used on input line 53.
+(pdftex.def)             Requested size: 251.31898pt x 117.81868pt.
+ [2 <./img/test.jpeg> <./img/test2.jpeg> <./img/test3.jpeg>]
+<img/test6.jpeg, id=97, 459.7175pt x 424.58624pt>
+File: img/test6.jpeg Graphic file (type jpg)
+ <use img/test6.jpeg>
+Package pdftex.def Info: img/test6.jpeg used on input line 55.
+(pdftex.def)             Requested size: 251.31898pt x 232.11728pt.
+ [3 <./img/test4.jpeg> <./img/test5.jpeg> <./img/test6.jpeg>]) (./paper.bbl)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 166.
- [3 <./img/test4.jpeg>]
+ [4]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 166.
- (./paper.aux)
+
+(./paper.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 166.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 166.
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 53FDAAF2749E0C32D00F9CFB69220014;452.
+(rerunfilecheck)             Checksum: FDBF1B4244F914FAC2B2B453620EE43A;550.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 166.
  ) 
 Here is how much of TeX's memory you used:
- 8620 strings out of 492995
- 128251 string characters out of 6132704
- 233473 words of memory out of 5000000
- 11978 multiletter control sequences out of 15000+600000
+ 8661 strings out of 492995
+ 128984 string characters out of 6132704
+ 237205 words of memory out of 5000000
+ 12002 multiletter control sequences out of 15000+600000
  34772 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 44i,9n,40p,1539b,382s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,9n,40p,1568b,382s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2017/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/20
 17/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texm
 f-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fon
 ts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (3 pages, 913491 bytes).
+Output written on paper.pdf (4 pages, 1090825 bytes).
 PDF statistics:
- 119 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
- 26 named destinations out of 1000 (max. 500000)
- 103 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 162 PDF objects out of 1000 (max. 8388607)
+ 134 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
 

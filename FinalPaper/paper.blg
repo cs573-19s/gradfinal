@@ -3,44 +3,53 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: paper.aux
 The style file: abbrv.bst
 Database file #1: paper.bib.bib
-You've used 5 entries,
+Repeated entry---line 102 of file paper.bib.bib
+ : @incollection{brodlie2012review
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 111 of file paper.bib.bib
+ : @inproceedings{gregory2006user
+ :                               ,
+I'm skipping whatever remains of this entry
+You've used 16 entries,
             2118 wiz_defined-function locations,
-            532 strings with 4817 characters,
-and the built_in function-call counts, 2175 in all, are:
-= -- 229
-> -- 83
-< -- 3
-+ -- 33
-- -- 28
-* -- 147
-:= -- 334
-add.period$ -- 18
-call.type$ -- 5
-change.case$ -- 29
+            599 strings with 7429 characters,
+and the built_in function-call counts, 7344 in all, are:
+= -- 750
+> -- 366
+< -- 9
++ -- 145
+- -- 128
+* -- 528
+:= -- 1146
+add.period$ -- 57
+call.type$ -- 16
+change.case$ -- 110
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 89
-empty$ -- 177
-format.name$ -- 28
-if$ -- 480
+cite$ -- 16
+duplicate$ -- 282
+empty$ -- 546
+format.name$ -- 128
+if$ -- 1593
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 5
-newline$ -- 28
-num.names$ -- 10
-pop$ -- 34
+int.to.str$ -- 16
+missing$ -- 17
+newline$ -- 83
+num.names$ -- 32
+pop$ -- 130
 preamble$ -- 1
-purify$ -- 24
+purify$ -- 95
 quote$ -- 0
-skip$ -- 66
+skip$ -- 206
 stack$ -- 0
-substring$ -- 169
-swap$ -- 33
-text.length$ -- 3
+substring$ -- 497
+swap$ -- 101
+text.length$ -- 9
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
+type$ -- 62
 warning$ -- 0
-while$ -- 23
-width$ -- 6
-write$ -- 60
+while$ -- 71
+width$ -- 18
+write$ -- 186
+(There were 2 error messages)
