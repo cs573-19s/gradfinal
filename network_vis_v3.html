@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node circle {
+  cursor: pointer;
+  stroke: #3182bd;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+
+var colors = {
+  "selected_links": "#6D6875",
+  "selected_node": "#32A287",
+  "selected_edge_nodes": "#44CF6C",
+  "unselected_node_Asleep": "#1E90FF",//"#82A39B",
+  "unselected_node_Ready":  "#32CD32",//"#82A39B",
+  "unselected_node_Unreachable": "#778899",//"#82A39B",
+  "unselected_link": "#AAAAAA"
+
+};
+
+var width = 1000,
+    height = 1000;
+    
+
+var force = d3.layout.force()
+    .linkDistance(80)
+    .charge(-120)
+    .gravity(.05)
+    .size([width, height])
+    .on("tick", tick);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var link = svg.selectAll(".link"),
+    node = svg.selectAll(".node");
+
+d3.csv("bots.csv", function(error, data) {
+  if (error) throw error;
+
+  var links = []
+  var nodes = []
+    for (i in data){
+      var node = {"id":i, "name":data[i].ip_addr, "state":data[i].state, "neighbors":data[i].neighbors, "lastCMD":data[i].lastCMD}
+      nodes.push(node)
+    }
+
+   // if (init === true){
+	    for (i in nodes){
+	      var neighbors= nodes[i].neighbors
+	      var parsedString = ""
+	      for (char in neighbors){
+		if (!(neighbors[char] === '[' || neighbors[char] ===']' || neighbors[char] ==='"' || neighbors[char] ==="'" || neighbors[char] ===" ")){
+		  parsedString += neighbors[char]
+		}
+	      }
+	      var neighborsList = parsedString.split(',')
+	      for (n in neighborsList){
+		if (!(neighborsList[n] === "")){
+		  var target = nodes.find(target=> target.name === neighborsList[n])
+		  console.log("Test", target)
+		  var link = {'source':nodes[i].id, 'target':target.id}
+		  if (!links.includes(link) && !links.includes({'source':target.id, 'target':nodes[i].id})) {
+		    links.push(link)
+		    console.log(link)
+		  }
+		}
+	      }
+	    }
+
+  update(nodes, links);
+});
+
+function update(n, l) {
+  var nodes = n,
+      links = l;//d3.layout.tree().links(nodes);
+console.log("Test1")
+  // Restart the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+ console.log("Test2")
+  // Update links.
+  link = link.data(links, function(d) { return d.target.id; });
+
+  link.exit().remove();
+
+  link.enter().insert("line", ".node")
+      .attr("class", "link");
+
+  // Update nodes.
+  node = node.data(nodes, function(d) { return d.id; });
+
+  node.exit().remove();
+
+  var nodeEnter = node.enter().append("g")
+      .attr("class", "node")
+      .on("click", click)
+      .call(force.drag);
+
+  nodeEnter.append("circle")
+      .attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; });
+
+  nodeEnter.append("text")
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+
+  node.select("circle")
+      .style("fill", function (d) {return color(d)});
+}
+
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+
+function color(node){
+        if (node.state === "Ready"){
+          return colors["unselected_node_Ready"]
+        }else if (node.state === "Asleep"){
+          return colors["unselected_node_Asleep"]
+        }else{
+          return colors["unselected_node_Unreachable"]
+        }
+};
+
+
+// Toggle children on click.
+//function click(d) {
+//  if (d3.event.defaultPrevented) return; // ignore drag
+//  if (d.children) {
+//    d._children = d.children;
+//    d.children = null;
+//  } else {
+//    d.children = d._children;
+//    d._children = null;
+//  }
+//  update();
+//}
+
+
+
+</script>
