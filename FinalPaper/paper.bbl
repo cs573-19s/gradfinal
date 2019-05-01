@@ -1,0 +1,104 @@
+\begin{thebibliography}{10}
+
+\bibitem{boicea2012mongodb}
+A.~Boicea, F.~Radulescu, and L.~I. Agapin.
+\newblock Mongodb vs oracle--database comparison.
+\newblock In {\em 2012 third international conference on emerging intelligent
+  data and web technologies}, pages 330--335. IEEE, 2012.
+
+\bibitem{brodlie2012review}
+K.~Brodlie, R.~A. Osorio, and A.~Lopes.
+\newblock A review of uncertainty in data visualization.
+\newblock In {\em Expanding the frontiers of visual analytics and
+  visualization}, pages 81--109. Springer, 2012.
+
+\bibitem{buja1991interactive}
+A.~Buja, J.~A. McDonald, J.~Michalak, and W.~Stuetzle.
+\newblock Interactive data visualization using focusing and linking.
+\newblock In {\em Proceeding Visualization'91}, pages 156--163. IEEE, 1991.
+
+\bibitem{de2003visual}
+M.~F. De~Oliveira and H.~Levkowitz.
+\newblock From visual data exploration to visual data mining: a survey.
+\newblock {\em IEEE Transactions on Visualization and Computer Graphics},
+  9(3):378--394, 2003.
+
+\bibitem{gregory2006user}
+M.~L. Gregory, N.~Chinchor, P.~Whitney, R.~Carter, E.~Hetzler, and A.~Turner.
+\newblock User-directed sentiment analysis: Visualizing the affective content
+  of documents.
+\newblock In {\em Proceedings of the Workshop on Sentiment and Subjectivity in
+  Text}, pages 23--30. Association for Computational Linguistics, 2006.
+
+\bibitem{hao2011visual}
+M.~Hao, C.~Rohrdantz, H.~Janetzko, U.~Dayal, D.~A. Keim, L.-E. Haug, and M.-C.
+  Hsu.
+\newblock Visual sentiment analysis on twitter data streams.
+\newblock In {\em 2011 IEEE Conference on Visual Analytics Science and
+  Technology (VAST)}, pages 277--278. IEEE, 2011.
+
+\bibitem{hao2013visual}
+M.~C. Hao, C.~Rohrdantz, H.~Janetzko, D.~A. Keim, U.~Dayal, L.~E. Haug, M.~Hsu,
+  and F.~Stoffel.
+\newblock Visual sentiment analysis of customer feedback streams using
+  geo-temporal term associations.
+\newblock {\em Information Visualization}, 12(3-4):273--290, 2013.
+
+\bibitem{harper2014deconstructing}
+J.~Harper and M.~Agrawala.
+\newblock Deconstructing and restyling d3 visualizations.
+\newblock In {\em Proceedings of the 27th annual ACM symposium on User
+  interface software and technology}, pages 253--262. ACM, 2014.
+
+\bibitem{heiberger2014design}
+R.~M. Heiberger, N.~B. Robbins, et~al.
+\newblock Design of diverging stacked bar charts for likert scales and other
+  applications.
+\newblock {\em Journal of Statistical Software}, 57(5):1--32, 2014.
+
+\bibitem{heimerl2014word}
+F.~Heimerl, S.~Lohmann, S.~Lange, and T.~Ertl.
+\newblock Word cloud explorer: Text analytics based on word clouds.
+\newblock In {\em 2014 47th Hawaii International Conference on System
+  Sciences}, pages 1833--1842. IEEE, 2014.
+
+\bibitem{henry2007nodetrix}
+N.~Henry, J.-D. Fekete, and M.~J. McGuffin.
+\newblock Nodetrix: a hybrid visualization of social networks.
+\newblock {\em IEEE transactions on visualization and computer graphics},
+  13(6):1302--1309, 2007.
+
+\bibitem{holten2006hierarchical}
+D.~Holten.
+\newblock Hierarchical edge bundles: Visualization of adjacency relations in
+  hierarchical data.
+\newblock {\em IEEE Transactions on visualization and computer graphics},
+  12(5):741--748, 2006.
+
+\bibitem{jackson2010performance}
+K.~R. Jackson, L.~Ramakrishnan, K.~Muriki, S.~Canon, S.~Cholia, J.~Shalf, H.~J.
+  Wasserman, and N.~J. Wright.
+\newblock Performance analysis of high performance computing applications on
+  the amazon web services cloud.
+\newblock In {\em 2010 IEEE second international conference on cloud computing
+  technology and science}, pages 159--168. IEEE, 2010.
+
+\bibitem{keim2013big}
+D.~Keim, H.~Qu, and K.-L. Ma.
+\newblock Big-data visualization.
+\newblock {\em IEEE Computer Graphics and Applications}, 33(4):20--21, 2013.
+
+\bibitem{miner2012practical}
+G.~Miner, J.~Elder~IV, A.~Fast, T.~Hill, R.~Nisbet, and D.~Delen.
+\newblock {\em Practical text mining and statistical analysis for
+  non-structured text data applications}.
+\newblock Academic Press, 2012.
+
+\bibitem{roberts2007state}
+J.~C. Roberts.
+\newblock State of the art: Coordinated \& multiple views in exploratory
+  visualization.
+\newblock In {\em Fifth International Conference on Coordinated and Multiple
+  Views in Exploratory Visualization (CMV 2007)}, pages 61--71. IEEE, 2007.
+
+\end{thebibliography}
