@@ -1,0 +1,511 @@
+﻿YEAR,STATE,AllStudents,AverageScaleScore
+2017,Alabama,All students,268
+2017,Alaska,All students,277
+2017,Arizona,All students,282
+2017,Arkansas,All students,274
+2017,California,All students,277
+2017,Colorado,All students,286
+2017,Connecticut,All students,284
+2017,Delaware,All students,278
+2017,District of Columbia,All students,266
+2017,Florida,All students,279
+2017,Georgia,All students,281
+2017,Hawaii,All students,277
+2017,Idaho,All students,284
+2017,Illinois,All students,282
+2017,Indiana,All students,288
+2017,Iowa,All students,286
+2017,Kansas,All students,285
+2017,Kentucky,All students,278
+2017,Louisiana,All students,267
+2017,Maine,All students,284
+2017,Maryland,All students,281
+2017,Massachusetts,All students,297
+2017,Michigan,All students,280
+2017,Minnesota,All students,294
+2017,Mississippi,All students,271
+2017,Missouri,All students,281
+2017,Montana,All students,286
+2017,Nebraska,All students,288
+2017,Nevada,All students,275
+2017,New Hampshire,All students,293
+2017,New Jersey,All students,292
+2017,New Mexico,All students,269
+2017,New York,All students,282
+2017,North Carolina,All students,282
+2017,North Dakota,All students,288
+2017,Ohio,All students,288
+2017,Oklahoma,All students,275
+2017,Oregon,All students,282
+2017,Pennsylvania,All students,286
+2017,Rhode Island,All students,277
+2017,South Carolina,All students,275
+2017,South Dakota,All students,286
+2017,Tennessee,All students,279
+2017,Texas,All students,282
+2017,Utah,All students,287
+2017,Vermont,All students,288
+2017,Virginia,All students,290
+2017,Washington,All students,289
+2017,West Virginia,All students,273
+2017,Wisconsin,All students,288
+2017,Wyoming,All students,289
+2015,Alabama,All students,267
+2015,Alaska,All students,280
+2015,Arizona,All students,283
+2015,Arkansas,All students,275
+2015,California,All students,275
+2015,Colorado,All students,286
+2015,Connecticut,All students,284
+2015,Delaware,All students,280
+2015,District of Columbia,All students,263
+2015,Florida,All students,275
+2015,Georgia,All students,279
+2015,Hawaii,All students,279
+2015,Idaho,All students,284
+2015,Illinois,All students,282
+2015,Indiana,All students,287
+2015,Iowa,All students,286
+2015,Kansas,All students,284
+2015,Kentucky,All students,278
+2015,Louisiana,All students,268
+2015,Maine,All students,285
+2015,Maryland,All students,283
+2015,Massachusetts,All students,297
+2015,Michigan,All students,278
+2015,Minnesota,All students,294
+2015,Mississippi,All students,271
+2015,Missouri,All students,281
+2015,Montana,All students,287
+2015,Nebraska,All students,286
+2015,Nevada,All students,275
+2015,New Hampshire,All students,294
+2015,New Jersey,All students,293
+2015,New Mexico,All students,271
+2015,New York,All students,280
+2015,North Carolina,All students,281
+2015,North Dakota,All students,288
+2015,Ohio,All students,285
+2015,Oklahoma,All students,275
+2015,Oregon,All students,283
+2015,Pennsylvania,All students,284
+2015,Rhode Island,All students,281
+2015,South Carolina,All students,276
+2015,South Dakota,All students,285
+2015,Tennessee,All students,278
+2015,Texas,All students,284
+2015,Utah,All students,286
+2015,Vermont,All students,290
+2015,Virginia,All students,288
+2015,Washington,All students,287
+2015,West Virginia,All students,271
+2015,Wisconsin,All students,289
+2015,Wyoming,All students,287
+2013,Alabama,All students,269
+2013,Alaska,All students,282
+2013,Arizona,All students,280
+2013,Arkansas,All students,278
+2013,California,All students,276
+2013,Colorado,All students,290
+2013,Connecticut,All students,285
+2013,Delaware,All students,282
+2013,District of Columbia,All students,265
+2013,Florida,All students,281
+2013,Georgia,All students,279
+2013,Hawaii,All students,281
+2013,Idaho,All students,286
+2013,Illinois,All students,285
+2013,Indiana,All students,288
+2013,Iowa,All students,285
+2013,Kansas,All students,290
+2013,Kentucky,All students,281
+2013,Louisiana,All students,273
+2013,Maine,All students,289
+2013,Maryland,All students,287
+2013,Massachusetts,All students,301
+2013,Michigan,All students,280
+2013,Minnesota,All students,295
+2013,Mississippi,All students,271
+2013,Missouri,All students,283
+2013,Montana,All students,289
+2013,Nebraska,All students,285
+2013,Nevada,All students,278
+2013,New Hampshire,All students,296
+2013,New Jersey,All students,296
+2013,New Mexico,All students,273
+2013,New York,All students,282
+2013,North Carolina,All students,286
+2013,North Dakota,All students,291
+2013,Ohio,All students,290
+2013,Oklahoma,All students,276
+2013,Oregon,All students,284
+2013,Pennsylvania,All students,290
+2013,Rhode Island,All students,284
+2013,South Carolina,All students,280
+2013,South Dakota,All students,287
+2013,Tennessee,All students,278
+2013,Texas,All students,288
+2013,Utah,All students,284
+2013,Vermont,All students,295
+2013,Virginia,All students,288
+2013,Washington,All students,290
+2013,West Virginia,All students,274
+2013,Wisconsin,All students,289
+2013,Wyoming,All students,288
+2011,Alabama,All students,269
+2011,Alaska,All students,283
+2011,Arizona,All students,279
+2011,Arkansas,All students,279
+2011,California,All students,273
+2011,Colorado,All students,292
+2011,Connecticut,All students,287
+2011,Delaware,All students,283
+2011,District of Columbia,All students,260
+2011,Florida,All students,278
+2011,Georgia,All students,278
+2011,Hawaii,All students,278
+2011,Idaho,All students,287
+2011,Illinois,All students,283
+2011,Indiana,All students,285
+2011,Iowa,All students,285
+2011,Kansas,All students,290
+2011,Kentucky,All students,282
+2011,Louisiana,All students,273
+2011,Maine,All students,289
+2011,Maryland,All students,288
+2011,Massachusetts,All students,299
+2011,Michigan,All students,280
+2011,Minnesota,All students,295
+2011,Mississippi,All students,269
+2011,Missouri,All students,282
+2011,Montana,All students,293
+2011,Nebraska,All students,283
+2011,Nevada,All students,278
+2011,New Hampshire,All students,292
+2011,New Jersey,All students,294
+2011,New Mexico,All students,274
+2011,New York,All students,280
+2011,North Carolina,All students,286
+2011,North Dakota,All students,292
+2011,Ohio,All students,289
+2011,Oklahoma,All students,279
+2011,Oregon,All students,283
+2011,Pennsylvania,All students,286
+2011,Rhode Island,All students,283
+2011,South Carolina,All students,281
+2011,South Dakota,All students,291
+2011,Tennessee,All students,274
+2011,Texas,All students,290
+2011,Utah,All students,283
+2011,Vermont,All students,294
+2011,Virginia,All students,289
+2011,Washington,All students,288
+2011,West Virginia,All students,273
+2011,Wisconsin,All students,289
+2011,Wyoming,All students,288
+2009,Alabama,All students,269
+2009,Alaska,All students,283
+2009,Arizona,All students,277
+2009,Arkansas,All students,276
+2009,California,All students,270
+2009,Colorado,All students,287
+2009,Connecticut,All students,289
+2009,Delaware,All students,284
+2009,District of Columbia,All students,254
+2009,Florida,All students,279
+2009,Georgia,All students,278
+2009,Hawaii,All students,274
+2009,Idaho,All students,287
+2009,Illinois,All students,282
+2009,Indiana,All students,287
+2009,Iowa,All students,284
+2009,Kansas,All students,289
+2009,Kentucky,All students,279
+2009,Louisiana,All students,272
+2009,Maine,All students,286
+2009,Maryland,All students,288
+2009,Massachusetts,All students,299
+2009,Michigan,All students,278
+2009,Minnesota,All students,294
+2009,Mississippi,All students,265
+2009,Missouri,All students,286
+2009,Montana,All students,292
+2009,Nebraska,All students,284
+2009,Nevada,All students,274
+2009,New Hampshire,All students,292
+2009,New Jersey,All students,293
+2009,New Mexico,All students,270
+2009,New York,All students,283
+2009,North Carolina,All students,284
+2009,North Dakota,All students,293
+2009,Ohio,All students,286
+2009,Oklahoma,All students,276
+2009,Oregon,All students,285
+2009,Pennsylvania,All students,288
+2009,Rhode Island,All students,278
+2009,South Carolina,All students,280
+2009,South Dakota,All students,291
+2009,Tennessee,All students,275
+2009,Texas,All students,287
+2009,Utah,All students,284
+2009,Vermont,All students,293
+2009,Virginia,All students,286
+2009,Washington,All students,289
+2009,West Virginia,All students,270
+2009,Wisconsin,All students,288
+2009,Wyoming,All students,286
+2007,Alabama,All students,266
+2007,Alaska,All students,283
+2007,Arizona,All students,276
+2007,Arkansas,All students,274
+2007,California,All students,270
+2007,Colorado,All students,286
+2007,Connecticut,All students,282
+2007,Delaware,All students,283
+2007,District of Columbia,All students,248
+2007,Florida,All students,277
+2007,Georgia,All students,275
+2007,Hawaii,All students,269
+2007,Idaho,All students,284
+2007,Illinois,All students,280
+2007,Indiana,All students,285
+2007,Iowa,All students,285
+2007,Kansas,All students,290
+2007,Kentucky,All students,279
+2007,Louisiana,All students,272
+2007,Maine,All students,286
+2007,Maryland,All students,286
+2007,Massachusetts,All students,298
+2007,Michigan,All students,277
+2007,Minnesota,All students,292
+2007,Mississippi,All students,265
+2007,Missouri,All students,281
+2007,Montana,All students,287
+2007,Nebraska,All students,284
+2007,Nevada,All students,271
+2007,New Hampshire,All students,288
+2007,New Jersey,All students,289
+2007,New Mexico,All students,268
+2007,New York,All students,280
+2007,North Carolina,All students,284
+2007,North Dakota,All students,292
+2007,Ohio,All students,285
+2007,Oklahoma,All students,275
+2007,Oregon,All students,284
+2007,Pennsylvania,All students,286
+2007,Rhode Island,All students,275
+2007,South Carolina,All students,282
+2007,South Dakota,All students,288
+2007,Tennessee,All students,274
+2007,Texas,All students,286
+2007,Utah,All students,281
+2007,Vermont,All students,291
+2007,Virginia,All students,288
+2007,Washington,All students,285
+2007,West Virginia,All students,270
+2007,Wisconsin,All students,286
+2007,Wyoming,All students,287
+2005,Alabama,All students,262
+2005,Alaska,All students,279
+2005,Arizona,All students,274
+2005,Arkansas,All students,272
+2005,California,All students,269
+2005,Colorado,All students,281
+2005,Connecticut,All students,281
+2005,Delaware,All students,281
+2005,District of Columbia,All students,245
+2005,Florida,All students,274
+2005,Georgia,All students,272
+2005,Hawaii,All students,266
+2005,Idaho,All students,281
+2005,Illinois,All students,278
+2005,Indiana,All students,282
+2005,Iowa,All students,284
+2005,Kansas,All students,284
+2005,Kentucky,All students,274
+2005,Louisiana,All students,268
+2005,Maine,All students,281
+2005,Maryland,All students,278
+2005,Massachusetts,All students,292
+2005,Michigan,All students,277
+2005,Minnesota,All students,290
+2005,Mississippi,All students,262
+2005,Missouri,All students,276
+2005,Montana,All students,286
+2005,Nebraska,All students,284
+2005,Nevada,All students,270
+2005,New Hampshire,All students,285
+2005,New Jersey,All students,284
+2005,New Mexico,All students,263
+2005,New York,All students,280
+2005,North Carolina,All students,282
+2005,North Dakota,All students,287
+2005,Ohio,All students,283
+2005,Oklahoma,All students,271
+2005,Oregon,All students,282
+2005,Pennsylvania,All students,281
+2005,Rhode Island,All students,272
+2005,South Carolina,All students,281
+2005,South Dakota,All students,287
+2005,Tennessee,All students,271
+2005,Texas,All students,281
+2005,Utah,All students,279
+2005,Vermont,All students,287
+2005,Virginia,All students,284
+2005,Washington,All students,285
+2005,West Virginia,All students,269
+2005,Wisconsin,All students,285
+2005,Wyoming,All students,282
+2003,Alabama,All students,262
+2003,Alaska,All students,279
+2003,Arizona,All students,271
+2003,Arkansas,All students,266
+2003,California,All students,267
+2003,Colorado,All students,283
+2003,Connecticut,All students,284
+2003,Delaware,All students,277
+2003,District of Columbia,All students,243
+2003,Florida,All students,271
+2003,Georgia,All students,270
+2003,Hawaii,All students,266
+2003,Idaho,All students,280
+2003,Illinois,All students,277
+2003,Indiana,All students,281
+2003,Iowa,All students,284
+2003,Kansas,All students,284
+2003,Kentucky,All students,274
+2003,Louisiana,All students,266
+2003,Maine,All students,282
+2003,Maryland,All students,278
+2003,Massachusetts,All students,287
+2003,Michigan,All students,276
+2003,Minnesota,All students,291
+2003,Mississippi,All students,261
+2003,Missouri,All students,279
+2003,Montana,All students,286
+2003,Nebraska,All students,282
+2003,Nevada,All students,268
+2003,New Hampshire,All students,286
+2003,New Jersey,All students,281
+2003,New Mexico,All students,263
+2003,New York,All students,280
+2003,North Carolina,All students,281
+2003,North Dakota,All students,287
+2003,Ohio,All students,282
+2003,Oklahoma,All students,272
+2003,Oregon,All students,281
+2003,Pennsylvania,All students,279
+2003,Rhode Island,All students,272
+2003,South Carolina,All students,277
+2003,South Dakota,All students,285
+2003,Tennessee,All students,268
+2003,Texas,All students,277
+2003,Utah,All students,281
+2003,Vermont,All students,286
+2003,Virginia,All students,282
+2003,Washington,All students,281
+2003,West Virginia,All students,271
+2003,Wisconsin,All students,284
+2003,Wyoming,All students,284
+2000,Alabama,All students,262
+2000,Alaska,All students,265
+2000,Arizona,All students,271
+2000,Arkansas,All students,261
+2000,California,All students,262
+2000,Colorado,All students,268
+2000,Connecticut,All students,282
+2000,Delaware,All students,268
+2000,District of Columbia,All students,234
+2000,Florida,All students,270
+2000,Georgia,All students,266
+2000,Hawaii,All students,263
+2000,Idaho,All students,278
+2000,Illinois,All students,277
+2000,Indiana,All students,283
+2000,Iowa,All students,—
+2000,Kansas,All students,284
+2000,Kentucky,All students,272
+2000,Louisiana,All students,259
+2000,Maine,All students,284
+2000,Maryland,All students,276
+2000,Massachusetts,All students,283
+2000,Michigan,All students,278
+2000,Minnesota,All students,288
+2000,Mississippi,All students,254
+2000,Missouri,All students,274
+2000,Montana,All students,287
+2000,Nebraska,All students,281
+2000,Nevada,All students,268
+2000,New Hampshire,All students,268
+2000,New Jersey,All students,270
+2000,New Mexico,All students,260
+2000,New York,All students,276
+2000,North Carolina,All students,280
+2000,North Dakota,All students,283
+2000,Ohio,All students,283
+2000,Oklahoma,All students,272
+2000,Oregon,All students,281
+2000,Pennsylvania,All students,273
+2000,Rhode Island,All students,273
+2000,South Carolina,All students,266
+2000,South Dakota,All students,270
+2000,Tennessee,All students,263
+2000,Texas,All students,275
+2000,Utah,All students,275
+2000,Vermont,All students,283
+2000,Virginia,All students,277
+2000,Washington,All students,275
+2000,West Virginia,All students,271
+2000,Wisconsin,All students,‡
+2000,Wyoming,All students,277
+1996,Alabama,All students,257
+1996,Alaska,All students,278
+1996,Arizona,All students,268
+1996,Arkansas,All students,262
+1996,California,All students,263
+1996,Colorado,All students,276
+1996,Connecticut,All students,280
+1996,Delaware,All students,267
+1996,District of Columbia,All students,233
+1996,Florida,All students,264
+1996,Georgia,All students,262
+1996,Hawaii,All students,262
+1996,Idaho,All students,262
+1996,Illinois,All students,262
+1996,Indiana,All students,276
+1996,Iowa,All students,284
+1996,Kansas,All students,260
+1996,Kentucky,All students,267
+1996,Louisiana,All students,252
+1996,Maine,All students,284
+1996,Maryland,All students,270
+1996,Massachusetts,All students,278
+1996,Michigan,All students,277
+1996,Minnesota,All students,284
+1996,Mississippi,All students,250
+1996,Missouri,All students,273
+1996,Montana,All students,283
+1996,Nebraska,All students,283
+1996,Nevada,All students,263
+1996,New Hampshire,All students,263
+1996,New Jersey,All students,263
+1996,New Mexico,All students,262
+1996,New York,All students,270
+1996,North Carolina,All students,268
+1996,North Dakota,All students,284
+1996,Ohio,All students,260
+1996,Oklahoma,All students,260
+1996,Oregon,All students,276
+1996,Pennsylvania,All students,262
+1996,Rhode Island,All students,269
+1996,South Carolina,All students,261
+1996,South Dakota,All students,260
+1996,Tennessee,All students,263
+1996,Texas,All students,270
+1996,Utah,All students,277
+1996,Vermont,All students,279
+1996,Virginia,All students,270
+1996,Washington,All students,276
+1996,West Virginia,All students,265
+1996,Wisconsin,All students,283
+1996,Wyoming,All students,275
