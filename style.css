@@ -1,0 +1,299 @@
+p {
+  font-family: "Avenir Next", "Trebuchet MS", Verdana, sans-serif;
+}
+
+.active{
+  stroke:#000;
+  stroke-width: 1px;
+}
+
+body {
+  font-family: "Avenir Next", "Trebuchet MS", Verdana, sans-serif;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+  margin-bottom:0;
+  padding-bottom:0;
+  min-height: 100%;
+
+}
+html { height: 100% }
+text {
+  pointer-events: none
+}
+
+.leftside
+{
+  width: 25%;
+  top:0;
+  bottom:0;
+  margin-bottom:0;
+  left:0;
+  right:0;
+  position:absolute;
+}
+.rightside
+{
+  width: 75%;
+  right:0;
+  bottom:0;
+  margin-bottom:0;
+  position:absolute;
+}
+#radialChart
+{
+  z-index: 0;
+  bottom:0;
+  margin-bottom:0;
+}
+
+#fadebackground
+{
+  z-index: 1;
+
+  top:0;
+  bottom:0;
+  margin-bottom:0;
+  left:0;
+  right:0;
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  pointer-events: none;
+}
+
+#rightSidebar
+{
+  z-index: 2;
+  top:0;
+  bottom:0;
+  pointer-events: none;
+}
+
+#topFrame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#top {
+  min-height: 50px;
+  transition: flex .35s, height .35s, min-height .35s, opacity .15s;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  opacity: 100;
+  display: flex;
+  flex-direction: row;
+  background: #c5af8a;
+}
+
+#top.collapsed {
+  min-height: 0px;
+  flex: 0;
+  height: 0%;
+  opacity: 0;
+}
+
+#mainFrame {
+  margin-top: 10px;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+#filterSection {
+  transition: flex .35s, width .35s, min-width .35s, opacity .35s;
+  height: 100%;
+  flex: 1;
+  min-width: 200px;
+  opacity: 100;
+}
+
+#filterSection.collapsed {
+  flex: 0;
+  width: 0%;
+  min-width: 0px;
+  opacity: 0;
+}
+
+#centerSection {
+  background-repeat: no-repeat;
+  height: 100%;
+  flex: 3;
+}
+
+#sidebarSection {
+  transition: flex .35s, width .35s;
+  height: 100%;
+  flex: 1;
+  background: #f0efec;
+}
+
+#sidebarSection.collapsed {
+  flex: 0;
+  width: 1%;
+}
+
+#content {
+  transition: opacity .15s;
+  margin: 10px 0 0 30px;
+  opacity: 100;
+  height: 100%;
+}
+
+#content.collapsed {
+  opacity: 0;
+}
+
+#contentTopSection {
+  width: 100%;
+  height: 20%;
+  position:relative;
+}
+
+.label {
+  pointer-events: none;
+}
+
+#vsContainer {
+  padding: 20px 0 0 20px;
+  position:absolute;
+  bottom: 0;
+  left: 16%;
+  width: 90%;
+  height: 50%;
+  display: inline-block;
+}
+
+#contentApp1, #versus, #contentApp2 {
+  width: 30%;
+  align: center;
+  float: left;
+}
+
+.contentApp {
+  float: left;
+}
+
+#appSection {
+  transition: top .35s, right .35s;
+  width: 100px;
+  height: 50%;
+  top: 10%;
+  right: 10px;
+  border:none;
+  outline:none;
+  margin: 0px;
+  padding: 0px;
+  position: fixed;
+  background: #f0efec;
+}
+
+#appSection.collapsed {
+  top: 10%;
+  right: 25%;
+}
+
+#appSection:hover {
+  background-color: #e0e0eb;
+}
+
+.cube {
+    transition: display .35s;
+    background: #f0efec;
+    margin: 10px;
+    height: 20%;
+    width: 90%;
+    /* box-shadow: 5px 5px 5px grey; */
+}
+
+.labelNode {
+  height: 100%;
+  width: 200px;
+  display: inline-block;
+}
+
+.labelNode > p {
+  float: left;
+  margin-right: 20px;
+}
+
+.filterTextNode {
+  cursor: pointer;
+}
+
+#icon {
+  flex: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#labelSection {
+  flex: 3;
+  background: #e3dcd0;
+}
+
+#labelContainer {
+  float: left;
+  display: inline-block;
+}
+
+#appSection {
+  vertical-align: center;
+}
+
+#app1, #app2, #right_arrow {
+  height: 33%;
+  width: 100%;
+  position: relative;
+}
+
+#right_arrow {
+  text-align: center;
+  font-size: 150px;
+  color: white;
+  cursor: pointer;
+}
+
+.vesus {
+  text-align: center;
+  font-size: 100px;
+}
+
+.hidden {
+  display: none;
+}
+.icon {
+  width: 5rem;
+  height: 5rem;
+  margin: 10px 0 0 10px;
+  background-color: white;
+  background-size: contain;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 1px 1px 5px grey;
+}
+
+#appSection .icon {
+  position: absolute;
+}
+
+#app1Icon {
+  bottom: 0;
+}
+
+#app2Icon {
+  top: 0;
+}
+
+.deleteBtn {
+  cursor: pointer;
+}
