@@ -51,4 +51,4 @@ Design Achievements:
 - Choose nice looking color schemes
 - Collected data on funds and population of undergraduate
 - Used outside js insdead of code in the javascript code
-
+- Backgroud color is yellow, which is the basic color of China(Red is too conspicuous, making the map color unclear)
