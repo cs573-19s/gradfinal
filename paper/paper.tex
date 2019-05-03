@@ -40,11 +40,9 @@
 % Import other packages
 \input{packages.tex}
 
-% Import Figures
 \input{figures.tex}
-
 % Import Tables
-\input{tables.tex}
+%%\input{tables.tex}
 
 %% We encourage the use of mathptmx for consistent usage of times font
 %% throughout the proceedings. However, if you encounter conflicts
@@ -82,32 +80,23 @@
 
 %% Paper title.
 
-\title{The new best paper award}
+\title{Education funding and undergraduates in different provinces in China}
 
 %% This is how authors are specified in the journal style
 
 %% indicate IEEE Member or Student Member in form indicated below
-\author{Author's Name}
-\authorfooter{
-%% insert punctuation at end of each item
-\item
-% Lane Harrison is with Worcester Polytechnic Institute. E-mail: [lane]@cs.wpi.edu.
- Authors' info. Email.
-\item
- Authors' info. Email.
-}
+\author{Longsheng Xie \& Yuxiao Peng \& Zhaohui Li}
 
-%other entries to be set up for journal
-\shortauthortitle{Author \MakeLowercase{\textit{et al.}}: Title}
+
 
 %% Abstract section.
 \abstract{
-Your abstract is great.
+Educational access remains uneven in China. Students born into affluent families generally have greater access to high-quality education than those from lower income backgrounds. So we decided to create a map of China and find the relationship between the data by comparing the education funds and the number of students in each province. And visulize the education funding \& undergraduate population in different area in a China map from 1993 to 2017. Then this paper will discuss how to create maps and data connections, and finally, show and discuss the final results and the goals that we want to accomplish in the future.
 } % end of abstract
 
 %% Keywords that describe your work. Will show as 'Index Terms' in journal
 %% please capitalize first letter and insert punctuation after last keyword
-\keywords{Perception, Visualization, Evaluation.}
+\keywords{Map \& Data Visualization \& China \& Education \& Funding}
 
 %% ACM Computing Classification System (CCS). 
 %% See <http://www.acm.org/class/1998/> for details.
@@ -121,12 +110,8 @@ Your abstract is great.
 
 %% Uncomment below to include a teaser figure.
 % Teaser should be jnds for -pcp versus +pcp (distinguishable; not distinguishable; target; not distinguishable; distinguishable)
-\teaser{
-  \centering
-  \includegraphics[width=\textwidth]{img/teaser}
-  \caption{Every paper should have a teaser.}
-  \label{fig:teaser}
-}
+
+
 
 %% Uncomment below to disable the manuscript note
 %\renewcommand{\manuscriptnotetxt}{}
@@ -138,6 +123,12 @@ Your abstract is great.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%% START OF THE PAPER %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\teaser{
+	\centering
+	\includegraphics[width=\textwidth]{img/china}
+	\caption{The relationship between provinces and education funding}
+	\label{fig:teaser}
+}
 
 \begin{document}
 
@@ -155,9 +146,8 @@ Your abstract is great.
 
 %% if specified like this the section will be committed in review mode
 \acknowledgments{
-Text.
+The Authors would like to acknowledge Lane Harrison for his insight in improving ideas throughout the project.
 }
-
 \bibliographystyle{abbrv}
 \bibliography{paper.bib}
 
