@@ -1,0 +1,284 @@
+---
+title: "Hi-C Density Graph"
+author: "Jocelyn Tourtellotte"
+date: "2023-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r importlibraries, include=FALSE}
+library(tidyverse)
+library(readr)
+library(MASS)
+```
+
+# Project Data
+
+## Data Source
+The Hi-C data for this project is posted on the Gene Expression Omnibus (GEO) under assession number [GSE141067](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE141067).
+
+Kang H, Shokhirev MN, Xu Z, Chandran S et al. Dynamic regulation of histone modifications and long-range chromosomal interactions during postmitotic transcriptional reactivation. *Genes Dev 2020* Jul 1;34(13-14):913-930.\
+PMID: [32499403](https://pubmed.ncbi.nlm.nih.gov/32499403/)
+
+## Data Import
+Import only the interaction counts for **ZNF438** with **PARD3**. This data was processed in another notebook for an overarching project. This processing did not include normalization of the raw counts. Therefore, interaction counts represented here are raw counts of the number of contacts within a binned region at the maximum resolution provided by the data.
+
+NOTE: The way the data were processed, for lack of a better term, a "triangular" search. That is, once searched for a gene as "gene 1", it was removed from the list and not searched for in the "gene 2" position.
+
+*WANT:*
+
+-   *Verify that this search method does not leave anything out.*
+-   *Include data processing steps.*
+
+```{r hicdata, include=FALSE}
+ZNF438_PARD3_og_df <- read_csv("data/ZNF438_PARD3_og_df.csv")
+```
+
+
+
+```{r}
+pard3_znf438_ot_run1_plt <-ggplot(data = filter(ZNF438_PARD3_og_df, rep==1),
+                                  mapping = aes(x = interactions.y,
+                                                y = interactions.x,
+                                                fill = as.factor(interactions.counts))) + 
+                    geom_tile() +
+                    scale_fill_brewer(name="Interaction Counts",
+                                      palette = "Blues",
+                                      guide = guide_legend(reverse = TRUE)) +
+                    facet_grid(min~.) +
+                    #scale_x_discrete(name ="Chromosome 8") +
+                    #scale_y_discrete(name ="Chromosome 8") # +
+                    labs(x="PARD3 interaction counts by location (per 5000 bp)",
+                         y="ZNF438 interaction counts by location (per 5000 bp)",
+                         title = "Interactions between ZNF438 and PARD3 over time")
+ggsave("output/znf438_pard3_ot_run1_plt.png", width = 8, height = 6)
+pard3_znf438_ot_run1_plt
+```
+
+*WANT: have this color scale go 1-4 so that it matches the one for the other rep*
+
+```{r}
+pard3_znf438_ot_run2_plt <- ggplot(data = filter(ZNF438_PARD3_og_df, rep==2),
+                                   mapping = aes(x = interactions.y,
+                                                 y = interactions.x,
+                                                 fill = as.factor(interactions.counts))) + 
+                    geom_tile() +
+                    scale_fill_brewer(name="Interaction Counts",
+                                      palette = "Blues",
+                                      guide = guide_legend(reverse = TRUE)) +
+                    facet_grid(min~.) +
+                    #scale_x_discrete(name ="Chromosome 8") +
+                    #scale_y_discrete(name ="Chromosome 8") # +
+                    labs(x="PARD3 interaction counts by location (per 5000 bp)",
+                         y="ZNF438 interaction counts by location (per 5000 bp)",
+                         title = "Interactions between ZNF438 and PARD3 over time")
+
+ggsave("output/pard3_znf438_ot_run2_plt.png", width = 8, height = 6)
+pard3_znf438_ot_run2_plt
+```
+
+
+
+```{r}
+pard3_znf438_ot_plt <- ggplot(data = filter(ZNF438_PARD3_og_df), mapping = aes(x = interactions.y,
+                                                     y = interactions.x,
+                                                     fill = as.factor(interactions.counts))) + 
+                    geom_tile() +
+                    scale_fill_brewer(name="Interaction Counts",
+                                      palette = "Blues",
+                                      guide = guide_legend(reverse = TRUE)) +
+                    facet_grid(cols=vars(min), rows=vars(rep)) +
+                    theme(axis.text.x = element_text(angle = 55, hjust = 1, margin=margin(t=2)),
+                          axis.title.x=element_text(margin=margin(t=12)),
+                          axis.title.y=element_text(margin=margin(r=10))) +
+                    # scale_x_continuous(guide = guide_axis(angle = 55), expand = c(0, 0)) +
+                    #scale_y_discrete(name ="Chromosome 8") # +
+                    labs(x="PARD3 interaction counts by location (per 5000 bp)",
+                         y="ZNF438 interaction counts by location (per 5000 bp)",
+                         title = "Interactions between ZNF438 and PARD3 over time")
+
+ggsave("output/pard3_znf438_ot_plt.png", width = 8, height = 12)
+pard3_znf438_ot_plt
+```
+
+
+
+
+```{r}
+znf438_x_pard3_plt <- ggplot(data = ZNF438_PARD3_og_df, mapping = aes(x = interactions.x,
+                                                     y = min,
+                                                     fill = as.factor(interactions.counts))) + 
+                    geom_tile() +
+                    scale_fill_brewer(name="Interaction Counts",
+                                      palette = "Blues",
+                                      guide = guide_legend(reverse = TRUE)) +
+                    facet_grid(rep~.) +
+                    #scale_x_discrete(name ="Chromosome 8") +
+                    #scale_y_discrete(name ="Chromosome 8") # +
+                    labs(x="ZNF438 interaction counts by location (per 5000 bp)", y="Time (minutes)", title = "ZNF438 interactions with PARD3 over time")
+
+
+ggsave("output/znf438_x_pard3_plt.png", width = 8, height = 6)
+
+znf438_x_pard3_plt
+```
+
+```{r}
+znf438_pard3_x_plt <- ggplot(data = ZNF438_PARD3_og_df, mapping = aes(x = interactions.y,
+                                                     y = min,
+                                                     fill = as.factor(interactions.counts))) + 
+                    geom_tile() +
+                    scale_fill_brewer(name="Interaction Counts",
+                                      palette = "Blues",
+                                      guide = guide_legend(reverse = TRUE)) +
+                    facet_grid(rep~.) +
+                    #scale_x_discrete(name ="Chromosome 8") +
+                    #scale_y_discrete(name ="Chromosome 8") # +
+                    labs(x="PARD3 interaction counts by location (per 5000 bp)", y="Time (min)",title = "PARD3 interactions with ZNF438 over time")
+
+ggsave("output/znf438_pard3_x_plt.png", width = 8, height = 6)
+
+znf438_pard3_x_plt
+```
+
+```{r}
+# pivoting the dataframe longer by creating an observation (row) per count in interactions.counts
+ZNF438_PARD3_og_longer_df<-ZNF438_PARD3_og_df[rep(seq_len(nrow(ZNF438_PARD3_og_df)),times=ZNF438_PARD3_og_df$interactions.counts),]
+
+# confirmed repeated corrected by comparing the number of rows in the new data frame to sum interactions.counts in the original
+
+paste0('Sum of counts in the original dataset: ', sum(ZNF438_PARD3_og_df$interactions.counts))
+paste0('Number of rows in the new dataframe: ', nrow(ZNF438_PARD3_og_longer_df))
+```
+
+
+```{r}
+kde_PARD3_ZNF438_d_all <- ggplot(data = ZNF438_PARD3_og_longer_df,
+              aes(x=interactions.y, y=interactions.x)) +
+    stat_density2d_filled(contour_var="ndensity") +
+    coord_equal() +
+# Tweak the color gradient
+    scale_color_viridis_c() +
+    labs(x="PARD3",
+         y="ZNF438",
+         title = "KDE Model of all interactions between PARD3 and ZNF438",
+         subtitle = "Aggregation of both runs across all time points") +
+# White theme
+theme_bw()
+# Tip! Add invisible points to improve proportions kde + geom_sf(alpha=0)
+kde_PARD3_ZNF438_d_all
+ggsave("output/kde_PARD3_ZNF438_d_all.png", width = 8, height = 4)
+```
+
+```{r}
+kde_PARD3_ZNF438_d_run_all <- ggplot(data = ZNF438_PARD3_og_longer_df,
+                aes(x=interactions.y, y=interactions.x)) +
+    stat_density2d_filled(contour_var="ndensity") +
+# Tweak the color gradient
+    facet_grid(rows=vars(rep)) +
+    coord_equal() +
+# Tweak the color gradient
+    scale_color_viridis_c() +
+    labs(x="PARD3",
+         y="ZNF438",
+         title = "KDE Model of all interactions between PARD3 and ZNF438",
+         subtitle = "Stratified by run, all time points aggregated") +
+# White theme
+theme_bw()
+# Tip! Add invisible points to improve proportions kde + geom_sf(alpha=0)
+
+kde_PARD3_ZNF438_d_run_all
+ggsave("output/kde_PARD3_ZNF438_d_run_all.png", width = 8, height = 4)
+```
+
+
+```{r}
+kde_PARD3_ZNF438_d_run_all_scatter <- ggplot(data = ZNF438_PARD3_og_longer_df,
+                aes(x=interactions.y, y=interactions.x)) +
+    stat_density2d_filled(contour_var = "ndensity") +
+    facet_grid(rows=vars(rep))+
+# Tweak the color gradient
+    coord_equal() +
+# Tweak the color gradient
+    scale_color_viridis_c() +
+    labs(x="PARD3",
+         y="ZNF438",
+         title = "KDE Model of all interactions between PARD3 and ZNF438 overlayed with data points",
+         subtitle = "Stratified by run, all time points aggregated") +
+    geom_point(data=ZNF438_PARD3_og_longer_df,
+               aes(x=interactions.y, y=interactions.x),
+               color="black", size=.95, alpha=0.25)# +
+# White theme
+ # theme_bw()
+kde_PARD3_ZNF438_d_run_all_scatter
+ggsave("output/kde_PARD3_ZNF438_d_run_all.png", width = 8, height = 4)
+
+```
+
+```{r}
+kde_PARD3_ZNF438_d_run1_min <- ggplot(data = filter(ZNF438_PARD3_og_longer_df,rep==1),
+                                      aes(x=interactions.x,
+                                          y=interactions.y)) +
+    stat_density2d_filled(contour_var = "ndensity") +
+    facet_wrap(vars(min)) +
+# Tweak the color gradient
+    scale_color_viridis_c() +
+# White theme
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 65, hjust = 1, margin=margin(t=2)),
+                          axis.title.x=element_text(margin=margin(t=12)),
+                          axis.title.y=element_text(margin=margin(r=10))) +
+    labs(x="PARD3",
+         y="ZNF438",
+         title = "KDE Model of all interactions between PARD3 and ZNF438 over time",
+         subtitle = "Run 1") 
+
+kde_PARD3_ZNF438_d_run1_min
+ggsave("output/kde_PARD3_ZNF438_d_run1_min.png", width = 8, height = 6)
+
+```
+
+
+```{r}
+kde_PARD3_ZNF438_d_run2_min <- ggplot(data = filter(ZNF438_PARD3_og_longer_df,rep==2), aes(x=interactions.x, y=interactions.y)) +
+stat_density2d_filled(contour_var = "ndensity") +
+  facet_wrap(vars(min))+
+# Tweak the color gradient
+  scale_color_viridis_c() +
+# White theme
+  theme_bw() +
+    theme(axis.text.x = element_text(angle = 65, hjust = 1, margin=margin(t=2)),
+                          axis.title.x=element_text(margin=margin(t=12)),
+                          axis.title.y=element_text(margin=margin(r=10))) +
+    labs(x="PARD3",
+         y="ZNF438",
+         title = "KDE Model of all interactions between PARD3 and ZNF438 over time",
+         subtitle = "Run 2") 
+
+kde_PARD3_ZNF438_d_run2_min
+
+ggsave("output/kde_PARD3_ZNF438_d_run2_min.png", width = 8, height = 6)
+```
+
+
+
+# https://bookdown.org/egarpor/NP-UC3M/
+
+
+```{r}
+library(ks)
+ZNF438_PARD3_rep1_matrix <- as.matrix(
+    dplyr::select(
+        dplyr::filter(
+            ZNF438_PARD3_og_df, rep == 1),
+        c("min","interactions.x", "interactions.y")
+        )
+    )
+ZNF438_PARD3_rep1_kde3 <- ks::kde(ZNF438_PARD3_rep1_matrix)
+plot(ZNF438_PARD3_rep1_kde3)
+if (interactive()) plot(ZNF438_PARD3_rep1_kde3, display="rgl")
+```
+
